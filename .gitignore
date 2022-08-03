@@ -11,7 +11,7 @@ node_modules/
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
@@ -42,6 +42,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+audio-drive-api/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
@@ -70,3 +71,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
