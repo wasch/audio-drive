@@ -9,7 +9,6 @@ const Player = (props) => {
     <div className={style.player}>
         <audio></audio>
         <h4>Playing</h4>
-        {/* Audio Search */}
         <PlayerInfo audio={props.currentAudio} />
         <PlayerControls audio={props.currentAudio} />
         <p><strong>Next: </strong>{props.audioNext.title}</p>

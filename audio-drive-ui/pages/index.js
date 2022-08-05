@@ -4,12 +4,9 @@ import style from '../styles/Home.module.css'
 
 import Player from '../components/Player.js'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
 import { useState } from 'react'
-import Search from '../components/Search'
 
 export default function Home() {
-  const { data: session } = useSession();
 
   const [audioCurrentIndex, setAudioCurrentIndex] = useState(0);
   const [audioNextIndex, setAudioNextIndex] = useState(audioCurrentIndex + 1);
@@ -28,6 +25,10 @@ export default function Home() {
     }
   ]);
 
+  const getAudio = (data) => {
+    newAudio(data);
+  }
+
   return (
     <div className={style.container}>
       <Head>
@@ -37,23 +38,20 @@ export default function Home() {
 
       <main className={style.main}>
 
-        {!session && <button onClick={() => signIn()}>Sign in</button>}
-        {session && <button onClick={() => signOut()}>Sign out {session.user.name}</button>}
-        
+
+
         <h1 className={style.title}>
           Audio Drive
         </h1>
 
-        <Search />
-
-        <Player 
+        <Player
           currentAudio={audio[audioCurrentIndex]}
           audioNext={audio[audioNextIndex]}
         />
 
       </main>
 
-      
+
     </div>
   )
 }

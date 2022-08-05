@@ -1,68 +1,59 @@
 import React from 'react'
 import style from '../styles/library.module.css'
 import db from '../firebase'
-
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore'
+
+import { useSession } from 'next-auth/react'
 
 function Upload() {
-    const [fileUrl, setFileUrl] = React.useState(null)
+
+    const { data: session } = useSession();
+
     const [musicUrl, setMusicUrl] = React.useState(null)
     const [disable, setDisable] = React.useState(true);
 
     React.useEffect(() => {
-        if (musicUrl !== null && fileUrl !== null) {
+        if (musicUrl !== null) {
             setDisable(false);
-            alert("click on submit")
-            console.log(disable)
+            alert("Audio Uploaded");
+            console.log(disable);
         }
-    }, [musicUrl, fileUrl])
-
-    const filechanged = async (e) => {
-        let file = e.target.files[0];
-        const storagemRef = getStorage();
-        const fileRef = ref(storagemRef, 'images/' + file.name)
-        uploadBytes(fileRef, music).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
-        });
-        setMusicUrl(await getDownloadURL(musicRef));
-    }
+    }, [musicUrl])
 
     const musicchanged = async (e) => {
         let music = e.target.files[0];
         const storagemRef = getStorage();
         const musicRef = ref(storagemRef, 'audio/' + music.name)
-        uploadBytes(musicRef, music).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
+        await uploadBytes(musicRef, music).then((snapshot) => {
+            console.log('Uploaded audio');
         });
         setMusicUrl(await getDownloadURL(musicRef));
     }
 
-    const submit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const musicname = e.target.musicname.value;
         if (!musicname) {
-            return
+            return;
         }
-        db.collection("Music").doc(musicname).set({
-            name: musicname,
-            music: musicUrl,
-            image: fileUrl
-        })
-        alert("Music added")
+        try {
+            const audioDatabaseRef = await addDoc(collection(db, "audio"), {
+                name: musicname,
+                music: musicUrl,
+                user: session.user.email
+            });
+            console.log(audioDatabaseRef);
+            alert("Audio added");
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
     }
 
     return (
         <div className={style.uploadpage}>
-            <form onSubmit={submit} className={style.uploadform}>
-                <label>images</label>
-                <input
-                    type="file"
-                    className={style.myfile}
-                    name="img"
-                    onChange={filechanged}
-                    required
-                />
-                <label>Music files</label>
+            <form onSubmit={handleSubmit} className={style.uploadform}>
+                <label>Audio files</label>
                 <input type="file" name="music" onChange={musicchanged} required />
                 <input
                     type="text"
