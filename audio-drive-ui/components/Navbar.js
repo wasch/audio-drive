@@ -12,10 +12,6 @@ const Navbar = () => {
 
     return (
         <div>
-            <Head>
-                <title>Item Shop</title>
-            </Head>
-
             <div className={style.nav_container}>
                 <p className={style.logo}>Audio Drive</p>
                 <nav>
