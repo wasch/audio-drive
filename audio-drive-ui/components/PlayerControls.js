@@ -8,7 +8,7 @@ const PlayerControls = (props) => {
     <div className={style.playerControls}>
         <AudioPlayer
             autoPlay
-            src={props.audio.src}
+            src={props.url}
             onPlay={(e) => console.log("onPlay")}
             // other props here
             showSkipControls

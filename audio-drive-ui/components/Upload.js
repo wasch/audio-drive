@@ -24,7 +24,7 @@ function Upload() {
     const musicchanged = async (e) => {
         let music = e.target.files[0];
         const storagemRef = getStorage();
-        const musicRef = ref(storagemRef, 'audio/' + music.name)
+        const musicRef = ref(storagemRef, 'audio/' + music.name);
         await uploadBytes(musicRef, music).then((snapshot) => {
             console.log('Uploaded audio');
         });

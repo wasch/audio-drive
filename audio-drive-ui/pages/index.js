@@ -3,27 +3,25 @@ import Image from 'next/image'
 import style from '../styles/Home.module.css'
 
 import Player from '../components/Player.js'
-import GetAudio from '../components/GetAudio'
+import Audio from '../components/Audio'
 
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, getSession, loading } from 'next-auth/react'
+import { authOptions } from "./api/auth/[...nextauth]"
 
-export default function Home() {
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import db from '../firebase'
+
+export default function Home({ retrievedAudio }) {
 
   const [audioCurrentIndex, setAudioCurrentIndex] = useState(0);
   const [audioNextIndex, setAudioNextIndex] = useState(audioCurrentIndex + 1);
-  const [audio, setAudio] = useState([
-    {
-      title: "song 1",
-      artist: "artist 1",
-      src: "./audio/Black Tar.mp3"
-    },
-    {
-      title: "song 2",
-      artist: "artist 2",
-      src: "./audio/CODENAMEZ.mp3"
-    }
-  ]);
+  const [audio, setAudio] = useState({});
+  const [audioList, setAudioList] = useState(retrievedAudio);
+
+  const retrieveAudio = (audioData) => {
+    setAudio(audioData);
+  }
 
   return (
     <div className={style.container}>
@@ -38,11 +36,22 @@ export default function Home() {
           Audio Drive
         </h1>
 
-        <GetAudio />
+        <div>
+          {audioList.map((item, index) => (
+            <div className={style.singularAudio} key={index}>
+              <Audio
+                title={item.name}
+                url={item.music}
+                user={item.user}
+                passAudioToParent={retrieveAudio}
+              />
+            </div>
+          ))}
+        </div>
 
         <Player
-          currentAudio={audio[audioCurrentIndex]}
-          audioNext={audio[audioNextIndex]}
+          currentAudio={audio}
+        //audioNext={audio}
         />
 
       </main>
@@ -50,4 +59,26 @@ export default function Home() {
 
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+
+  const session = await getSession(context, authOptions);
+
+  let audio = [];
+  const q = query(collection(db, "audio"), where("user", "==", session.user.email));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    let newAudio = doc.data();
+    newAudio.id = doc.id;
+    if (!audio.some(audio => audio.id === newAudio.id)) {   // Don't add audio if it already exists
+      audio.push(newAudio);
+    }
+  });
+  console.log(audio);
+  return {
+    props: {
+      retrievedAudio: audio
+    }
+  }
 }

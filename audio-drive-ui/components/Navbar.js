@@ -20,6 +20,7 @@ const Navbar = () => {
                 <p className={style.logo}>Audio Drive</p>
                 <nav>
                     <ul className={style.nav_links}>
+                        <li><Link href="/"><a>Home</a></Link></li>
                         <li><Link href="/library"><a>Library</a></Link></li>
                         <li>About</li>
                         <li>
