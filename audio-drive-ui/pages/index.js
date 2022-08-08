@@ -3,8 +3,10 @@ import Image from 'next/image'
 import style from '../styles/Home.module.css'
 
 import Player from '../components/Player.js'
+import GetAudio from '../components/GetAudio'
 
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
 
@@ -14,20 +16,14 @@ export default function Home() {
     {
       title: "song 1",
       artist: "artist 1",
-      img_src: "./images/img1.jpg",
       src: "./audio/Black Tar.mp3"
     },
     {
       title: "song 2",
       artist: "artist 2",
-      img_src: "./images/img2.jpg",
       src: "./audio/CODENAMEZ.mp3"
     }
   ]);
-
-  const getAudio = (data) => {
-    newAudio(data);
-  }
 
   return (
     <div className={style.container}>
@@ -38,11 +34,11 @@ export default function Home() {
 
       <main className={style.main}>
 
-
-
         <h1 className={style.title}>
           Audio Drive
         </h1>
+
+        <GetAudio />
 
         <Player
           currentAudio={audio[audioCurrentIndex]}
