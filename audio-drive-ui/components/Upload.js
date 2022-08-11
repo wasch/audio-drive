@@ -53,15 +53,17 @@ function Upload() {
     return (
         <div className={style.uploadpage}>
             <form onSubmit={handleSubmit} className={style.uploadform}>
-                <label>Audio files</label>
-                <input type="file" name="music" onChange={musicchanged} required />
+                <label onChange={musicchanged} htmlFor="audioInput">
+                    Upload Audio Files
+                    <input type="file" id="audioInput" name="music" onChange={musicchanged} required multiple hidden/>
+                </label>
                 <input
                     type="text"
                     name="musicname"
-                    placeholder="Music name"
+                    placeholder="Audio name"
                     required
                 />
-                <button className={style.btn} disabled={disable}>Submit</button>
+                <button className="btn waves-effect waves-light blue" type="submit" name="action" disabled={disable}>Submit</button>
             </form>
         </div>
     );

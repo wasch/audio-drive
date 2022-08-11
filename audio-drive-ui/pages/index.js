@@ -2,8 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 import style from '../styles/Home.module.css'
 
-import Player from '../components/Player.js'
+import Player from '../components/Player'
 import Audio from '../components/Audio'
+import Queue from '../components/Queue'
 
 import { useState } from 'react'
 import { useSession, getSession, loading } from 'next-auth/react'
@@ -12,7 +13,7 @@ import { authOptions } from "./api/auth/[...nextauth]"
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import db from '../firebase'
 
-export default function Home({ retrievedAudio }) {
+export default function Home({ retrievedAudio, passAudioToApp }) {
 
   const [audioCurrentIndex, setAudioCurrentIndex] = useState(0);
   const [audioNextIndex, setAudioNextIndex] = useState(audioCurrentIndex + 1);
@@ -21,6 +22,7 @@ export default function Home({ retrievedAudio }) {
 
   const retrieveAudio = (audioData) => {
     setAudio(audioData);
+    passAudioToApp(audioData); // Pass current audio to _app.js, then layout component, then player component  
   }
 
   return (
@@ -28,15 +30,12 @@ export default function Home({ retrievedAudio }) {
       <Head>
         <title>Audio Drive</title>
         <meta name="Audio Drive" content="music, entertainment" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </Head>
 
-      <main className={style.main}>
-
-        <h1 className={style.title}>
-          Audio Drive
-        </h1>
-
-        <div>
+      <div className="row">
+        <div className="col s1"></div>
+        <div className="col s5">
           {audioList.map((item, index) => (
             <div className={style.singularAudio} key={index}>
               <Audio
@@ -48,14 +47,10 @@ export default function Home({ retrievedAudio }) {
             </div>
           ))}
         </div>
-
-        <Player
-          currentAudio={audio}
-        //audioNext={audio}
-        />
-
-      </main>
-
+        <div className="col s5">
+          <Queue />
+        </div>
+      </div>
 
     </div>
   )

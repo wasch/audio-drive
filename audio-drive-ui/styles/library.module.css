@@ -1,32 +1,31 @@
-.uploadpage{
-    height: 80vh;
-    display: flex;
-    justify-content: center;
- }
- .h{
-    text-align: center;
- }
- .uploadform{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- }
- .uploadform input{
-    margin: 10px 0 15px 0;
-    outline: none;
-    padding: 10px;
- }
- .uploadform input[file]{
-    padding: 10px;
- }
- .uploadform label{
-    text-transform: uppercase;
- }
- .uploadform button{
-    border: none;
-    padding: 10px 25px;
-    background: rgb(73, 13, 236);
-    border-radius: 15px;
-    color: #fff;
- }
+.uploadpage {
+   height: 50vh;
+   display: flex;
+   justify-content: center;
+}
+
+.h {
+   text-align: center;
+}
+
+.uploadform {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.uploadform input {
+   margin: 10px 0 15px 0;
+   outline: none;
+   padding: 10px;
+   color: #e8e6e3;
+}
+
+.uploadform label {
+   padding: 4em;
+   margin-bottom: 4em;
+   border: 3px dashed;
+   text-transform: uppercase;
+   cursor: pointer;
+}

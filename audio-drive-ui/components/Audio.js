@@ -1,19 +1,29 @@
 import React from 'react'
 
+import style from '../styles/audio.module.css'
+
 const Audio = (props) => {
 
     const { title, url, user } = props;
 
     const handleClick = () => {
-        props.passAudioToParent({title, url});
+        props.passAudioToParent({ title, url });
     }
 
     return (
-        <div>
-            <button onClick={() => handleClick()}>
-                Play
-            </button>
-            {title}
+        <div className="card grey darken-3">
+            <div className={style.audioCardWrapper}>
+                <div className="card-title valign-wrapper">
+                    <div className={style.playButton}>
+                        <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
+                            <i class="material-icons">play_arrow</i>
+                        </button>
+                    </div>
+                    <div className="card-text">
+                        {title}
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

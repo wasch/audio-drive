@@ -5,11 +5,12 @@ import 'react-h5-audio-player/lib/styles.css'
 
 const PlayerControls = (props) => {
   return (
-    <div className={style.playerControls}>
+    <div className={style.playerControlsContainer}>
         <AudioPlayer
             autoPlay
             src={props.url}
-            onPlay={(e) => console.log("onPlay")}
+            onPlay={(e) => console.log("playing")}
+            volume={0.20}
             // other props here
             showSkipControls
             autoPlayAfterSrcChange

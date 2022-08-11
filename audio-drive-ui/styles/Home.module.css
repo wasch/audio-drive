@@ -1,3 +1,57 @@
 .container {
-    display: flex;
- }
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+}
+
+.form input {
+    color: #e8e6e3;
+}
+
+.post {
+    background-color: #323638;
+    color: #e8e6e3;
+    overflow: hidden;
+}
+
+.card-text {
+    padding-left: 2em;
+    padding-right: 4em;
+}
+
+.arrow-up {
+    filter: invert(100%);
+    margin-bottom: 40%;
+}
+
+.arrow-down {
+    filter: invert(100%);
+    margin-top: 40%;
+}
+
+.right-icon {
+    position: absolute;
+    right: 1.5em;
+}
+
+.right-icon-menu {
+    filter: invert(100%);
+}
+
+.post:hover {
+    transform: scale(1.01);
+}
+
+.menu {
+    position: relative;
+    left: .8em;
+    bottom: .16em;
+    border: 5px #181a1b;
+    border-style: solid;
+    border-radius: 5px;
+    background-color: #181a1b;
+}
+
+.menu-button {
+    margin: .5em;
+}
