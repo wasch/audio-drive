@@ -58,15 +58,17 @@ export async function getServerSideProps(context) {
   const session = await getSession(context, authOptions);
 
   let audio = [];
-  const q = query(collection(db, "audio"), where("user", "==", session.user.email));
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    let newAudio = doc.data();
-    newAudio.id = doc.id;
-    if (!audio.some(audio => audio.id === newAudio.id)) {   // Don't add audio if it already exists
-      audio.push(newAudio);
-    }
-  });
+  if (session) {           // Check if user is signed in before getting audio
+    const q = query(collection(db, "audio"), where("user", "==", session.user.email));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let newAudio = doc.data();
+      newAudio.id = doc.id;
+      if (!audio.some(audio => audio.id === newAudio.id)) {   // Don't add audio if it already exists
+        audio.push(newAudio);
+      }
+    });
+  }
   console.log(audio);
   return {
     props: {
