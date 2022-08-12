@@ -16,7 +16,7 @@ const Audio = (props) => {
                 <div className="card-title valign-wrapper">
                     <div className={style.playButton}>
                         <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
-                            <i class="material-icons">play_arrow</i>
+                            <i className="material-icons">play_arrow</i>
                         </button>
                     </div>
                     <div className="card-text">

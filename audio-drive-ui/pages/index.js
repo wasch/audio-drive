@@ -30,12 +30,11 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
       <Head>
         <title>Audio Drive</title>
         <meta name="Audio Drive" content="music, entertainment" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </Head>
 
       <div className="row">
-        <div className="col s1"></div>
-        <div className="col s5">
+        <div className="col s3"></div>
+        <div className="col s6">
           {audioList.map((item, index) => (
             <div className={style.singularAudio} key={index}>
               <Audio
@@ -47,9 +46,7 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
             </div>
           ))}
         </div>
-        <div className="col s5">
-          <Queue />
-        </div>
+        <div className="col s3"></div>
       </div>
 
     </div>

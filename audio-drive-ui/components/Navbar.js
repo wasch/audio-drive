@@ -14,15 +14,25 @@ const Navbar = () => {
         <div>
             <nav className="nav-wrapper blue">
                 <div className="container">
-                    <Link href="/"><a className="brand-logo">Audio Drive</a></Link>
-                    <ul className="right hide-on-med-and-down">
-                        <li><Link href="/"><a>Home</a></Link></li>
+
+                    <div className="logoContainer">
+                        <Link href="/"><a className="left brand-logo">Audio Drive</a></Link>
+                    </div>
+                    <ul>
+                    <li className="right">
+                        <div className={style.authButton}>
+                            {!session && <button className="btn grey darken-4" onClick={() => signIn()}>Sign in</button>}
+                            {session && <button className="btn grey darken-4" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                        </div>
+                    </li>
+                    <li className="right hide-on-med-and-down">
                         <li><Link href="/library"><a>Library</a></Link></li>
-                        <li>About</li>
-                        <li>
-                            {!session && <button className="btn" onClick={() => signIn()}>Sign in</button>}
-                            {session && <button className="btn blue" onClick={() => signOut()}>Sign out {session.user.name}</button>}
-                        </li>
+                        <li><Link href="/library"><a>About</a></Link></li>
+                    </li>
+                    <li className="right">
+                        <li><Link href=""><a>Queue</a></Link></li>
+                        <li><Link href=""><a>Soundboard</a></Link></li>
+                    </li>
                     </ul>
                 </div>
             </nav>
