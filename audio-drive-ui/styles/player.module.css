@@ -4,6 +4,12 @@
    bottom: 0;
 }
 
+.playerInfo {
+   display: block;
+   height: 5.8em;
+   overflow: hidden;
+}
+
 .title {
    margin-left: 0.5em;
    margin-bottom: 0.3em;

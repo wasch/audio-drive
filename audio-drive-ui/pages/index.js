@@ -39,7 +39,7 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
             <div className={style.singularAudio} key={index}>
               <Audio
                 title={item.name}
-                url={item.music}
+                url={item.audioSource}
                 user={item.user}
                 passAudioToParent={retrieveAudio}
               />

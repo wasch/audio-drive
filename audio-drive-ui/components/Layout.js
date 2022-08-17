@@ -14,7 +14,7 @@ const Layout = ({ children, audio }) => {
         <Navbar />
       </header>
 
-      <main>
+      <main className={style.main}>
         {children}
       </main>
 
