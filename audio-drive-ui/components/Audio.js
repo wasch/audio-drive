@@ -13,13 +13,13 @@ const Audio = (props) => {
     return (
         <div className="card grey darken-3">
             <div className={style.audioCardWrapper}>
-                <div className="card-title valign-wrapper">
+                <div className="valign-wrapper">
                     <div className={style.playButton}>
                         <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
                             <i className="material-icons">play_arrow</i>
                         </button>
                     </div>
-                    <div className="card-text">
+                    <div className={style.cardTitle}>
                         {title}
                     </div>
                 </div>
