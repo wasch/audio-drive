@@ -10,6 +10,7 @@ function Upload() {
 
     const { data: session } = useSession();
 
+    const [dragActive, setDragActive] = React.useState(false);
     const [disable, setDisable] = React.useState(true);
     const [audioList, setAudioList] = React.useState([]);
 
@@ -25,63 +26,104 @@ function Upload() {
         Array.from(e.target.files).forEach(async (file) => {
             let audio = file;
             let audioName = audio.name;
+
+            // Add files to Firebase Storage
             const storagemRef = getStorage();
             const audioRef = ref(storagemRef, 'audio/' + audio.name);
             await uploadBytes(audioRef, audio).then((snapshot) => {
                 console.log('Uploaded audio');
             });
             let audioUrl = await getDownloadURL(audioRef);
-            setAudioList(current => [...current, {
+            const audioObj = {
                 name: audioName.substr(0, audioName.lastIndexOf(".")),
                 audioSource: audioUrl,
                 user: session.user.email
-            }]);
+            }
+
+            // Add doc references for audio files in Firebase Cloud Firestore Database
+            try {
+                const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                console.log(audioDatabaseRef);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+            setAudioList(current => [...current, audioObj]);
         });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        audioList.forEach(async (audio) => {
-            try {
-                const audioDatabaseRef = await addDoc(collection(db, "audio"), audio);
-                console.log(audioDatabaseRef);
+    }
 
-            } catch (e) {
-                console.error("Error adding documents: ", e);
-            }
-        });
-        alert("Audio added");
-        setAudioList([]);
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    }
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            Array.from(e.dataTransfer.files).forEach(async (file) => {
+                let audio = file;
+                let audioName = audio.name;
+                const storagemRef = getStorage();
+                const audioRef = ref(storagemRef, 'audio/' + audio.name);
+                await uploadBytes(audioRef, audio).then((snapshot) => {
+                    console.log('Uploaded audio');
+                });
+                let audioUrl = await getDownloadURL(audioRef);
+                const audioObj = {
+                    name: audioName.substr(0, audioName.lastIndexOf(".")),
+                    audioSource: audioUrl,
+                    user: session.user.email
+                }
+    
+                // Add doc references for audio files in Firebase Cloud Firestore Database
+                try {
+                    const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                    console.log(audioDatabaseRef);
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
+                setAudioList(current => [...current, audioObj]);
+            });
+        }
     }
 
     return (
         <div className={style.uploadpage}>
             <div className="row">
-                <div className="col s12">
-                    <form onSubmit={handleSubmit} className={style.uploadform} id="uploadForm">
-                        <label htmlFor="audioInput">
-                            Upload Audio Files
-                            <input type="file" id="audioInput" name="audio" onChange={audioChanged} required multiple hidden />
-                        </label>
-                        <button className="btn waves-effect waves-light blue" type="submit" name="action" disabled={disable}>Upload Files</button>
-                    </form>
+                <form onSubmit={handleSubmit} className={style.uploadform} id="uploadForm" onDragEnter={handleDrag}>
+                    <label htmlFor="audioInput" className={dragActive ? style.dragActive : "" }>
+                        Upload Audio Files
+                        <input type="file" id="audioInput" name="audio" onChange={audioChanged} required multiple hidden />
+                    </label>
+                    {dragActive && <div className={style.dragFileElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div>}
+                </form>
 
-                    {audioList.length === 0 ? <></> :
-                        <div className={style.cardContainer}>
-                            {audioList.map((item, index) => (
-                                <div className="card grey darken-3" key={index}>
-                                    <div className={style.audioCardWrapper}>
-                                        <div className="card-title valign-wrapper">
-                                            <div className="card-text">
-                                                {item.name}
-                                            </div>
+                {audioList.length === 0 ? <></> :
+                    <div className={style.cardContainer}>
+                        <h3>Audio Added:</h3>
+                        {audioList.map((item, index) => (
+                            <div className="card grey darken-3" key={index}>
+                                <div className={style.audioCardWrapper}>
+                                    <div className="card-title valign-wrapper">
+                                        <div className="card-text">
+                                            {item.name}
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    }
-                </div>
+                            </div>
+                        ))}
+                    </div>
+                }
             </div>
         </div>
     );

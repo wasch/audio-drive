@@ -33,8 +33,7 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
       </Head>
 
       <div className="row">
-        <div className="col s3"></div>
-        <div className="col s6">
+        <div className={style.audioContainer}>
           {audioList.map((item, index) => (
             <div className={style.singularAudio} key={index}>
               <Audio
@@ -46,7 +45,6 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
             </div>
           ))}
         </div>
-        <div className="col s3"></div>
       </div>
 
     </div>
