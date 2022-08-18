@@ -7,6 +7,9 @@ import Layout from '../components/Layout'
 
 import { SessionProvider } from 'next-auth/react'
 
+import store from '../redux/store'
+import { Provider } from 'react-redux'
+
 function MyApp({ Component, pageProps }) {
 
   const [currentAudio, setCurrentAudio] = React.useState({});
@@ -17,12 +20,14 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <SessionProvider session={pageProps.session} refetchInterval={0}>
-      <Layout audio={currentAudio}>
-        <Component 
-        {...pageProps} 
-        passAudioToApp={retrieveAudio}
-        />
-      </Layout>
+      <Provider store={store}>
+        <Layout audio={currentAudio}>
+          <Component
+            {...pageProps}
+            passAudioToApp={retrieveAudio}
+          />
+        </Layout>
+      </Provider>
     </SessionProvider>
   );
 }

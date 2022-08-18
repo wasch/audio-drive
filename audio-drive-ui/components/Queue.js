@@ -1,9 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
 
+import style from '../styles/queue.module.css'
+
 const Queue = () => {
 
-    const [queue, setQueue] = useState([]);
+
 
     const swapQueue = (currentIndex, swapToIndex) => {
         if (currentIndex === 0 || swapToIndex === 0 || swapToIndex > queue.length - 1) return;
@@ -33,7 +35,6 @@ const Queue = () => {
 
                             <div className="right-icon">
                                 <input className="arrow-up" type="image" src={arrow_up} onClick={() => { swapQueue(index, index - 1) }} />
-                                <Dropdown deleteCallback={this.deleteCallback} upNextCallback={this.upNextCallback} index={index} />
                                 <input className="arrow-down" type="image" src={arrow_down} onClick={() => { swapQueue(index, index + 1) }} />
                             </div>
                         </div>

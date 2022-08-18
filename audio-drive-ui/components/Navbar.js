@@ -26,7 +26,7 @@ const Navbar = () => {
                             </div>
                         </li>
                         <div className="right hide-on-med-and-down">
-                            <li><Link href="#"><a>Queue</a></Link></li>
+                            <li><Link href="/queue"><a>Queue</a></Link></li>
                             <li><Link href="#"><a>Soundboard</a></Link></li>
                             <li><Link href="/upload"><a>Upload</a></Link></li>
                             <li><Link href="#"><a>About</a></Link></li>
