@@ -1,7 +1,6 @@
 import React from 'react'
 import style from '../styles/layout.module.css'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 
 import Navbar from './Navbar'
 import Player from './Player'
@@ -20,10 +19,7 @@ const Layout = ({ children, audio }) => {
 
       <div className={style.footerContainer}>
         <footer className={style.footer}>
-          <Player
-            currentAudio={audio}
-          //audioNext={audio}
-          />
+          <Player />
         </footer>
       </div>
     </div>

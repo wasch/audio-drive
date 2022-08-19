@@ -22,6 +22,7 @@ function Upload() {
         }
     }, [audioList])
 
+    // Handle click to upload
     const audioChanged = (e) => {
         Array.from(e.target.files).forEach(async (file) => {
             let audio = file;
@@ -34,20 +35,32 @@ function Upload() {
                 console.log('Uploaded audio');
             });
             let audioUrl = await getDownloadURL(audioRef);
-            const audioObj = {
-                name: audioName.substr(0, audioName.lastIndexOf(".")),
-                audioSource: audioUrl,
-                user: session.user.email
-            }
 
-            // Add doc references for audio files in Firebase Cloud Firestore Database
-            try {
-                const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
-                console.log(audioDatabaseRef);
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }
-            setAudioList(current => [...current, audioObj]);
+            // Get audio duration
+            let audioTag = document.createElement('audio');
+            audioTag.src = audioUrl;
+            audioTag.addEventListener('loadedmetadata', async () => {
+
+                let minutes = parseInt(audioTag.duration / 60, 10);
+                let seconds = "0" + parseInt(audioTag.duration % 60);
+                let convertedDuration = minutes + ":" + seconds.slice(-2)
+
+                const audioObj = {
+                    name: audioName.substr(0, audioName.lastIndexOf(".")),
+                    audioSource: audioUrl,
+                    audioDuration: convertedDuration,
+                    user: session.user.email
+                }
+
+                // Add doc references for audio files in Firebase Cloud Firestore Database
+                try {
+                    const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                    console.log(audioDatabaseRef);
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
+                setAudioList(current => [...current, audioObj]);
+            });
         });
     }
 
@@ -65,6 +78,7 @@ function Upload() {
         }
     }
 
+    // Handle drag and drop to upload
     const handleDrop = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -73,26 +87,40 @@ function Upload() {
             Array.from(e.dataTransfer.files).forEach(async (file) => {
                 let audio = file;
                 let audioName = audio.name;
+
+                // Upload audio to Firebase Storage
                 const storagemRef = getStorage();
                 const audioRef = ref(storagemRef, 'audio/' + audio.name);
                 await uploadBytes(audioRef, audio).then((snapshot) => {
                     console.log('Uploaded audio');
                 });
                 let audioUrl = await getDownloadURL(audioRef);
-                const audioObj = {
-                    name: audioName.substr(0, audioName.lastIndexOf(".")),
-                    audioSource: audioUrl,
-                    user: session.user.email
-                }
-    
-                // Add doc references for audio files in Firebase Cloud Firestore Database
-                try {
-                    const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
-                    console.log(audioDatabaseRef);
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                }
-                setAudioList(current => [...current, audioObj]);
+
+                // Get audio duration
+                let audioTag = document.createElement('audio');
+                audioTag.src = audioUrl;
+                audioTag.addEventListener('loadedmetadata', async () => {
+
+                    let minutes = parseInt(audioTag.duration / 60, 10);
+                    let seconds = "0" + parseInt(audioTag.duration % 60);
+                    let convertedDuration = minutes + ":" + seconds.slice(-2)
+
+                    const audioObj = {
+                        name: audioName.substr(0, audioName.lastIndexOf(".")),
+                        audioSource: audioUrl,
+                        audioDuration: convertedDuration,
+                        user: session.user.email
+                    }
+
+                    // Add doc references for audio files in Firebase Cloud Firestore Database
+                    try {
+                        const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                        console.log(audioDatabaseRef);
+                    } catch (e) {
+                        console.error("Error adding document: ", e);
+                    }
+                    setAudioList(current => [...current, audioObj]);
+                });
             });
         }
     }
@@ -101,7 +129,7 @@ function Upload() {
         <div className={style.uploadpage}>
             <div className="row">
                 <form onSubmit={handleSubmit} className={style.uploadform} id="uploadForm" onDragEnter={handleDrag}>
-                    <label htmlFor="audioInput" className={dragActive ? style.dragActive : "" }>
+                    <label htmlFor="audioInput" className={dragActive ? style.dragActive : ""}>
                         Upload Audio Files
                         <input type="file" id="audioInput" name="audio" onChange={audioChanged} required multiple hidden />
                     </label>

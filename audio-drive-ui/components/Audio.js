@@ -1,11 +1,19 @@
 import React from 'react'
 
+import { useDispatch } from 'react-redux'
+import { addAudioToEndOfList, addAudioToStartOfList } from '../redux/slices/queueSlice'
+
 import style from '../styles/audio.module.css'
 
 const Audio = (props) => {
 
-    const { title, url, user } = props;
+    // Props
+    const { title, url, duration, user } = props;
 
+    // Redux
+    const dispatch = useDispatch();
+
+    // Handlers
     const handleClick = () => {
         props.passAudioToParent({ title, url });
     }
@@ -13,15 +21,32 @@ const Audio = (props) => {
     return (
         <div className="card grey darken-3">
             <div className={style.audioCardWrapper}>
-                <div className="valign-wrapper">
-                    <div className={style.playButton}>
-                        <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
-                            <i className="material-icons">play_arrow</i>
-                        </button>
-                    </div>
-                    <div className={style.cardTitle}>
-                        {title}
-                    </div>
+                <div className={style.playButton}>
+                    <button className="z-depth-2 btn-floating blue" onClick={() => dispatch(addAudioToStartOfList({
+                        name: title,
+                        audioSource: url,
+                        audioDuration: duration,
+                        user: user
+                    }))}>
+                        <i className="material-icons">play_arrow</i>
+                    </button>
+                </div>
+
+                <div className={style.cardTitle}>
+                    {title}
+                </div>
+                <div className={style.duration}>
+                    {duration}
+                </div>
+                <div className={style.rightIcon}>
+                    <button className="z-depth-2 btn blue" onClick={() => dispatch(addAudioToEndOfList({
+                        name: title,
+                        audioSource: url,
+                        audioDuration: duration,
+                        user: user
+                    }))}>
+                        <i className="material-icons">add</i>
+                    </button>
                 </div>
             </div>
         </div>
