@@ -10,15 +10,18 @@ import style from '../styles/queue.module.css'
 
 const Queue = () => {
 
-    const [queue, setQueue] = useState([]);
-    const [current, setCurrent] = useState({});
+    // Redux
+    const queueIndex = useSelector((state) => state.queueIndex.value);
     const storeQueue = useSelector((state) => state.queue.value);
 
-    useEffect(() => {
-        setCurrent(storeQueue[0]);
-        setQueue(storeQueue);
+    // State
+    const [queue, setQueue] = useState([]);
+    const [current, setCurrent] = useState({});
 
-        console.log("Current: " + current.name);
+    useEffect(() => {
+        setCurrent(storeQueue[queueIndex]);
+        setQueue(storeQueue.slice(queueIndex));     // Don't show songs that were already played
+
         console.log(storeQueue);
     });
 

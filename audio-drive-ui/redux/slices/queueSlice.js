@@ -6,12 +6,19 @@ export const queueSlice = createSlice({
         value: []
     },
     reducers: {
-        addAudioToList: (state, audio) => {
+        addAudioToEndOfList: (state, audio) => {
             state.value.push(audio.payload);
+        },
+        addAudioToStartOfList: (state, audio) => {
+            if (state.value.length === 0) {
+                state.value.push(audio.payload);
+            } else {
+                state.value[0] = audio.payload;
+            }
         }
     }
 })
 
-export const { addAudioToList } = queueSlice.actions
+export const { addAudioToEndOfList, addAudioToStartOfList } = queueSlice.actions
 
 export default queueSlice.reducer

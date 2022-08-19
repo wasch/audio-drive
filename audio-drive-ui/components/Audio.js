@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useDispatch } from 'react-redux'
-import { addAudioToList } from '../redux/slices/queueSlice'
+import { addAudioToEndOfList, addAudioToStartOfList } from '../redux/slices/queueSlice'
 
 import style from '../styles/audio.module.css'
 
@@ -22,7 +22,12 @@ const Audio = (props) => {
         <div className="card grey darken-3">
             <div className={style.audioCardWrapper}>
                 <div className={style.playButton}>
-                    <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
+                    <button className="z-depth-2 btn-floating blue" onClick={() => dispatch(addAudioToStartOfList({
+                        name: title,
+                        audioSource: url,
+                        audioDuration: duration,
+                        user: user
+                    }))}>
                         <i className="material-icons">play_arrow</i>
                     </button>
                 </div>
@@ -34,7 +39,7 @@ const Audio = (props) => {
                     {duration}
                 </div>
                 <div className={style.rightIcon}>
-                    <button className="z-depth-2 btn blue" onClick={() => dispatch(addAudioToList({
+                    <button className="z-depth-2 btn blue" onClick={() => dispatch(addAudioToEndOfList({
                         name: title,
                         audioSource: url,
                         audioDuration: duration,
