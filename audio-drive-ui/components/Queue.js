@@ -23,7 +23,7 @@ const Queue = () => {
         setQueue(storeQueue.slice(queueIndex));     // Don't show songs that were already played
 
         console.log(storeQueue);
-    });
+    }, [queueIndex]);
 
     const swapQueue = (currentIndex, swapToIndex) => {
         if (currentIndex === 0 || swapToIndex === 0 || swapToIndex > queue.length - 1) return;
