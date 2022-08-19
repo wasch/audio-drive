@@ -10,10 +10,13 @@
     align-items: center;
 }
 
-.cardTitle {
-    font-size: large
+.duration {
+    font-size: medium;
+    color: #A2A2A2;
+    margin-left: auto;
+    margin-right: 1em;
 }
 
-.rightIcon {
-    margin-left: auto;
+.cardTitle {
+    font-size: large;
 }

@@ -7,9 +7,11 @@ const PlayerControls = (props) => {
   return (
     <div className={style.playerControlsContainer}>
         <AudioPlayer
+            id="audioPlayer"
             autoPlay
             src={props.url}
             onPlay={(e) => console.log("playing")}
+            onEnded={(e) => console.log("stopped")}
             volume={0.20}
             // other props here
             showSkipControls

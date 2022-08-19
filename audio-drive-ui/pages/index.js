@@ -1,10 +1,7 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import style from '../styles/Home.module.css'
 
-import Player from '../components/Player'
 import Audio from '../components/Audio'
-import Queue from '../components/Queue'
 
 import { useState } from 'react'
 import { useSession, getSession, loading } from 'next-auth/react'
@@ -39,6 +36,7 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
               <Audio
                 title={item.name}
                 url={item.audioSource}
+                duration={item.audioDuration}
                 user={item.user}
                 passAudioToParent={retrieveAudio}
               />

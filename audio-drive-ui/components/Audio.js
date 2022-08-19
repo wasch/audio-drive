@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addAudioToList } from '../redux/slices/queueSlice'
 
 import style from '../styles/audio.module.css'
@@ -8,10 +8,9 @@ import style from '../styles/audio.module.css'
 const Audio = (props) => {
 
     // Props
-    const { title, url, user } = props;
+    const { title, url, duration, user } = props;
 
     // Redux
-    const queue = useSelector((state) => state.queue.value);
     const dispatch = useDispatch();
 
     // Handlers
@@ -27,13 +26,18 @@ const Audio = (props) => {
                         <i className="material-icons">play_arrow</i>
                     </button>
                 </div>
+
                 <div className={style.cardTitle}>
                     {title}
+                </div>
+                <div className={style.duration}>
+                    {duration}
                 </div>
                 <div className={style.rightIcon}>
                     <button className="z-depth-2 btn blue" onClick={() => dispatch(addAudioToList({
                         name: title,
                         audioSource: url,
+                        audioDuration: duration,
                         user: user
                     }))}>
                         <i className="material-icons">add</i>
