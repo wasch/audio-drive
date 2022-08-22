@@ -10,11 +10,16 @@ export const queueSlice = createSlice({
             state.value.push(audio.payload);
         },
         addAudioToStartOfList: (state, audio) => {
-            if (state.value.length === 0) {
-                state.value.push(audio.payload);
-            } else {
-                state.value[0] = audio.payload;
+            const queueIndex = audio.payload.currentIndex;
+            console.log(queueIndex);
+            const audioObj = {
+                name: audio.payload.name,
+                audioSource: audio.payload.audioSource,
+                audioDuration: audio.payload.audioDuration,
+                user: audio.payload.user
             }
+            // Clears the upcoming audio in the queue and adds the new audio to the end of the new queue
+            state.value = [...state.value.slice(0, queueIndex), audioObj];
         }
     }
 })
