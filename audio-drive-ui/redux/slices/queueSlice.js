@@ -20,10 +20,13 @@ export const queueSlice = createSlice({
             }
             // Clears the upcoming audio in the queue and adds the new audio to the end of the new queue
             state.value = [...state.value.slice(0, queueIndex), audioObj];
+        },
+        replaceQueue: (state, audio) => {
+            state.value = audio.payload;
         }
     }
 })
 
-export const { addAudioToEndOfList, addAudioToStartOfList } = queueSlice.actions
+export const { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } = queueSlice.actions
 
 export default queueSlice.reducer

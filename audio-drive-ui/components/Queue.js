@@ -1,16 +1,15 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 
-import { useSelector } from 'react-redux'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { replaceQueue } from '../redux/slices/queueSlice'
 
 import style from '../styles/queue.module.css'
 
 const Queue = () => {
 
     // Redux
+    const dispatch = useDispatch();
     const queueIndex = useSelector((state) => state.queueIndex.value);
     const storeQueue = useSelector((state) => state.queue.value);
 
@@ -58,8 +57,17 @@ const Queue = () => {
                             <div className={style.duration}>
                                 {card.audioDuration}
                             </div>
-                            <div className={style.rightIcon}>
-                                <button className="btn blue" onClick={() => { swapQueue(index, index - 1) }}></button>
+                            <div className={style.removeButton}>
+                                <button className="btn blue" onClick={() => {
+                                    console.log(card);
+                                    console.log(storeQueue[queueIndex]);
+                                    if (card !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
+                                        queue.splice(index, 1);
+                                        dispatch(replaceQueue(queue));
+                                    }
+                                }}>
+                                    <i className="material-icons">remove</i>
+                                </button>
                             </div>
                         </div>
                     </div>

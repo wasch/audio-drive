@@ -20,3 +20,7 @@
 .cardTitle {
     font-size: large;
 }
+
+.removeButtonLabel {
+    margin: 0 auto;
+}
