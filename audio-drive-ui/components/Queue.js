@@ -48,12 +48,15 @@ const Queue = () => {
                     <div className="card grey darken-3" key={index}>
                         <div className={style.audioCardWrapper}>
                             <div className={style.playButton}>
-                                <button className="z-depth-2 btn-floating blue" onClick={() => handleClick()}>
+                                <button className="z-depth-2 btn-floating blue">
                                     <i className="material-icons">play_arrow</i>
                                 </button>
                             </div>
                             <div className={style.cardTitle}>
                                 {card.name}
+                            </div>
+                            <div className={style.duration}>
+                                {card.audioDuration}
                             </div>
                             <div className={style.rightIcon}>
                                 <button className="btn blue" onClick={() => { swapQueue(index, index - 1) }}></button>

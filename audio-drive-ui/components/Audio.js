@@ -37,7 +37,6 @@ const Audio = (props) => {
                         };
                         if (queue[0]) {
                             audioObj.currentIndex += 1;
-                            console.log(audioObj.currentIndex);
                             dispatch(addAudioToStartOfList(audioObj));
                             dispatch(next());
                         } else {
