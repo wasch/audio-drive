@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { replaceQueue } from '../redux/slices/queueSlice'
 
+import { Draggable } from 'react-beautiful-dnd';
+
+import QueueAudio from './QueueAudio'
+
 import style from '../styles/queue.module.css'
 
 const Queue = () => {
@@ -20,60 +24,45 @@ const Queue = () => {
     useEffect(() => {
         setCurrent(storeQueue[queueIndex]);
         setQueue(storeQueue.slice(queueIndex));     // Don't show songs that were already played
+    }, [queueIndex, storeQueue]);
 
-        console.log(storeQueue);
-    }, [queueIndex]);
-
-    const swapQueue = (currentIndex, swapToIndex) => {
-        if (currentIndex === 0 || swapToIndex === 0 || swapToIndex > queue.length - 1) return;
-        let tempArray = [...queue];
-        let temp = tempArray[swapToIndex];
-        tempArray[swapToIndex] = tempArray[currentIndex];
-        tempArray[currentIndex] = temp;
-        setQueue(tempArray);
+    const setQueueFromButtonClick = (removedAudio) => {
+        setQueue(queue.filter(audio => audio !== removedAudio));
+        dispatch(replaceQueue(storeQueue.filter(audio => audio !== removedAudio)));
     }
 
     return (
         <div className={style.container}>
-            <h4 className="center grey-text text-lighten-2">Queue</h4>
-            {/*
-            <form className="form" onSubmit={this.handleSubmit}>
-                <label>Enter a command:</label>
-                <input type="text" onChange={this.handleChange} />
-            </form>
-             */}
             {queue ? (
-                queue.map((card, index) => (
-                    <div className="card grey darken-3" key={index}>
-                        <div className={style.audioCardWrapper}>
-                            <div className={style.playButton}>
-                                <button className="z-depth-2 btn-floating blue">
-                                    <i className="material-icons">play_arrow</i>
-                                </button>
+                queue.map((card, index) => index !== 0 ? (
+                    <Draggable draggableId={index + card.name} key={index} index={index}>
+                        {(provided) => (
+                            <div
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                ref={provided.innerRef}
+                            >
+                                <QueueAudio
+                                    card={card}
+                                    index={index}
+                                    setQueueFromButtonClick={setQueueFromButtonClick}
+                                />
                             </div>
-                            <div className={style.cardTitle}>
-                                {card.name}
-                            </div>
-                            <div className={style.duration}>
-                                {card.audioDuration}
-                            </div>
-                            <div className={style.removeButton}>
-                                <button className="btn blue" onClick={() => {
-                                    console.log(card);
-                                    console.log(storeQueue[queueIndex]);
-                                    if (card !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
-                                        queue.splice(index, 1);
-                                        dispatch(replaceQueue(queue));
-                                    }
-                                }}>
-                                    <i className="material-icons">remove</i>
-                                </button>
-                            </div>
-                        </div>
+                        )}
+                    </Draggable>
+                ) : (
+                    <div key={index}>
+                        <h4 className={style.nowPlaying}>Now playing:</h4>
+                        <QueueAudio
+                            card={card}
+                            index={index}
+                            setQueueFromButtonClick={setQueueFromButtonClick}
+                        />
+                        <hr className={style.currentlyPlayingDivider} />
                     </div>
                 ))
             ) : (
-                <div className="center grey-text text-darken 2">There is currently no queue</div>
+                <p>There is currently no queue</p>
             )}
         </div>
     )

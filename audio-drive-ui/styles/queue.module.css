@@ -1,9 +1,14 @@
+.nowPlaying {
+    margin-bottom: 0.6em;
+}
+
 .playButton {
     margin-right: 0.7em;
 }
 
 .audioCardWrapper {
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     display: flex;
@@ -24,3 +29,11 @@
 .removeButtonLabel {
     margin: 0 auto;
 }
+
+.currentlyPlayingDivider {
+    border: 3px solid;
+    border-radius: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+

@@ -1,11 +1,24 @@
 import React from 'react'
 
-import Queue from '../components/Queue'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+
+import QueueContainer from '../components/QueueContainer'
 
 const queue = () => {
+
+  const onDragEnd = (result) => {
+
+  }
+
   return (
     <>
-        <Queue />
+      <DragDropContext
+        //onDragStart={ }
+        //onDragUpdate
+        onDragEnd={onDragEnd()}
+      >
+        <QueueContainer />
+      </DragDropContext>
     </>
   )
 }
