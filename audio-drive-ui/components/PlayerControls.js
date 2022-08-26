@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import style from '../styles/player.module.css'
 import AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
@@ -17,6 +17,12 @@ const PlayerControls = (props) => {
     if (queueIndex + 1 < queue.length)
       dispatch(next());
   }
+
+  useEffect(() => {
+    // Enables next and previous media keys (play and pause work by default)
+    navigator.mediaSession.setActionHandler('nexttrack', () => checkForQueueLengthExceeded());
+    navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(previous()));
+  });
 
   return (
     <div className={style.playerControlsContainer}>
