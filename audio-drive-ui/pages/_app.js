@@ -18,6 +18,15 @@ function MyApp({ Component, pageProps }) {
     setCurrentAudio(audioData);
   }
 
+  /* Check for touch device
+  const isTouchDevice = () => {
+    if ("ontouchstart" in window) {
+      return true;
+    }
+    return false;
+  }
+  */
+
   return (
     <SessionProvider session={pageProps.session} refetchInterval={0}>
       <Provider store={store}>
