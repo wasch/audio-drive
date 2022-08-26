@@ -13,9 +13,8 @@ const QueueContainer = () => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                     >
-                        <Queue>
-                            {provided.placeholder}
-                        </Queue>
+                        <Queue />
+                        {provided.placeholder}
                     </div>
                 )}
             </Droppable>
