@@ -24,7 +24,7 @@ const Audio = (props) => {
     }, [queueIndex]);
 
     return (
-        <div className="card grey darken-3">
+        <div className="bg-zinc-700">
             <div className={style.audioCardWrapper}>
                 <div className={style.playButton}>
                     <button className="z-depth-2 btn-floating blue" onClick={() => {

@@ -12,8 +12,8 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav className="nav-wrapper blue">
-                <div className="container">
+            <nav className="nav-wrapper">
+                <div className="bg-blue-500 shadow-md">
 
                     <div className="logoContainer">
                         <Link href="/"><a className="left brand-logo">Audio Drive</a></Link>
