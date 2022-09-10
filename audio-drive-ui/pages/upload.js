@@ -2,16 +2,17 @@ import React from 'react'
 import Head from 'next/head'
 
 import Upload from '../components/Upload'
-import style from '../styles/upload.module.css'
 
 const upload = () => {
   return (
-    <div>
-        <Head>
-            <title>Upload Files</title>
-        </Head>
-        <h3 className={style.title}>Drag & Drop or Click to Upload</h3>
-        <Upload />
+    <div className="m-5 grid justify-items-center">
+      <Head>
+        <title>Upload Files</title>
+      </Head>
+      <div>
+        <h3 className="text-3xl mt-20">Drag & Drop or Click to Upload</h3>
+      </div>
+      <Upload />
     </div>
   )
 }

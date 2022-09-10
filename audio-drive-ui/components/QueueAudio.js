@@ -12,7 +12,7 @@ const QueueAudio = (props) => {
 
     return (
         <div className={style.queueContainer}>
-            <div className="card grey darken-3">
+            <div className="bg-zinc-700 px-1 py-2">
                 <div className={style.audioCardWrapper}>
                     <div className={style.cardTitle}>
                         {props.card.name}
@@ -21,7 +21,7 @@ const QueueAudio = (props) => {
                         {props.card.audioDuration}
                     </div>
                     <div className={style.removeButton}>
-                        <button className="btn blue" onClick={() => {
+                        <button className="flex" onClick={() => {
                             if (props.card !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
                                 props.setQueueFromButtonClick(props.card);
                             }

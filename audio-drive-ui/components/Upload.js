@@ -138,14 +138,12 @@ function Upload() {
 
                 {audioList.length === 0 ? <></> :
                     <div className={style.cardContainer}>
-                        <h3>Audio Added:</h3>
+                        <h3 className="text-2xl">Audio Added:</h3>
                         {audioList.map((item, index) => (
                             <div className="card grey darken-3" key={index}>
                                 <div className={style.audioCardWrapper}>
-                                    <div className="card-title valign-wrapper">
-                                        <div className="card-text">
-                                            {item.name}
-                                        </div>
+                                    <div className="text-xl">
+                                        {item.name}
                                     </div>
                                 </div>
                             </div>

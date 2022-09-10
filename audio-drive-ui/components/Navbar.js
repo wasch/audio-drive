@@ -1,8 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import style from '../styles/navbar.module.css'
-
 
 import { useSession, signIn, signOut } from 'next-auth/react'
 
@@ -11,30 +9,32 @@ const Navbar = () => {
     const { data: session } = useSession();
 
     return (
-        <div>
-            <nav className="nav-wrapper">
-                <div className="bg-blue-500 shadow-md">
-
-                    <div className="logoContainer">
-                        <Link href="/"><a className="left brand-logo">Audio Drive</a></Link>
-                    </div>
-                    <ul>
-                        <li className="right">
-                            <div className={style.authButton}>
-                                {!session && <button className="btn grey darken-4" onClick={() => signIn()}>Sign in</button>}
-                                {session && <button className="btn grey darken-4" onClick={() => signOut()}>Sign out {session.user.name}</button>}
-                            </div>
+        <div className="bg-blue-500 shadow-lg">
+            <nav className="md:flex justify-center min-w-fit">
+                <div className="md:flex items-center">
+                    <Link href="/"><a className="text-3xl pl-5 md:pr-60">Audio Drive</a></Link>
+                    <ul className="md:flex md:flex-row items-center ml-auto">
+                        <li>
+                            <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Queue</a></Link>
                         </li>
-                        <div className="right hide-on-med-and-down">
-                            <li><Link href="/queue"><a>Queue</a></Link></li>
-                            <li><Link href="#"><a>Soundboard</a></Link></li>
-                            <li><Link href="/upload"><a>Upload</a></Link></li>
-                            <li><Link href="#"><a>About</a></Link></li>
-                        </div>
+                        <li>
+                            <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Soundboard</a></Link>
+                        </li>
+                        <li>
+                            <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Upload</a></Link>
+                        </li>
+                        <li>
+                            <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
+                        </li>
+                        <li>
+                            {!session && <button className="block hover:backdrop-brightness-110 py-4 px-6" onClick={() => signIn()}>Sign in</button>}
+                            {session && <button className="block hover:backdrop-brightness-110 py-4 px-6" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                        </li>
+
                     </ul>
                 </div>
-            </nav>
-        </div>
+            </nav >
+        </div >
     )
 }
 
