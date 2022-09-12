@@ -1,16 +1,5 @@
 .player {
    margin: 0 auto;
-   max-width: 900px;
+   max-width: 960px;
    bottom: 0;
-}
-
-.playerInfo {
-   display: block;
-   height: 5.7em;
-   overflow: hidden;
-}
-
-.title {
-   margin-left: 0.5em;
-   margin-bottom: 0.3em;
 }

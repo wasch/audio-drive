@@ -5,11 +5,6 @@
    justify-content: center;
 }
 
-.title {
-   margin-top: 1em;
-   text-align: center;
-}
-
 .uploadform {
    display: flex;
    flex-direction: column;
@@ -25,8 +20,8 @@
 }
 
 .uploadform label {
-   padding: 10em;
-   margin-bottom: 4em;
+   margin-top: -5em;
+   padding: 4em;
    border: 3px dashed;
    text-transform: uppercase;
    cursor: pointer;
@@ -53,8 +48,7 @@
 
 .audioCardWrapper {
    margin: 10px;
-   padding-top: 10px;
-   padding-bottom: 10px;
+   padding-top: 0.7rem;
 }
 
 .cardContainer {

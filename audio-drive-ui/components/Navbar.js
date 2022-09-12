@@ -1,40 +1,74 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import style from '../styles/navbar.module.css'
-
 
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { useEffect } from 'react'
 
 const Navbar = () => {
 
     const { data: session } = useSession();
 
-    return (
-        <div>
-            <nav className="nav-wrapper blue">
-                <div className="container">
+    // Sets up the mobile menu button
+    useEffect(() => {
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
 
-                    <div className="logoContainer">
-                        <Link href="/"><a className="left brand-logo">Audio Drive</a></Link>
-                    </div>
-                    <ul>
-                        <li className="right">
-                            <div className={style.authButton}>
-                                {!session && <button className="btn grey darken-4" onClick={() => signIn()}>Sign in</button>}
-                                {session && <button className="btn grey darken-4" onClick={() => signOut()}>Sign out {session.user.name}</button>}
-                            </div>
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    }, []);
+
+    return (
+        <div className="bg-slate-600 shadow-lg">
+            <nav className="flex items-center justify-center min-w-fit">
+                <Link href="/"><a className="text-3xl pl-5 md:pr-60">Audio Drive</a></Link>
+                <button type="button" className="md:hidden ml-auto p-2 text-sm rounded-lg hover:backdrop-brightness-110 mobile-menu-button" aria-controls="navbar-default" aria-expanded="false">
+                    <svg className="w-8 h-8" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                </button>
+                <div className="hidden md:flex items-center" id="navbar-default">
+                    <ul className="flex flex-row items-center ml-auto">
+                        <li>
+                            <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Queue</a></Link>
                         </li>
-                        <div className="right hide-on-med-and-down">
-                            <li><Link href="/queue"><a>Queue</a></Link></li>
-                            <li><Link href="#"><a>Soundboard</a></Link></li>
-                            <li><Link href="/upload"><a>Upload</a></Link></li>
-                            <li><Link href="#"><a>About</a></Link></li>
-                        </div>
+                        <li>
+                            <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Soundboard</a></Link>
+                        </li>
+                        <li>
+                            <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Upload</a></Link>
+                        </li>
+                        <li>
+                            <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
+                        </li>
+                        <li>
+                            {!session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signIn()}>Sign in</button>}
+                            {session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                        </li>
+
                     </ul>
                 </div>
-            </nav>
-        </div>
+            </nav >
+            <div className="hidden bg-slate-600 mobile-menu">
+                <ul>
+                    <li>
+                        <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Queue</a></Link>
+                    </li>
+                    <li>
+                        <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Soundboard</a></Link>
+                    </li>
+                    <li>
+                        <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Upload</a></Link>
+                    </li>
+                    <li>
+                        <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">About</a></Link>
+                    </li>
+                    <li>
+                        {!session && <button className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={() => signIn()}>Sign in</button>}
+                        {session && <button className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                    </li>
+                </ul>
+            </div>
+        </div >
     )
 }
 

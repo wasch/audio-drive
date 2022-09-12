@@ -19,10 +19,10 @@ const Queue = () => {
 
     // State
     const [queue, setQueue] = useState([]);
-    const [current, setCurrent] = useState({});
+    //const [current, setCurrent] = useState({});
 
     useEffect(() => {
-        setCurrent(storeQueue[queueIndex]);
+        //setCurrent(storeQueue[queueIndex]);
         setQueue(storeQueue.slice(queueIndex));     // Don't show songs that were already played
     }, [queueIndex, storeQueue]);
 
@@ -38,6 +38,7 @@ const Queue = () => {
                     <Draggable draggableId={index + card.name} key={index} index={index}>
                         {(provided) => (
                             <div
+                                className="mb-3"
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 ref={provided.innerRef}
@@ -52,7 +53,7 @@ const Queue = () => {
                     </Draggable>
                 ) : (
                     <div key={index}>
-                        <h4 className={style.nowPlaying}>Now playing:</h4>
+                        <h4 className="text-3xl mt-8 mb-4">Now playing:</h4>
                         <QueueAudio
                             card={card}
                             index={index}

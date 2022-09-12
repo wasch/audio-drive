@@ -24,10 +24,9 @@ const Audio = (props) => {
     }, [queueIndex]);
 
     return (
-        <div className="card grey darken-3">
-            <div className={style.audioCardWrapper}>
-                <div className={style.playButton}>
-                    <button className="z-depth-2 btn-floating blue" onClick={() => {
+        <div className="bg-zinc-700 flex items-center m-3 px-2 py-3">
+                <div className="mr-2">
+                    <button className="flex hover:brightness-110" onClick={() => {
                         let audioObj = {
                             name: title,
                             audioSource: url,
@@ -55,7 +54,7 @@ const Audio = (props) => {
                     {duration}
                 </div>
                 <div className={style.rightIcon}>
-                    <button className="z-depth-2 btn blue" onClick={() => dispatch(addAudioToEndOfList({
+                    <button className="flex" onClick={() => dispatch(addAudioToEndOfList({
                         name: title,
                         audioSource: url,
                         audioDuration: duration,
@@ -64,7 +63,6 @@ const Audio = (props) => {
                         <i className="material-icons">add</i>
                     </button>
                 </div>
-            </div>
         </div>
     )
 }
