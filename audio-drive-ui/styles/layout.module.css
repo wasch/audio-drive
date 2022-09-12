@@ -1,5 +1,6 @@
 .main {
     margin: auto;
+    padding: 1em;
     max-width: 980px;
     margin-bottom: 15em;
 }
@@ -12,6 +13,6 @@
 }
 
 .footer {
-    background-color: #252525;
-    border-top: 1px solid #313131;
+    background-color: #27272a;
+    border-top: 1px solid #3e3e3e;
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import style from '../styles/player.module.css'
 
 const PlayerInfo = (props) => {
   return (
