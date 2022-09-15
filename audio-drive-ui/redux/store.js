@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import queueReducer from './slices/queueSlice'
 import queueIndexReducer from './slices/queueIndexSlice'
+import playbackSpeedReducer from './slices/playbackSpeedSlice'
 
 export default configureStore({
   reducer: {
     queue: queueReducer,
-    queueIndex: queueIndexReducer
+    queueIndex: queueIndexReducer,
+    playbackSpeed: playbackSpeedReducer
   }
 })

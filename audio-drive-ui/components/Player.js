@@ -12,6 +12,7 @@ const Player = () => {
   // Redux
   const currentIndex = useSelector((state) => state.queueIndex.value);
   const current = useSelector((state) => state.queue.value[currentIndex]);
+  const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
 
   // State
   const [currentAudio, setCurrentAudio] = React.useState({});
@@ -23,6 +24,9 @@ const Player = () => {
       setCurrentAudio(current);
       setTitle(currentAudio.name);
       setUrl(currentAudio.audioSource);
+
+      document.querySelector('audio').playbackRate = playbackSpeed; 
+      document.querySelector('audio').mozPreservesPitch = false;
     }
   });
 
@@ -35,10 +39,3 @@ const Player = () => {
 }
 
 export default Player
-
-/*
- * Useful audio commands
- *
- * document.querySelector('audio').playbackRate = 1; 
- * document.querySelector('audio').mozPreservesPitch = false 
- */
