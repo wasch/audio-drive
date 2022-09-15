@@ -33,8 +33,8 @@ const Queue = () => {
 
     return (
         <div className={style.container}>
-            {queue ? (
-                queue.map((card, index) => index !== 0 ? (
+            {storeQueue ? (
+                storeQueue.slice(queueIndex).map((card, index) => index !== 0 ? (
                     <Draggable draggableId={index + card.name} key={index} index={index}>
                         {(provided) => (
                             <div
