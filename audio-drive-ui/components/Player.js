@@ -13,6 +13,7 @@ const Player = () => {
   const currentIndex = useSelector((state) => state.queueIndex.value);
   const current = useSelector((state) => state.queue.value[currentIndex]);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
+  const maintainPitch = useSelector((state) => state.maintainPitch.value);
 
   // State
   const [currentAudio, setCurrentAudio] = React.useState({});
@@ -26,7 +27,7 @@ const Player = () => {
       setUrl(currentAudio.audioSource);
 
       document.querySelector('audio').playbackRate = playbackSpeed; 
-      document.querySelector('audio').mozPreservesPitch = false;
+      document.querySelector('audio').mozPreservesPitch = maintainPitch;
     }
   });
 

@@ -5,6 +5,7 @@ import 'react-h5-audio-player/lib/styles.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { next, previous } from '../redux/slices/queueIndexSlice'
 import { increment, decrement } from '../redux/slices/playbackSpeedSlice'
+import { toggleShouldMaintainPitch } from '../redux/slices/maintainPitchSlice'
 
 const PlayerControls = (props) => {
 
@@ -34,13 +35,21 @@ const PlayerControls = (props) => {
     slowDown.addEventListener("click", () => {
       dispatch(decrement());
     });
+
+    // Setup should maintain pitch toggle
+    const maintainPitchToggle = document.querySelector('input.maintainPitchToggle');
+    maintainPitchToggle.addEventListener("click", () => {
+      dispatch(toggleShouldMaintainPitch());
+    });
   }, []);
 
   return (
     <div>
       <button className="slowDown">Slow Down</button>
       <h5>{playbackSpeed.toFixed(2)}</h5>
-      <button className="speedUp">Speed Up</button>
+      <button className="speedUp">Speed Up</button><br/>
+      <input type="checkbox" id="maintainPitchToggle" name="maintainPitchToggle" className="maintainPitchToggle" />
+      <label for="maintainPitchToggle">Maintain Pitch</label>
       <AudioPlayer
         id="audioPlayer"
         autoPlay
