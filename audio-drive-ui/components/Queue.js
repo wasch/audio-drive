@@ -17,17 +17,7 @@ const Queue = () => {
     const queueIndex = useSelector((state) => state.queueIndex.value);
     const storeQueue = useSelector((state) => state.queue.value);
 
-    // State
-    const [queue, setQueue] = useState([]);
-    //const [current, setCurrent] = useState({});
-
-    useEffect(() => {
-        //setCurrent(storeQueue[queueIndex]);
-        setQueue(storeQueue.slice(queueIndex));     // Don't show songs that were already played
-    }, [queueIndex, storeQueue]);
-
     const setQueueFromButtonClick = (removedAudio) => {
-        setQueue(queue.filter(audio => audio !== removedAudio));
         dispatch(replaceQueue(storeQueue.filter(audio => audio !== removedAudio)));
     }
 
