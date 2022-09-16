@@ -34,7 +34,7 @@ const Audio = (props) => {
                             user: user,
                             currentIndex: currentIndex
                         };
-                        if (queue[0]) {
+                        if (queue[0]) { // If audio already exists in the queue
                             audioObj.currentIndex += 1;
                             dispatch(addAudioToStartOfList(audioObj));
                             dispatch(next());
@@ -54,13 +54,18 @@ const Audio = (props) => {
                     {duration}
                 </div>
                 <div className={style.rightIcon}>
-                    <button className="flex" onClick={() => dispatch(addAudioToEndOfList({
+                    <button className="flex" title="Add to queue" onClick={() => dispatch(addAudioToEndOfList({
                         name: title,
                         audioSource: url,
                         audioDuration: duration,
                         user: user
                     }))}>
                         <i className="material-icons">add</i>
+                    </button>
+                </div>
+                <div className={style.rightIcon}>
+                    <button className="flex" title="Menu">
+                        <i className="material-icons">more_vert</i>
                     </button>
                 </div>
         </div>

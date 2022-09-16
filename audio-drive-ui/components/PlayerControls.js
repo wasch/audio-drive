@@ -49,16 +49,15 @@ const PlayerControls = (props) => {
       <h5>{playbackSpeed.toFixed(2)}</h5>
       <button className="speedUp">Speed Up</button><br/>
       <input type="checkbox" id="maintainPitchToggle" name="maintainPitchToggle" className="maintainPitchToggle" />
-      <label for="maintainPitchToggle">Maintain Pitch</label>
+      <label htmlFor="maintainPitchToggle">Maintain Pitch</label>
       <AudioPlayer
         id="audioPlayer"
         autoPlay
         src={props.url}
         onPlay={(e) => console.log("playing")}
-        onEnded={(e) => dispatch(next())}
+        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next())}}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => checkForQueueLengthExceeded()}
         onClickPrevious={(e) => dispatch(previous())}
-        onClickForwards={(e) => console.log(test)}
         volume={0.20}
         // other props here
         showSkipControls
