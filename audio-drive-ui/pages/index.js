@@ -8,7 +8,7 @@ import { useSession, getSession, loading } from 'next-auth/react'
 import { authOptions } from "./api/auth/[...nextauth]"
 
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
-import db from '../firebase'
+import { db } from '../firebase'
 
 export default function Home({ retrievedAudio, passAudioToApp }) {
 

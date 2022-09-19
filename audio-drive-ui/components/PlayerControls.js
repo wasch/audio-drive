@@ -16,8 +16,9 @@ const PlayerControls = (props) => {
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
 
   const checkForQueueLengthExceeded = () => {
-    if (queueIndex + 1 < queue.length)
+    if (queueIndex + 1 < queue.length) {
       dispatch(next());
+    }
   }
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const PlayerControls = (props) => {
     <div>
       <button className="slowDown">Slow Down</button>
       <h5>{playbackSpeed.toFixed(2)}</h5>
-      <button className="speedUp">Speed Up</button><br/>
+      <button className="speedUp">Speed Up</button><br />
       <input type="checkbox" id="maintainPitchToggle" name="maintainPitchToggle" className="maintainPitchToggle" />
       <label htmlFor="maintainPitchToggle">Maintain Pitch</label>
       <AudioPlayer
@@ -55,7 +56,7 @@ const PlayerControls = (props) => {
         autoPlay
         src={props.url}
         onPlay={(e) => console.log("playing")}
-        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next())}}   // Don't increment the queueIndex if there is no more audio in the queue
+        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()) }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => checkForQueueLengthExceeded()}
         onClickPrevious={(e) => dispatch(previous())}
         volume={0.20}

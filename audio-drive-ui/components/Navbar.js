@@ -41,8 +41,8 @@ const Navbar = () => {
                             <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
                         </li>
                         <li>
-                            {!session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signIn()}>Sign in</button>}
-                            {session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                            {!session && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
+                            {session && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign out</a></Link>}
                         </li>
 
                     </ul>
