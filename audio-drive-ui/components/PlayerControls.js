@@ -23,7 +23,9 @@ const PlayerControls = (props) => {
       if (queueIndex + 1 < queue.length) dispatch(next());
     });
     navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(previous()));
+  }, [queue, queueIndex]);
 
+  useEffect(() => {
     // Setup slow down and speed up buttons
     const speedUp = document.querySelector('button.speedUp');
     speedUp.addEventListener("click", () => {
@@ -41,7 +43,7 @@ const PlayerControls = (props) => {
       dispatch(toggleShouldMaintainPitch());
     });
     console.log("test");
-  }, [queue, queueIndex]);
+  }, []);
 
   return (
     <div>
