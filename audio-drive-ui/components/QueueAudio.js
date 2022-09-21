@@ -20,7 +20,7 @@ const QueueAudio = (props) => {
                     <div className={style.duration}>
                         {props.card.audioDuration}
                     </div>
-                    <div className={style.removeButton}>
+                    <div className={style.removeButton} title="Remove from queue">
                         <button className="flex" onClick={() => {
                             if (props.card !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
                                 props.setQueueFromButtonClick(props.card);

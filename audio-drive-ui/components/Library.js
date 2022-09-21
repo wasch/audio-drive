@@ -7,16 +7,16 @@ import { useState } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setAudio } from '../redux/slices/audioSlice'
 import { useEffect } from 'react'
 
 const Library = () => {
 
     // Redux
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
-
-    // State
-    const [audioList, setAudioList] = useState([]);
+    const audio = useSelector((state) => state.audio.value);
 
     useEffect(() => {
         async function fetchAudio() {
@@ -32,18 +32,17 @@ const Library = () => {
                     }
                 });
             }
-            setAudioList(audio);
-            console.log("test");
+            dispatch(setAudio(audio));
         }
         fetchAudio();
     }, [user]);
 
     return (
         <>
-            {audioList ?
+            {audio ?
                 <div className="row">
                     <div className={style.audioContainer}>
-                        {audioList.map((item, index) => (
+                        {audio.map((item, index) => (
                             <div className={style.singularAudio} key={index}>
                                 <Audio
                                     title={item.name}

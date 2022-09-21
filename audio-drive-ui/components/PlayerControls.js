@@ -15,15 +15,13 @@ const PlayerControls = (props) => {
   const queue = useSelector((state) => state.queue.value);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
 
-  const checkForQueueLengthExceeded = () => {
-    if (queueIndex + 1 < queue.length) {
-      dispatch(next());
-    }
-  }
-
   useEffect(() => {
     // Enables next and previous media keys (play and pause work by default)
-    navigator.mediaSession.setActionHandler('nexttrack', () => checkForQueueLengthExceeded());
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      console.log(queueIndex);
+      console.log(queue.length);
+      if (queueIndex + 1 < queue.length) dispatch(next());
+    });
     navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(previous()));
 
     // Setup slow down and speed up buttons
@@ -42,7 +40,8 @@ const PlayerControls = (props) => {
     maintainPitchToggle.addEventListener("click", () => {
       dispatch(toggleShouldMaintainPitch());
     });
-  }, []);
+    console.log("test");
+  }, [queue, queueIndex]);
 
   return (
     <div>
@@ -56,8 +55,8 @@ const PlayerControls = (props) => {
         autoPlay
         src={props.url}
         onPlay={(e) => console.log("playing")}
-        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()) }}   // Don't increment the queueIndex if there is no more audio in the queue
-        onClickNext={(e) => checkForQueueLengthExceeded()}
+        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
+        onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
         onClickPrevious={(e) => dispatch(previous())}
         volume={0.20}
         // other props here
