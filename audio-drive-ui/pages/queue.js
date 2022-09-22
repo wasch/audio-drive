@@ -6,8 +6,9 @@ import { replaceQueue } from '../redux/slices/queueSlice'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import QueueContainer from '../components/QueueContainer'
+import Layout from '../components/Layout'
 
-const queue = () => {
+export default function Queue() {
 
   // Redux
   const dispatch = useDispatch();
@@ -39,4 +40,8 @@ const queue = () => {
   )
 }
 
-export default queue
+Queue.getLayout = function getLayout(page) {
+  return (
+    <Layout>{page}</Layout>
+  )
+}

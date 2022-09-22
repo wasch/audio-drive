@@ -30,11 +30,16 @@ const Navbar = () => {
                     uid: user.uid,
                     email: user.email
                 }));
-            } else {
+            } else { // Redirect user to sign in page if no user is signed in
                 dispatch(setUser(null));
+                document.location.href = "/auth";
             }
         });
     }, []);
+
+    const signOutUser = () => {
+        fbAuth.signOut();
+    }
 
     return (
         <div className="bg-slate-600 shadow-lg">
@@ -59,7 +64,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
-                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign out {user.email}</a></Link>}
+                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
                         </li>
 
                     </ul>
@@ -81,7 +86,7 @@ const Navbar = () => {
                     </li>
                     <li>
                         {!user && <Link href="/auth"><a className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5">Sign in</a></Link>}
-                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5">Sign out {user.email}</a></Link>}
+                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
                     </li>
                 </ul>
             </div>

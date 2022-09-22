@@ -1,10 +1,11 @@
 import React from 'react'
-import { useEffect } from 'react'
 
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/compat/app'
 import { fbAuth } from '../firebase'
 import 'firebase/compat/auth'
+
+import SimpleLayout from '../components/SimpleLayout'
 
 const auth = () => {
 
@@ -29,9 +30,15 @@ const auth = () => {
 
   return (
     <div>
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={fbAuth}/>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={fbAuth} />
     </div>
   )
 }
 
 export default auth
+
+auth.getLayout = function getLayout(authPage) {
+  return (
+    <SimpleLayout>{authPage}</SimpleLayout>
+  )
+}

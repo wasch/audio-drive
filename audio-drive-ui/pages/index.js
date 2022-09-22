@@ -2,6 +2,8 @@ import Head from 'next/head'
 import style from '../styles/Home.module.css'
 import Library from '../components/Library'
 
+import Layout from '../components/Layout'
+
 export default function Home() {
   
   return (
@@ -14,5 +16,11 @@ export default function Home() {
       <Library />
 
     </div>
+  )
+}
+
+Home.getLayout = function getLayout(page) {
+  return (
+    <Layout>{page}</Layout>
   )
 }

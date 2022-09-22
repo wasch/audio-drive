@@ -1,11 +1,10 @@
 import React from 'react'
 import style from '../styles/layout.module.css'
-import { useSession } from 'next-auth/react'
 
 import Navbar from './Navbar'
 import Player from './Player'
 
-const Layout = ({ children, audio }) => {
+const Layout = ({ children }) => {
 
   return (
     <div className="layoutContainer">

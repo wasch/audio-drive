@@ -1,9 +1,10 @@
 import React from 'react'
 import Head from 'next/head'
 
-import Upload from '../components/Upload'
+import Layout from '../components/Layout'
+import Uploader from '../components/Uploader'
 
-const upload = () => {
+export default function Upload() {
   return (
     <div className="m-5 grid justify-items-center">
       <Head>
@@ -12,9 +13,13 @@ const upload = () => {
       <div>
         <h3 className="text-3xl mt-20">Drag & Drop or Click to Upload</h3>
       </div>
-      <Upload />
+      <Uploader />
     </div>
   )
 }
 
-export default upload
+Upload.getLayout = function getLayout(page) {
+  return (
+    <Layout>{page}</Layout>
+  )
+}

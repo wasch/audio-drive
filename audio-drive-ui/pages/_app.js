@@ -2,21 +2,15 @@ import '../styles/globals.css'
 
 import React from 'react'
 
-import Layout from '../components/Layout'
-
 import store from '../redux/store'
 import { Provider } from 'react-redux'
 
-function MyApp({ Component, pageProps, ...rest }) {
+function MyApp({ Component, pageProps }) {
+
+  const getLayout = Component.getLayout || ((page) => page);
 
   return (
-    <Provider store={store}>
-      <Layout>
-        <Component
-          {...pageProps}
-        />
-      </Layout>
-    </Provider>
+    <Provider store={store}> { getLayout(<Component {...pageProps} />) } </Provider>
   );
 }
 
