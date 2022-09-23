@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { addAudioToEndOfList, addAudioToStartOfList } from '../redux/slices/queueSlice'
@@ -25,49 +26,85 @@ const Audio = (props) => {
 
     return (
         <div className="bg-zinc-700 flex items-center m-3 px-2 py-3">
-                <div className="mr-2">
-                    <button className="flex hover:brightness-110" onClick={() => {
-                        let audioObj = {
-                            name: title,
-                            audioSource: url,
-                            audioDuration: duration,
-                            user: user,
-                            currentIndex: currentIndex
-                        };
-                        if (queue[0]) { // If audio already exists in the queue
-                            audioObj.currentIndex += 1;
-                            dispatch(addAudioToStartOfList(audioObj));
-                            dispatch(next());
-                        } else {
-                            dispatch(addAudioToStartOfList(audioObj));
-                        }
-                    }
-                    }>
-                        <i className="material-icons">play_arrow</i>
-                    </button>
-                </div>
-
-                <div className={style.cardTitle}>
-                    {title}
-                </div>
-                <div className={style.duration}>
-                    {duration}
-                </div>
-                <div className={style.rightIcon}>
-                    <button className="flex" title="Add to queue" onClick={() => dispatch(addAudioToEndOfList({
+            <div className="mr-2">
+                <button className="flex hover:brightness-110" onClick={() => {
+                    let audioObj = {
                         name: title,
                         audioSource: url,
                         audioDuration: duration,
-                        user: user
-                    }))}>
-                        <i className="material-icons">add</i>
-                    </button>
-                </div>
-                <div className={style.rightIcon}>
-                    <button className="flex" title="Menu">
+                        user: user,
+                        currentIndex: currentIndex
+                    };
+                    if (queue[0]) { // If audio already exists in the queue
+                        audioObj.currentIndex += 1;
+                        dispatch(addAudioToStartOfList(audioObj));
+                        dispatch(next());
+                    } else {
+                        dispatch(addAudioToStartOfList(audioObj));
+                    }
+                }
+                }>
+                    <i className="material-icons">play_arrow</i>
+                </button>
+            </div>
+
+            <div className={style.cardTitle}>
+                {title}
+            </div>
+            <div className={style.duration}>
+                {duration}
+            </div>
+            <div className={style.rightIcon}>
+                <button className="flex" title="Add to queue" onClick={() => dispatch(addAudioToEndOfList({
+                    name: title,
+                    audioSource: url,
+                    audioDuration: duration,
+                    user: user
+                }))}>
+                    <i className="material-icons">add</i>
+                </button>
+            </div>
+            <Menu as="div" className="relative inline-block">
+                <div>
+                    <Menu.Button className="flex" title="Menu">
                         <i className="material-icons">more_vert</i>
-                    </button>
+                    </Menu.Button>
                 </div>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="absolute bg-slate-600 shadow-md rounded-sm">
+                        <div className="flex flex-col">
+                            <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
+                                {({ active }) => (
+                                    <a
+                                        className={`${active && 'bg-blue-500'}`}
+                                        href="#"
+                                    >
+                                        Settings
+                                    </a>
+                                )}
+                            </Menu.Item>
+                            <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
+                                {({ active }) => (
+                                    <a
+                                        className={`${active && 'bg-blue-500'}`}
+                                        href="#"
+                                    >
+                                        Documentation
+                                    </a>
+                                )}
+                            </Menu.Item>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
         </div>
     )
 }

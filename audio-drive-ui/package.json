@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.2",
     "@reduxjs/toolkit": "^1.8.4",
     "firebase": "^9.9.1",
     "firebaseui": "^6.0.1",
