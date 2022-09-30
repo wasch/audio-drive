@@ -2,8 +2,6 @@ import style from '../styles/Home.module.css'
 
 import Audio from './Audio'
 
-import { useState } from 'react'
-
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
 
@@ -17,6 +15,7 @@ const Library = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
     const audio = useSelector((state) => state.audio.value);
+    const queue = useSelector((state) => state.queue.value);
 
     useEffect(() => {
         async function fetchAudio() {
@@ -35,7 +34,7 @@ const Library = () => {
             dispatch(setAudio(audio));
         }
         fetchAudio();
-    }, [user]);
+    }, [user, queue]);
 
     return (
         <>
@@ -49,6 +48,7 @@ const Library = () => {
                                     url={item.audioSource}
                                     duration={item.audioDuration}
                                     user={item.user}
+                                    size={item.MBFileSize}
                                 />
                             </div>
                         ))}

@@ -2,15 +2,19 @@ import React, { useState, useEffect, Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addAudioToEndOfList, addAudioToStartOfList } from '../redux/slices/queueSlice'
+import { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } from '../redux/slices/queueSlice'
 import { next } from '../redux/slices/queueIndexSlice'
+
+import { db } from '../firebase'
+import { doc, deleteDoc, query, where, collection, getDocs, getDoc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import style from '../styles/audio.module.css'
 
 const Audio = (props) => {
 
     // Props
-    const { title, url, duration, user } = props;
+    const { title, url, duration, user, size } = props;
 
     // Redux
     const dispatch = useDispatch();
@@ -23,6 +27,40 @@ const Audio = (props) => {
     useEffect(() => {
         setCurrentIndex(queueIndex);
     }, [queueIndex]);
+
+    const removeFromLibrary = async () => {
+        // Remove doc
+        const q = query(collection(db, "audio"),
+            where("user", "==", user),
+            where("name", "==", title),
+            where("audioSource", "==", url),
+            where("audioDuration", "==", duration));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (audio) => {
+            await deleteDoc(doc(db, "audio", audio.id));
+        });
+
+        // Remove file
+        const storage = getStorage();
+        const fileRef = ref(storage, "audio/" + title + ".mp3");
+        deleteObject(fileRef).then(() => {
+            console.log("Successfully deleted: " + title);
+        }).catch((err) => {
+            console.log("Unable to delete: " + title);
+            console.log(err);
+        });
+
+        // Update user's capacity
+        const docRef = doc(db, "capacity", user);
+        const docSnap = await getDoc(docRef);
+        const currentCapacity = docSnap.data().capacity;
+        await updateDoc(docRef, {
+            capacity: currentCapacity - size,
+        });
+
+        // Clear queue
+        dispatch(replaceQueue([queue[0]]));
+    }
 
     return (
         <div className="bg-zinc-700 flex items-center m-3 px-2 py-3">
@@ -79,18 +117,20 @@ const Audio = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute bg-slate-600 shadow-md rounded-sm">
+                    <Menu.Items className="absolute bg-slate-600 shadow-md rounded-sm z-10">
                         <div className="flex flex-col">
                             <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
                                 {({ active }) => (
-                                    <a
+                                    <button
+                                        onClick={removeFromLibrary}
                                         className={`${active && 'bg-blue-500'}`}
                                         href="#"
                                     >
-                                        Settings
-                                    </a>
+                                        Delete
+                                    </button>
                                 )}
                             </Menu.Item>
+                            {/**
                             <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
                                 {({ active }) => (
                                     <a
@@ -101,6 +141,7 @@ const Audio = (props) => {
                                     </a>
                                 )}
                             </Menu.Item>
+                             */}
                         </div>
                     </Menu.Items>
                 </Transition>

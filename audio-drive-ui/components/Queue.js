@@ -17,6 +17,7 @@ const Queue = () => {
     const queueIndex = useSelector((state) => state.queueIndex.value);
     const storeQueue = useSelector((state) => state.queue.value);
 
+    // Removes audio from queue
     const setQueueFromButtonClick = (removedAudio) => {
         dispatch(replaceQueue(storeQueue.filter(audio => audio !== removedAudio)));
     }

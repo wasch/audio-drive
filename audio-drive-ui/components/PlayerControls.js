@@ -42,7 +42,6 @@ const PlayerControls = (props) => {
     maintainPitchToggle.addEventListener("click", () => {
       dispatch(toggleShouldMaintainPitch());
     });
-    console.log("test");
   }, []);
 
   return (
