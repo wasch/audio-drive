@@ -15,16 +15,17 @@ const PlayerControls = (props) => {
   const queue = useSelector((state) => state.queue.value);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
 
-  const checkForQueueLengthExceeded = () => {
-    if (queueIndex + 1 < queue.length)
-      dispatch(next());
-  }
-
   useEffect(() => {
     // Enables next and previous media keys (play and pause work by default)
-    navigator.mediaSession.setActionHandler('nexttrack', () => checkForQueueLengthExceeded());
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      console.log(queueIndex);
+      console.log(queue.length);
+      if (queueIndex + 1 < queue.length) dispatch(next());
+    });
     navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(previous()));
+  }, [queue, queueIndex]);
 
+  useEffect(() => {
     // Setup slow down and speed up buttons
     const speedUp = document.querySelector('button.speedUp');
     speedUp.addEventListener("click", () => {
@@ -41,13 +42,14 @@ const PlayerControls = (props) => {
     maintainPitchToggle.addEventListener("click", () => {
       dispatch(toggleShouldMaintainPitch());
     });
+    console.log("test");
   }, []);
 
   return (
     <div>
       <button className="slowDown">Slow Down</button>
       <h5>{playbackSpeed.toFixed(2)}</h5>
-      <button className="speedUp">Speed Up</button><br/>
+      <button className="speedUp">Speed Up</button><br />
       <input type="checkbox" id="maintainPitchToggle" name="maintainPitchToggle" className="maintainPitchToggle" />
       <label htmlFor="maintainPitchToggle">Maintain Pitch</label>
       <AudioPlayer
@@ -55,8 +57,8 @@ const PlayerControls = (props) => {
         autoPlay
         src={props.url}
         onPlay={(e) => console.log("playing")}
-        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next())}}   // Don't increment the queueIndex if there is no more audio in the queue
-        onClickNext={(e) => checkForQueueLengthExceeded()}
+        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
+        onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
         onClickPrevious={(e) => dispatch(previous())}
         volume={0.20}
         // other props here

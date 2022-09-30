@@ -1,27 +1,11 @@
 import Head from 'next/head'
 import style from '../styles/Home.module.css'
+import Library from '../components/Library'
 
-import Audio from '../components/Audio'
+import Layout from '../components/Layout'
 
-import { useState } from 'react'
-import { useSession, getSession, loading } from 'next-auth/react'
-import { authOptions } from "./api/auth/[...nextauth]"
-
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
-import db from '../firebase'
-
-export default function Home({ retrievedAudio, passAudioToApp }) {
-
-  const [audioCurrentIndex, setAudioCurrentIndex] = useState(0);
-  const [audioNextIndex, setAudioNextIndex] = useState(audioCurrentIndex + 1);
-  const [audio, setAudio] = useState({});
-  const [audioList, setAudioList] = useState(retrievedAudio);
-
-  const retrieveAudio = (audioData) => {
-    setAudio(audioData);
-    passAudioToApp(audioData); // Pass current audio to _app.js, then layout component, then player component  
-  }
-
+export default function Home() {
+  
   return (
     <div className={style.container}>
       <Head>
@@ -29,46 +13,14 @@ export default function Home({ retrievedAudio, passAudioToApp }) {
         <meta name="Audio Drive" content="music, entertainment" />
       </Head>
 
-      <div className="row">
-        <div className={style.audioContainer}>
-          {audioList.map((item, index) => (
-            <div className={style.singularAudio} key={index}>
-              <Audio
-                title={item.name}
-                url={item.audioSource}
-                duration={item.audioDuration}
-                user={item.user}
-                passAudioToParent={retrieveAudio}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      <Library />
 
     </div>
   )
 }
 
-export async function getServerSideProps(context) {
-
-  const session = await getSession(context, authOptions);
-
-  let audio = [];
-  if (session) {           // Check if user is signed in before getting audio
-    const q = query(collection(db, "audio"), where("user", "==", session.user.email));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      let newAudio = doc.data();
-      newAudio.id = doc.id;
-      if (!audio.some(audio => audio.id === newAudio.id)) {   // Don't add audio if it already exists
-        audio.push(newAudio);
-      }
-    });
-  }
-  console.log(audio);
-  return {
-    props: {
-      retrievedAudio: audio
-    }
-  }
+Home.getLayout = function getLayout(page) {
+  return (
+    <Layout>{page}</Layout>
+  )
 }

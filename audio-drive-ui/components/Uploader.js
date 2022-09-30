@@ -1,14 +1,10 @@
 import React from 'react'
 import style from '../styles/upload.module.css'
-import db from '../firebase'
+import { db, fbAuth } from '../firebase'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore'
 
-import { useSession } from 'next-auth/react'
-
-function Upload() {
-
-    const { data: session } = useSession();
+function Uploader() {
 
     const [dragActive, setDragActive] = React.useState(false);
     const [disable, setDisable] = React.useState(true);
@@ -49,7 +45,7 @@ function Upload() {
                     name: audioName.substr(0, audioName.lastIndexOf(".")),
                     audioSource: audioUrl,
                     audioDuration: convertedDuration,
-                    user: session.user.email
+                    user: fbAuth.currentUser.uid
                 }
 
                 // Add doc references for audio files in Firebase Cloud Firestore Database
@@ -109,7 +105,7 @@ function Upload() {
                         name: audioName.substr(0, audioName.lastIndexOf(".")),
                         audioSource: audioUrl,
                         audioDuration: convertedDuration,
-                        user: session.user.email
+                        user: fbAuth.currentUser.uid
                     }
 
                     // Add doc references for audio files in Firebase Cloud Firestore Database
@@ -155,4 +151,4 @@ function Upload() {
     );
 }
 
-export default Upload
+export default Uploader

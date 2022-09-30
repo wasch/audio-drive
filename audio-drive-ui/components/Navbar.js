@@ -2,12 +2,17 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
 import { useEffect } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../redux/slices/userSlice'
+
+import { fbAuth } from '../firebase'
 
 const Navbar = () => {
 
-    const { data: session } = useSession();
+    const user = useSelector((state) => state.user.value);
+    const dispatch = useDispatch();
 
     // Sets up the mobile menu button
     useEffect(() => {
@@ -17,7 +22,24 @@ const Navbar = () => {
         btn.addEventListener("click", () => {
             menu.classList.toggle("hidden");
         });
+
+        // Sets the current user
+        fbAuth.onAuthStateChanged((user) => {
+            if (user) {
+                dispatch(setUser({
+                    uid: user.uid,
+                    email: user.email
+                }));
+            } else { // Redirect user to sign in page if no user is signed in
+                dispatch(setUser(null));
+                document.location.href = "/auth";
+            }
+        });
     }, []);
+
+    const signOutUser = () => {
+        fbAuth.signOut();
+    }
 
     return (
         <div className="bg-slate-600 shadow-lg">
@@ -41,8 +63,8 @@ const Navbar = () => {
                             <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
                         </li>
                         <li>
-                            {!session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signIn()}>Sign in</button>}
-                            {session && <button className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                            {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
+                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
                         </li>
 
                     </ul>
@@ -63,8 +85,8 @@ const Navbar = () => {
                         <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">About</a></Link>
                     </li>
                     <li>
-                        {!session && <button className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={() => signIn()}>Sign in</button>}
-                        {session && <button className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={() => signOut()}>Sign out {session.user.name}</button>}
+                        {!user && <Link href="/auth"><a className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5">Sign in</a></Link>}
+                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
                     </li>
                 </ul>
             </div>
