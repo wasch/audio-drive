@@ -63,7 +63,7 @@ const Audio = (props) => {
     }
 
     return (
-        <div className="bg-zinc-700 flex items-center m-3 px-2 py-3">
+        <div className="bg-zinc-700 flex items-center my-3 px-2 py-3">
             <div className="mr-2">
                 <button className="flex hover:brightness-110" onClick={() => {
                     let audioObj = {
@@ -85,11 +85,10 @@ const Audio = (props) => {
                     <i className="material-icons">play_arrow</i>
                 </button>
             </div>
-
-            <div className={style.cardTitle}>
+            <div className="text-lg mr-4">
                 {title}
             </div>
-            <div className={style.duration}>
+            <div className="text-md text-zinc-400 ml-auto mr-3">
                 {duration}
             </div>
             <div className={style.rightIcon}>

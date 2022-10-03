@@ -8,6 +8,7 @@ import { db } from '../firebase'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAudio } from '../redux/slices/audioSlice'
 import { useEffect } from 'react'
+import { useState } from 'react'
 
 const Library = () => {
 
@@ -16,6 +17,9 @@ const Library = () => {
     const user = useSelector((state) => state.user.value);
     const audio = useSelector((state) => state.audio.value);
     const queue = useSelector((state) => state.queue.value);
+
+    // State
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         async function fetchAudio() {
@@ -36,13 +40,18 @@ const Library = () => {
         fetchAudio();
     }, [user, queue]);
 
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+    }
+
     return (
-        <>
+        <div className="flex flex-col items-center">
+            <input type="text" onChange={handleSearchChange} placeholder="Search" className="w-full max-w-md p-3 bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
             {audio ?
-                <div className="row">
-                    <div className={style.audioContainer}>
-                        {audio.map((item, index) => (
-                            <div className={style.singularAudio} key={index}>
+                <div className="w-full">
+                    {audio.map((item, index) => (
+                        search === "" || item.name.toLowerCase().includes(search.toLowerCase()) ?      // If the audio matches the search criteria or search is not being used, show it
+                            <div key={index}>
                                 <Audio
                                     title={item.name}
                                     url={item.audioSource}
@@ -51,12 +60,12 @@ const Library = () => {
                                     size={item.MBFileSize}
                                 />
                             </div>
-                        ))}
-                    </div>
+                            : <div key={index}></div>
+                    ))}
                 </div>
                 : <h3>No audio in library</h3>
             }
-        </>
+        </div>
     )
 }
 
