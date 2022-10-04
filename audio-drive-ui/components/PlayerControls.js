@@ -59,7 +59,7 @@ const PlayerControls = (props) => {
         customAdditionalControls={
           [
             RHAP_UI.LOOP,
-            <Popover as="div" className="flex mt-1">
+            <Popover as="div" className="flex mt-1 -mr-6 md:mr-0">
               <div>
                 <Popover.Button title="Other controls">
                   <i className="material-icons">more_vert</i>
@@ -98,7 +98,7 @@ const PlayerControls = (props) => {
           ]
         }
         customVolumeControls={[
-          <div className="ml-4"></div>,
+          <div className="md:ml-4"></div>,
           RHAP_UI.VOLUME
         ]}
         showSkipControls
