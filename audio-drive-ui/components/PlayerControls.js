@@ -59,7 +59,7 @@ const PlayerControls = (props) => {
         customAdditionalControls={
           [
             RHAP_UI.LOOP,
-            <Popover as="div" className="flex mt-1 -mr-6 md:mr-0">
+            <Popover as="div" key="popover" className="flex mt-1 -mr-6 md:mr-0">
               <div>
                 <Popover.Button title="Other controls">
                   <i className="material-icons">more_vert</i>
@@ -74,12 +74,12 @@ const PlayerControls = (props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Popover.Panel className="flex flex-row justify-center items-center absolute border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md rounded-sm z-10">
+                <Popover.Panel className="flex flex-row justify-center items-center z-10 absolute border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md rounded-sm z-10">
                   <button className="slowDown" title="Slow down (5%)" onClick={handleSlowdown}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78748/rotate-left">Rotate Left icon by Icons8</a> */}
                   </button>
-                  <h5 className="mx-2" title="Playback speed">{playbackSpeed.toFixed(2)}</h5>
+                  <h5 className="mx-2" title="Playback speed">{playbackSpeed.toFixed(2) + "x"}</h5>
                   <button className="speedUp" title="Speed up (5%)" onClick={handleSpeedup}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-right.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78746/rotate-right">Rotate Right icon by Icons8</a> */}
@@ -98,7 +98,7 @@ const PlayerControls = (props) => {
           ]
         }
         customVolumeControls={[
-          <div className="md:ml-4"></div>,
+          <div className="md:ml-4" key="spacer"></div>,
           RHAP_UI.VOLUME
         ]}
         showSkipControls

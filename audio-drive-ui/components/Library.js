@@ -1,5 +1,3 @@
-import style from '../styles/Home.module.css'
-
 import Audio from './Audio'
 
 import { collection, query, where, getDocs } from 'firebase/firestore'
@@ -46,7 +44,7 @@ const Library = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <input type="text" onChange={handleSearchChange} placeholder="Search" className="w-full max-w-md p-3 bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
+            <input type="text" onChange={handleSearchChange} placeholder="Search" className="w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
             {audio ?
                 <div className="w-full">
                     {audio.map((item, index) => (

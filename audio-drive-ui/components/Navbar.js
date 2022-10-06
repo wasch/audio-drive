@@ -51,6 +51,9 @@ const Navbar = () => {
                 <div className="hidden md:flex items-center" id="navbar-default">
                     <ul className="flex flex-row items-center ml-auto">
                         <li>
+                            <Link href="/playlists"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Playlists</a></Link>
+                        </li>
+                        <li>
                             <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Queue</a></Link>
                         </li>
                         <li>
@@ -64,7 +67,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
-                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
+                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={signOutUser}>Sign out {user.email}</a></Link>}
                         </li>
 
                     </ul>
@@ -72,6 +75,9 @@ const Navbar = () => {
             </nav >
             <div className="hidden bg-slate-600 mobile-menu">
                 <ul>
+                    <li>
+                        <Link href="/playlists"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Playlists</a></Link>
+                    </li>
                     <li>
                         <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Queue</a></Link>
                     </li>
@@ -86,7 +92,7 @@ const Navbar = () => {
                     </li>
                     <li>
                         {!user && <Link href="/auth"><a className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5">Sign in</a></Link>}
-                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={ signOutUser }>Sign out {user.email}</a></Link>}
+                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={signOutUser}>Sign out {user.email}</a></Link>}
                     </li>
                 </ul>
             </div>
