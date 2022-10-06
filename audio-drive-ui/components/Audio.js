@@ -10,6 +10,7 @@ import { doc, deleteDoc, query, where, collection, getDocs, getDoc, updateDoc } 
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import style from '../styles/audio.module.css'
+import { Dialog } from '@headlessui/react'
 
 const Audio = (props) => {
 
@@ -23,6 +24,7 @@ const Audio = (props) => {
 
     // State
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         setCurrentIndex(queueIndex);
@@ -92,12 +94,16 @@ const Audio = (props) => {
                 {duration}
             </div>
             <div className={style.rightIcon}>
-                <button className="flex" title="Add to queue" onClick={() => dispatch(addAudioToEndOfList({
-                    name: title,
-                    audioSource: url,
-                    audioDuration: duration,
-                    user: user
-                }))}>
+                <button className="flex" title="Add to queue" onClick={() => {
+                    dispatch(addAudioToEndOfList({
+                        name: title,
+                        audioSource: url,
+                        audioDuration: duration,
+                        user: user
+                    }));
+                    setIsOpen(true);    // Triggers dialog
+                    setTimeout(() => setIsOpen(false), 3000); // Dismisses dialog after 3 seconds
+                }}>
                     <i className="material-icons">add</i>
                 </button>
             </div>
@@ -145,6 +151,23 @@ const Audio = (props) => {
                     </Menu.Items>
                 </Transition>
             </Menu>
+
+            <Transition
+                show={isOpen}
+                enter="transition duration-100 ease-in-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+                as={Fragment}
+            >
+                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpen(false)}>
+                    <Dialog.Panel>
+                        <Dialog.Title>Added {title} to queue</Dialog.Title>
+                    </Dialog.Panel>
+                </Dialog>
+            </Transition>
         </div>
     )
 }
