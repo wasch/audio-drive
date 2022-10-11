@@ -5,6 +5,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc, addDoc, collection, getDoc, updateDoc } from 'firebase/firestore'
 
 import { useSelector } from 'react-redux'
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
 
 function Uploader() {
 
@@ -12,6 +14,7 @@ function Uploader() {
     const [dragActive, setDragActive] = useState(false);
     const [disable, setDisable] = useState(true);
     const [audioList, setAudioList] = useState([]);
+    const [isOpenFileSizeLimitExceededDialog, setIsOpenFileSizeLimitExceededDialog] = useState(false);
 
     // Redux
     const user = useSelector((state) => state.user.value);
@@ -33,7 +36,7 @@ function Uploader() {
         if (docSnap.exists()) {
             const currentCapacity = docSnap.data().capacity;
             console.log("Current capacity: " + currentCapacity);
-            if (MBFileSize + currentCapacity > 200) { // If adding the audio would exceed the per user storage limit (200MB)
+            if (MBFileSize + currentCapacity > process.env.NEXT_PUBLIC_MB_STORAGE_LIMIT) { // If adding the audio would exceed the per user storage limit (200MB)
                 return true;
             } else {
                 await updateDoc(docRef, {
@@ -74,7 +77,7 @@ function Uploader() {
                     let minutes = parseInt(audioTag.duration / 60, 10);
                     let seconds = "0" + parseInt(audioTag.duration % 60);
                     let convertedDuration = minutes + ":" + seconds.slice(-2)
-                    
+
                     const audioObj = {
                         name: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf(".")),
                         audioSource: audioUrl,
@@ -92,7 +95,8 @@ function Uploader() {
                     setAudioList(current => [...current, audioObj]);
                 });
             } else {
-                console.log("File " + file.name + " was not added due to storage limit (200MB). Try deleting songs")
+                setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
+                setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
             }
         };
     }
@@ -158,7 +162,8 @@ function Uploader() {
                         setAudioList(current => [...current, audioObj]);
                     });
                 } else {
-                    console.log("File " + file.name + " was not added due to storage limit (200MB). Try deleting songs")
+                    setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
+                    setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
                 }
             };
         }
@@ -193,6 +198,24 @@ function Uploader() {
                     </div>
                 }
             </div>
+
+            {/* File size limit exceeded dialog */}
+            <Transition
+                show={isOpenFileSizeLimitExceededDialog}
+                enter="transition duration-100 ease-in-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+                as={Fragment}
+            >
+                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenCreatePlaylistDialogConf(false)}>
+                    <Dialog.Panel>
+                        <Dialog.Title>Some files were not added due to storage limit ({process.env.NEXT_PUBLIC_MB_STORAGE_LIMIT}MB). Try deleting songs</Dialog.Title>
+                    </Dialog.Panel>
+                </Dialog>
+            </Transition>
         </div>
     );
 }
