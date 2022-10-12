@@ -23,8 +23,8 @@ const Queue = () => {
     }
 
     return (
-        <div className={style.container}>
-            {storeQueue ? (
+        <div className="flex flex-col justify-center">
+            {storeQueue.length > 0 ? (
                 storeQueue.slice(queueIndex).map((card, index) => index !== 0 ? (
                     <Draggable draggableId={index + card.name} key={index} index={index}>
                         {(provided) => (
@@ -54,7 +54,7 @@ const Queue = () => {
                     </div>
                 ))
             ) : (
-                <p>There is currently no queue</p>
+                <p className="text-lg self-center">There is currently no queue</p>
             )}
         </div>
     )

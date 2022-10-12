@@ -2,13 +2,12 @@ import React, { useEffect, Fragment, useState } from 'react'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
 
-import { Menu, Popover, Transition } from '@headlessui/react'
+import { Popover, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { next, previous } from '../redux/slices/queueIndexSlice'
 import { increment, decrement } from '../redux/slices/playbackSpeedSlice'
 import { toggleShouldMaintainPitch } from '../redux/slices/maintainPitchSlice'
-
 
 const PlayerControls = (props) => {
 
@@ -44,6 +43,12 @@ const PlayerControls = (props) => {
     setMaintainPitchIsToggled(!maintainPitchIsToggled);
   }
 
+  const handleRestart = () => {
+    document.querySelector('audio').pause();
+    document.querySelector('audio').currentTime = 0;
+    document.querySelector('audio').play();
+  }
+
   return (
     <div>
       <AudioPlayer
@@ -59,7 +64,10 @@ const PlayerControls = (props) => {
         customAdditionalControls={
           [
             RHAP_UI.LOOP,
-            <Popover as="div" key="popover" className="flex mt-1 -mr-6 md:mr-0">
+            <button title="Restart" className="flex" onClick={handleRestart}>
+              <i className="material-icons">cached</i>
+            </button>,
+            <Popover as="div" key="popover" className="flex mt-0.5 -mr-6 md:mr-0">
               <div>
                 <Popover.Button title="Other controls">
                   <i className="material-icons">more_vert</i>
@@ -98,7 +106,7 @@ const PlayerControls = (props) => {
           ]
         }
         customVolumeControls={[
-          <div className="md:ml-4" key="spacer"></div>,
+          <div className="md:ml-8" key="spacer"></div>,
           RHAP_UI.VOLUME
         ]}
         showSkipControls
