@@ -4,7 +4,8 @@ import audioReducer from './slices/audioSlice'
 import queueReducer from './slices/queueSlice'
 import queueIndexReducer from './slices/queueIndexSlice'
 import playbackSpeedReducer from './slices/playbackSpeedSlice'
-import maintainPitchSlice from './slices/maintainPitchSlice'
+import maintainPitchReducer from './slices/maintainPitchSlice'
+import playlistsReducer from './slices/playlistsSlice'
 
 export default configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export default configureStore({
     queue: queueReducer,
     queueIndex: queueIndexReducer,
     playbackSpeed: playbackSpeedReducer,
-    maintainPitch: maintainPitchSlice
+    maintainPitch: maintainPitchReducer,
+    playlists: playlistsReducer,
   }
 });

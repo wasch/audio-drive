@@ -50,7 +50,7 @@ const Queue = () => {
                             index={index}
                             setQueueFromButtonClick={setQueueFromButtonClick}
                         />
-                        <hr className={style.currentlyPlayingDivider} />
+                        <hr className="border-2 rounded-md my-6" />
                     </div>
                 ))
             ) : (

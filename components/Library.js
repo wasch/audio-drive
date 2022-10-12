@@ -58,7 +58,7 @@ const Library = () => {
                                     size={item.MBFileSize}
                                 />
                             </div>
-                            : <div key={index}></div>
+                            : <div key={index} className="hidden"></div>
                     ))}
                 </div>
                 : <h3>No audio in library</h3>
