@@ -14,7 +14,7 @@ import { Dialog } from '@headlessui/react'
 const Audio = (props) => {
 
     // Props
-    const { title, url, duration, user, size, isSelected, handleClick, deselect } = props;
+    const { title, url, duration, user, size, deselect } = props;
 
     // Redux
     const dispatch = useDispatch();
@@ -66,7 +66,7 @@ const Audio = (props) => {
     }
 
     return (
-        <div className={`bg-zinc-700 flex flex-row items-center my-3 px-2 shadow-md transition ease-in-out ${isSelected ? 'brightness-125 translate-x-2' : ''}`}>
+        <div className="bg-zinc-700 flex flex-row items-center my-3 px-2 shadow-md">
             <div className="mr-2">
                 <button className="flex hover:brightness-110" onClick={() => {
                     let audioObj = {
@@ -83,13 +83,12 @@ const Audio = (props) => {
                     } else {
                         dispatch(addAudioToStartOfList(audioObj));
                     }
-                    deselect(url);
                 }
                 }>
                     <i className="material-icons">play_arrow</i>
                 </button>
             </div>
-            <div className="flex flex-grow items-center py-3 select-none hover:cursor-pointer" onClick={(e) => handleClick(e, url, isSelected)}>
+            <div className="flex flex-grow items-center py-3">
                 <div className="text-lg mr-4">
                     {title}
                 </div>
@@ -105,7 +104,6 @@ const Audio = (props) => {
                         audioDuration: duration,
                         user: user
                     }));
-                    deselect(url);
                     setIsOpen(true);    // Triggers dialog
                     setTimeout(() => setIsOpen(false), 3000); // Dismisses dialog after 3 seconds
                 }}>
@@ -113,7 +111,7 @@ const Audio = (props) => {
                 </button>
                 <Menu as="div" className="relative inline-block">
                     <div>
-                        <Menu.Button className="flex" title="Menu" onClick={() => deselect(url)}>
+                        <Menu.Button className="flex" title="Menu">
                             <i className="material-icons">more_vert</i>
                         </Menu.Button>
                     </div>

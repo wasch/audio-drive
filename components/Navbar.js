@@ -1,18 +1,16 @@
-import React from 'react'
-import Head from 'next/head'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 
-import { useEffect } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../redux/slices/userSlice'
+import { useSelector } from 'react-redux'
 
 import { fbAuth } from '../firebase'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/slices/userSlice'
 
 const Navbar = () => {
 
-    const user = useSelector((state) => state.user.value);
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.value);
 
     // Sets up the mobile menu button
     useEffect(() => {

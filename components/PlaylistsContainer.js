@@ -1,20 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react'
-import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setPlaylists } from '../redux/slices/playlistsSlice'
+import { addPlaylist } from '../redux/slices/playlistsSlice'
 
 import { db, fbAuth } from '../firebase'
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore'
 
-import Playlist from './Playlist';
+import Playlist from './Playlist'
 
 const PlaylistsContainer = () => {
 
     // Redux
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.value);
     const playlistList = useSelector((state) => state.playlists.value);
 
     // State
@@ -23,30 +21,13 @@ const PlaylistsContainer = () => {
     const [playlistName, setPlaylistName] = useState("");
     const [canSubmitPlaylist, setCanSubmitPlaylist] = useState(false);
 
+    const [isViewingPlaylist, setIsViewingPlaylist] = useState(false);
+    const [activePlaylist, setActivePlaylist] = useState(null);
+
     // Dialog states
     const [isOpenCreatePlaylistDialog, setIsOpenCreatePlaylistDialog] = useState(false);
     const [isOpenCreatePlaylistDialogConf, setIsOpenCreatePlaylistDialogConf] = useState(false);
     const [isOpenCreatePlaylistDialogError, setIsOpenCreatePlaylistDialogError] = useState(false);
-
-    // Fetches the current user's playlists
-    useEffect(() => {
-        async function fetchPlaylists() {
-            let playlists = [];
-            if (user) {           // Check if user is signed in before getting playlists
-                const q = query(collection(db, "playlists"), where("user", "==", user.uid));
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    let newPlaylist = doc.data();
-                    newPlaylist.id = doc.id;
-                    if (!playlists.some(playlist => playlist.id === newPlaylist.id)) {   // Don't add playlist if it is already being shown
-                        playlists.push(newPlaylist);
-                    }
-                });
-            }
-            if (playlists.length > 0) dispatch(setPlaylists(playlists));
-        }
-        fetchPlaylists();
-    }, [user, isOpenCreatePlaylistDialogConf]);
 
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
@@ -70,7 +51,6 @@ const PlaylistsContainer = () => {
     const handleSubmitNewPlaylist = async (e) => {
         e.preventDefault();
         let name = playlistName;
-        console.log(name);
         setIsOpenCreatePlaylistDialog(false);
 
         const playlistObj = {
@@ -80,9 +60,11 @@ const PlaylistsContainer = () => {
             user: fbAuth.currentUser.uid,
         }
 
-        // Add doc references for audio files in Firebase Cloud Firestore Database
+        // Add doc references for playlist in Firebase Cloud Firestore Database
         try {
-            const playlistDatabaseRef = await addDoc(collection(db, "playlists"), playlistObj);
+            const res = await addDoc(collection(db, "playlists"), playlistObj);
+            playlistObj.id = res.id;
+            dispatch(addPlaylist(playlistObj));
             setIsOpenCreatePlaylistDialogConf(true);    // Triggers dialog
             setTimeout(() => setIsOpenCreatePlaylistDialogConf(false), 3000); // Dismisses dialog after 3 seconds
         } catch (e) {
@@ -92,27 +74,50 @@ const PlaylistsContainer = () => {
         }
     }
 
+    const handleSelectPlaylist = (item) => {
+        setIsViewingPlaylist(true);
+        setActivePlaylist(item);
+    }
+
+    const handleBack = () => {
+        setIsViewingPlaylist(false);
+        setActivePlaylist(null);
+    }
+
     return (
-        <div className="flex flex-col">
-            <div className="flex flex-row justify-center">
-                <button className="mr-4 p-2 min-w-fit text-lg shadow-md rounded-md bg-slate-600 transition ease-in-out hover:brightness-110" onClick={handleCreateNewPlaylist}>Create new playlist</button>
-                <input type="text" onChange={handleSearchChange} placeholder="Search" className="w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
+        <div className="flex flex-col grow">
+            <div className={`${isViewingPlaylist ? "hidden" : ""}`}>
+                <div className="flex flex-row justify-center">
+                    <button className="mr-4 p-2 min-w-fit text-lg shadow-md rounded-md bg-slate-600 transition ease-in-out hover:brightness-110" onClick={handleCreateNewPlaylist}>Create new playlist</button>
+                    <input type="text" onChange={handleSearchChange} placeholder="Search" className="w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
+                </div>
+
+                <div className="flex justify-center mt-5">
+                    {playlistList.length > 0 ?
+                        <div className="w-full grid grid-cols-1 md:grid-cols-3">
+                            {playlistList.map((item, index) => (
+                                search === "" || item.name.toLowerCase().includes(search.toLowerCase()) ?      // If a playlist matches the search criteria or search is not being used, show it
+                                    <div key={index} className="p-4 m-4 bg-zinc-700 shadow-md hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
+                                        <h2 className="text-4xl">{item.name}</h2>
+                                    </div>
+                                    : <div key={index} className="hidden"></div>
+                            ))}
+                        </div>
+                        : <h3 className="text-lg">No playlists created</h3>
+                    }
+                </div>
             </div>
 
-            <div className="flex justify-center mt-5">
-                {playlistList.length > 0 ?
-                    <div className="w-full grid grid-cols-1 md:grid-cols-3">
-                        {playlistList.map((item, index) => (
-                            search === "" || item.name.toLowerCase().includes(search.toLowerCase()) ?      // If a playlist matches the search criteria or search is not being used, show it
-                                <div key={index} className="p-4 m-4 bg-zinc-700 shadow-md">
-                                    <h2 className="text-4xl">{item.name}</h2>
-                                </div>
-                                : <div key={index} className="hidden"></div>
-                        ))}
-                    </div>
-                    : <h3 className="text-lg">No playlists created</h3>
-                }
-            </div>
+            {isViewingPlaylist ?
+                <Playlist
+                    name={activePlaylist.name}
+                    audioList={activePlaylist.audioList}
+                    isFavorite={activePlaylist.isFavorite}
+                    user={activePlaylist.user}
+                    handleBack={handleBack}
+                />
+                : <div className="hidden"></div>
+            }
 
             {/* Create playlist dialog */}
             <Transition
@@ -125,7 +130,7 @@ const PlaylistsContainer = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenCreatePlaylistDialog(false)}>
+                <Dialog className="z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-3 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenCreatePlaylistDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl">Create new playlist</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmitNewPlaylist}>

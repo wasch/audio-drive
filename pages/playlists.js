@@ -4,9 +4,9 @@ import Head from 'next/head'
 import Layout from '../components/Layout'
 import PlaylistsContainer from '../components/PlaylistsContainer'
 
-export default function Upload() {
+export default function Playlists() {
   return (
-    <div className="m-5 grid justify-items-center">
+    <div>
       <Head>
         <title>Your Playlists</title>
       </Head>
@@ -15,7 +15,7 @@ export default function Upload() {
   )
 }
 
-Upload.getLayout = function getLayout(page) {
+Playlists.getLayout = function getLayout(page) {
   return (
     <Layout>{page}</Layout>
   )

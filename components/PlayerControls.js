@@ -59,7 +59,7 @@ const PlayerControls = (props) => {
         onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
         onClickPrevious={(e) => dispatch(previous())}
-        volume={0.20}
+        volume={0.50}
         // other props here
         customAdditionalControls={
           [

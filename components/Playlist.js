@@ -1,17 +1,22 @@
 import React from 'react'
 
-import Audio from './Audio'
+import PlaylistAudio from './PlaylistAudio'
 
 const Playlist = (props) => {
 
-    const { name, audioList } = props;
+    const { name, audioList, handleBack } = props;
 
     return (
-        <div>
-            <h3>{name}</h3>
+        <div className="">
+            <div className="flex flex-row items-center mb-6">
+                <h3 className="text-4xl">{name}</h3>
+                <button className="flex ml-auto border-2 rounded-md hover:cursor-pointer" title="Back" onClick={handleBack}>
+                    <i className="material-icons text-3xl">arrow_back</i>
+                </button>
+            </div>
             {audioList.map((item, index) => (
                 <div key={index}>
-                    <Audio
+                    <PlaylistAudio
                         title={item.name}
                         url={item.audioSource}
                         duration={item.audioDuration}
