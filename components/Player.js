@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import style from '../styles/player.module.css'
 
 import PlayerInfo from './PlayerInfo'
@@ -16,9 +16,9 @@ const Player = () => {
   const maintainPitch = useSelector((state) => state.maintainPitch.value);
 
   // State
-  const [currentAudio, setCurrentAudio] = React.useState({});
-  const [title, setTitle] = React.useState(null);
-  const [url, setUrl] = React.useState(null);
+  const [currentAudio, setCurrentAudio] = useState({});
+  const [title, setTitle] = useState(null);
+  const [url, setUrl] = useState(null);
 
   useEffect(() => {
     if (current) {

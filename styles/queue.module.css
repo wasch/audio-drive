@@ -13,19 +13,3 @@
     margin-left: auto;
     margin-right: 1em;
 }
-
-.cardTitle {
-    font-size: large;
-}
-
-.removeButtonLabel {
-    margin: 0 auto;
-}
-
-.currentlyPlayingDivider {
-    border: 2px solid;
-    border-radius: 1em;
-    margin-top: 2em;
-    margin-bottom: 2em;
-}
-
