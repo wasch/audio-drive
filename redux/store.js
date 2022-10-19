@@ -6,6 +6,7 @@ import queueIndexReducer from './slices/queueIndexSlice'
 import playbackSpeedReducer from './slices/playbackSpeedSlice'
 import maintainPitchReducer from './slices/maintainPitchSlice'
 import playlistsReducer from './slices/playlistsSlice'
+import currentTimeReducer from './slices/currentTimeSlice'
 
 export default configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export default configureStore({
     playbackSpeed: playbackSpeedReducer,
     maintainPitch: maintainPitchReducer,
     playlists: playlistsReducer,
+    currentTime: currentTimeReducer
   }
 });

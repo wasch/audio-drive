@@ -5,11 +5,13 @@ import PlayerInfo from './PlayerInfo'
 import PlayerControls from './PlayerControls'
 
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setTime } from '../redux/slices/currentTimeSlice'
 
 const Player = () => {
 
   // Redux
+  const dispatch = useDispatch();
   const currentIndex = useSelector((state) => state.queueIndex.value);
   const current = useSelector((state) => state.queue.value[currentIndex]);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
@@ -26,8 +28,9 @@ const Player = () => {
       setTitle(currentAudio.name);
       setUrl(currentAudio.audioSource);
 
-      document.querySelector('audio').playbackRate = playbackSpeed; 
-      document.querySelector('audio').mozPreservesPitch = maintainPitch;
+      const audioTag = document.querySelector('audio');
+      audioTag.playbackRate = playbackSpeed; 
+      audioTag.mozPreservesPitch = maintainPitch;
     }
   });
 

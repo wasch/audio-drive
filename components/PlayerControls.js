@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { next, previous } from '../redux/slices/queueIndexSlice'
 import { increment, decrement } from '../redux/slices/playbackSpeedSlice'
 import { toggleShouldMaintainPitch } from '../redux/slices/maintainPitchSlice'
+import { setTime } from '../redux/slices/currentTimeSlice'
 
 const PlayerControls = (props) => {
 
@@ -59,8 +60,12 @@ const PlayerControls = (props) => {
         onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
         onClickPrevious={(e) => dispatch(previous())}
-        volume={0.50}
+        onListen={(e) => { 
+          dispatch(setTime(document.querySelector('audio').currentTime));
+        }}
+        volume={0.20}
         // other props here
+        listenInterval={10}
         customAdditionalControls={
           [
             RHAP_UI.LOOP,
