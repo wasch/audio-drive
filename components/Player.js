@@ -5,13 +5,11 @@ import PlayerInfo from './PlayerInfo'
 import PlayerControls from './PlayerControls'
 
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setTime } from '../redux/slices/currentTimeSlice'
+import { useSelector } from 'react-redux'
 
 const Player = () => {
 
   // Redux
-  const dispatch = useDispatch();
   const currentIndex = useSelector((state) => state.queueIndex.value);
   const current = useSelector((state) => state.queue.value[currentIndex]);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);

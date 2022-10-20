@@ -19,33 +19,62 @@ const WaveformVisualizer = () => {
         responsive: true,
         height: 200,
         normalize: true,
-        partialRender: true
+        partialRender: true,
     });
 
     // Redux
     const currentIndex = useSelector((state) => state.queueIndex.value);
     const current = useSelector((state) => state.queue.value[currentIndex]);
     const currentTime = useSelector((state) => state.currentTime.value);
+    const isPaused = useSelector((state) => state.isPaused.value);
 
     // State
-    const [waveSurfer, setWaveSurfer] = useState(false);
+    const [waveSurfer, setWaveSurfer] = useState(false); // Indicates if the waveform has finished generating
 
+    // Creates the waveform and adds event listeners
     const create = async () => {
+        setWaveSurfer(false);
         const WaveSurfer = (await import("wavesurfer.js")).default;
+        const WaveSurferCursor = (await import("wavesurfer.js/dist/plugin/wavesurfer.cursor")).default;
+        //const WaveSurferPlayhead = (await import("wavesurfer.js/dist/plugin/wavesurfer.playhead")).default;
 
         const options = formWaveSurferOptions(waveformRef.current);
         wavesurfer.current = WaveSurfer.create(options);
         wavesurfer.current.on('ready', function () {
             setWaveSurfer(true);
+            wavesurfer.current.addPlugin(WaveSurferCursor.create({
+                showTime: true,
+                opacity: 1,
+                customShowTimeStyle: {
+                    'background-color': '#000',
+                    color: '#fff',
+                    padding: '2px',
+                    'font-size': '14px'
+                }
+            })).initPlugin('cursor');
+            /*
+            wavesurfer.current.addPlugin(WaveSurferPlayhead.create({
+                returnOnPause: true,
+                moveOnSeek: true,
+                draw: true
+            })).initPlugin('playhead');
+            */
         });
+
+        wavesurfer.current.setMute(true);
+
+        wavesurfer.current.on('seek', function (position) {
+            document.querySelector('audio').currentTime = position * wavesurfer.current.getDuration();
+        });
+
         wavesurfer.current.load(current.audioSource);
     };
 
+    // Generates the waveform when the current audio is updated
     useEffect(() => {
         if (current) {
             create();
         }
-
         return () => {
             if (wavesurfer.current) {
                 wavesurfer.current.destroy();
@@ -54,8 +83,15 @@ const WaveformVisualizer = () => {
     }, [current]);
 
     useEffect(() => {
+        if (isPaused) {
+            wavesurfer.current.pause()
+        } 
+    }, [isPaused]);
+
+    // Seeks the waveform
+    useEffect(() => {
         if (waveSurfer && wavesurfer.current) {
-            wavesurfer.current.setCurrentTime(currentTime);
+            wavesurfer.current.play(currentTime);
         }
     }, [currentTime]);
 
@@ -65,7 +101,7 @@ const WaveformVisualizer = () => {
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}
             </div>
-            <div id="waveform" ref={waveformRef}/>
+            <div id="waveform" ref={waveformRef} />
         </div>
     )
 }

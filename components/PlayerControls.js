@@ -9,6 +9,7 @@ import { next, previous } from '../redux/slices/queueIndexSlice'
 import { increment, decrement } from '../redux/slices/playbackSpeedSlice'
 import { toggleShouldMaintainPitch } from '../redux/slices/maintainPitchSlice'
 import { setTime } from '../redux/slices/currentTimeSlice'
+import { setIsPaused } from '../redux/slices/pausedSlice'
 
 const PlayerControls = (props) => {
 
@@ -28,7 +29,15 @@ const PlayerControls = (props) => {
       console.log(queue.length);
       if (queueIndex + 1 < queue.length) dispatch(next());
     });
-    navigator.mediaSession.setActionHandler('previoustrack', () => dispatch(previous()));
+    navigator.mediaSession.setActionHandler('previoustrack', () => {  // Restarts audio if current time is over 3 seconds, goes to previous audio otherwise
+      if (document.querySelector('audio').currentTime > 3) {
+        document.querySelector('audio').pause();
+        document.querySelector('audio').currentTime = 0;
+        document.querySelector('audio').play();
+      } else {
+        dispatch(previous());
+      }
+    });
   }, [queue, queueIndex]);
 
   const handleSlowdown = () => {
@@ -56,11 +65,18 @@ const PlayerControls = (props) => {
         id="audioPlayer"
         autoPlay
         src={props.url}
-        onPlay={(e) => console.log("playing")}
+        onPlay={(e) => dispatch(setIsPaused(false))}
+        onPause={(e) => dispatch(setIsPaused(true))}
         onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
-        onClickPrevious={(e) => dispatch(previous())}
-        onListen={(e) => { 
+        onClickPrevious={(e) => {
+          if (document.querySelector('audio').currentTime > 3) {
+            handleRestart();
+          } else {
+            dispatch(previous())
+          }
+        }}
+        onListen={(e) => {
           dispatch(setTime(document.querySelector('audio').currentTime));
         }}
         volume={0.20}

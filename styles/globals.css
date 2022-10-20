@@ -47,5 +47,5 @@ body {
 
 /* Smoothens the animation of the waveform */
 wave wave {
-  transition: all 0.5s linear;
+  transition: all 0.25s linear;
 }
