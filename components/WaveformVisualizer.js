@@ -14,6 +14,7 @@ const WaveformVisualizer = () => {
         waveColor: "#eee",
         progressColor: "#0178FF",
         cursorColor: "OrangeRed",
+        cursorWidth: 2,
         barWidth: 3,
         barRadius: 3,
         responsive: true,
@@ -36,7 +37,7 @@ const WaveformVisualizer = () => {
         setWaveSurfer(false);
         const WaveSurfer = (await import("wavesurfer.js")).default;
         const WaveSurferCursor = (await import("wavesurfer.js/dist/plugin/wavesurfer.cursor")).default;
-        //const WaveSurferPlayhead = (await import("wavesurfer.js/dist/plugin/wavesurfer.playhead")).default;
+        const WaveSurferTimeline = (await import("wavesurfer.js/dist/plugin/wavesurfer.timeline")).default;
 
         const options = formWaveSurferOptions(waveformRef.current);
         wavesurfer.current = WaveSurfer.create(options);
@@ -52,13 +53,13 @@ const WaveformVisualizer = () => {
                     'font-size': '14px'
                 }
             })).initPlugin('cursor');
-            /*
-            wavesurfer.current.addPlugin(WaveSurferPlayhead.create({
-                returnOnPause: true,
-                moveOnSeek: true,
-                draw: true
-            })).initPlugin('playhead');
-            */
+            wavesurfer.current.addPlugin(WaveSurferTimeline.create({
+                container: "#timeline",
+                primaryColor: '#fff',
+                primaryFontColor: '#fff',
+                secondaryFontColor: '#fff',
+                notchPercentHeight: '30'
+            })).initPlugin('timeline');
         });
 
         wavesurfer.current.setMute(true);
@@ -72,25 +73,25 @@ const WaveformVisualizer = () => {
 
     // Generates the waveform when the current audio is updated
     useEffect(() => {
-        if (current) {
+        if (current && !waveSurfer) {
             create();
+            return () => {
+                if (wavesurfer.current) {
+                    wavesurfer.current.destroy();
+                }
+            };
         }
-        return () => {
-            if (wavesurfer.current) {
-                wavesurfer.current.destroy();
-            }
-        };
     }, [current]);
 
     useEffect(() => {
-        if (isPaused) {
+        if (wavesurfer.current && isPaused) {
             wavesurfer.current.pause()
-        } 
+        }
     }, [isPaused]);
 
     // Seeks the waveform
     useEffect(() => {
-        if (waveSurfer && wavesurfer.current) {
+        if (waveSurfer && wavesurfer.current && wavesurfer.current.backend) {
             wavesurfer.current.play(currentTime);
         }
     }, [currentTime]);
@@ -102,6 +103,7 @@ const WaveformVisualizer = () => {
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}
             </div>
             <div id="waveform" ref={waveformRef} />
+            <div id="timeline" className="mt-6 text-zinc-100"></div>
         </div>
     )
 }
