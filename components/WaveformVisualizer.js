@@ -97,7 +97,7 @@ const WaveformVisualizer = () => {
     }, [currentTime]);
 
     return (
-        <div>
+        <div className="bg-zinc-700 shadow-md rounded-md p-5">
             <div className="flex justify-center">
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}
