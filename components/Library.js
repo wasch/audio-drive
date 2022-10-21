@@ -7,10 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setAudio } from '../redux/slices/audioSlice'
 import { setPlaylists } from '../redux/slices/playlistsSlice'
 
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
 
 const Library = () => {
 
@@ -140,6 +138,7 @@ const Library = () => {
                             search === "" || item.name.toLowerCase().includes(search.toLowerCase()) ?      // If the audio matches the search criteria or search is not being used, show it
                                 <div key={index}>
                                     <Audio
+                                        id={item.id}
                                         title={item.name}
                                         url={item.audioSource}
                                         duration={item.audioDuration}

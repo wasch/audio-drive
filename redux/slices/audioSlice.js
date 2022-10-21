@@ -9,9 +9,18 @@ export const audioSlice = createSlice({
         setAudio: (state, audio) => {
             state.value = audio.payload;
         },
+        addAudio: (state, audio) => {
+            state.value = [...state.value, audio.payload];
+        },
+        removeAudio: (state, id) => {
+            const matchingAudio = state.value.findIndex(element => element.id === id.payload);
+            let tempAudioList = [...state.value];
+            tempAudioList.splice(matchingAudio, 1);
+            state.value = tempAudioList;
+        },
     }
 })
 
-export const { setAudio } = audioSlice.actions
+export const { setAudio, addAudio, removeAudio } = audioSlice.actions
 
 export default audioSlice.reducer
