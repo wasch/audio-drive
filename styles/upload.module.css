@@ -50,18 +50,3 @@
    margin: 10px;
    padding-top: 0.7rem;
 }
-
-.cardContainer {
-   margin-top: 3em;
-   margin-bottom: 15em;
-   padding: 1em;
-   background-color: #334155;
-   border-style: solid;
-   border-radius: 10px;
-   border-color: #334155;
-   box-shadow:   0 3px 3px 0 rgba(0,0,0,0.14),0 1px 7px 0 rgba(0,0,0,0.12),0 3px 1px -1px rgba(0,0,0,0.2);
-}
-
-.cardContainer h3 {
-   margin-top: 0;
-}
