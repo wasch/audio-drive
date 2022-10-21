@@ -186,18 +186,18 @@ const Uploader = () => {
                 </form>
 
                 {audioList.length === 0 ? <></> :
-                    <div className={style.cardContainer}>
+                    <div className="p-3 mt-8 shadow-md rounded-md bg-zinc-700">
                         <h3 className="text-2xl">Audio Added:</h3>
                         {audioList.map((item, index) => (
                             <div key={index}>
-                                <div className="card grey darken-3">
+                                <div className="card">
                                     <div className={style.audioCardWrapper}>
                                         <div className="text-xl">
                                             {item.name}
                                         </div>
                                     </div>
                                 </div>
-                                <hr className="border-slate-600" />
+                                <hr className="border-zinc-600" />
                             </div>
                         ))}
                     </div>
