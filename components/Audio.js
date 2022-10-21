@@ -4,6 +4,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } from '../redux/slices/queueSlice'
 import { next } from '../redux/slices/queueIndexSlice'
+import { removeAudio } from '../redux/slices/audioSlice'
 
 import { db } from '../firebase'
 import { doc, deleteDoc, query, where, collection, getDocs, getDoc, updateDoc } from "firebase/firestore";
@@ -14,7 +15,7 @@ import { Dialog } from '@headlessui/react'
 const Audio = (props) => {
 
     // Props
-    const { title, url, duration, user, size, isSelected, handleClick, deselect } = props;
+    const { id, title, url, duration, user, size, isSelected, handleClick, deselect } = props;
 
     // Redux
     const dispatch = useDispatch();
@@ -33,15 +34,7 @@ const Audio = (props) => {
 
     const removeFromLibrary = async () => {
         // Remove doc
-        const q = query(collection(db, "audio"),
-            where("user", "==", user),
-            where("name", "==", title),
-            where("audioSource", "==", url),
-            where("audioDuration", "==", duration));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (audio) => {
-            await deleteDoc(doc(db, "audio", audio.id));
-        });
+        await deleteDoc(doc(db, "audio", id));
 
         // Remove file
         const storage = getStorage();
@@ -60,6 +53,9 @@ const Audio = (props) => {
         await updateDoc(docRef, {
             capacity: currentCapacity - size,
         });
+
+        // Remove from redux store
+        dispatch(removeAudio(id))
 
         // Clear queue
         dispatch(replaceQueue([queue[0]]));

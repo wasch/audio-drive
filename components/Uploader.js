@@ -4,11 +4,13 @@ import { db, fbAuth } from '../firebase'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc, addDoc, collection, getDoc, updateDoc } from 'firebase/firestore'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
-function Uploader() {
+import { addAudio } from '../redux/slices/audioSlice'
+
+const Uploader = () => {
 
     // State
     const [dragActive, setDragActive] = useState(false);
@@ -17,6 +19,7 @@ function Uploader() {
     const [isOpenFileSizeLimitExceededDialog, setIsOpenFileSizeLimitExceededDialog] = useState(false);
 
     // Redux
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
 
     useEffect(() => {
@@ -89,10 +92,11 @@ function Uploader() {
                     // Add doc references for audio files in Firebase Cloud Firestore Database
                     try {
                         const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                        dispatch(addAudio(audioObj));
+                        setAudioList(current => [...current, audioObj]);
                     } catch (e) {
                         console.error("Error adding document: ", e);
                     }
-                    setAudioList(current => [...current, audioObj]);
                 });
             } else {
                 setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
@@ -153,13 +157,14 @@ function Uploader() {
                             MBFileSize: e.currentTarget.size
                         }
 
-                        // Add doc references for audio files in Firebase Cloud Firestore Database
+                        // Add doc references for audio files in Firebase Cloud Firestore Database and redux store
                         try {
                             const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                            dispatch(addAudio(audioObj));
+                            setAudioList(current => [...current, audioObj]);
                         } catch (e) {
                             console.error("Error adding document: ", e);
                         }
-                        setAudioList(current => [...current, audioObj]);
                     });
                 } else {
                     setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
