@@ -16,8 +16,6 @@ const AppWrapper = ({ children }) => {
 
   // Redux
   const dispatch = useDispatch();
-
-  // State
   const user = useSelector((state) => state.user.value);
 
   // Gets the current user's playlists

@@ -1,26 +1,34 @@
-import React, { useEffect, Fragment, useState } from 'react'
+import React, { useEffect, Fragment, useState, useRef } from 'react'
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
 
 import { Popover, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { next, previous } from '../redux/slices/queueIndexSlice'
-import { increment, decrement } from '../redux/slices/playbackSpeedSlice'
-import { toggleShouldMaintainPitch } from '../redux/slices/maintainPitchSlice'
-import { setTime } from '../redux/slices/currentTimeSlice'
-import { setIsPaused } from '../redux/slices/pausedSlice'
+import { next, previous } from '../../redux/slices/queueIndexSlice'
+import { increment, decrement } from '../../redux/slices/playbackSpeedSlice'
+import { toggleShouldMaintainPitch } from '../../redux/slices/maintainPitchSlice'
+import { setTime } from '../../redux/slices/currentTimeSlice'
+import { setIsPaused } from '../../redux/slices/pausedSlice'
 
 const PlayerControls = (props) => {
+
+  const audioRef = useRef(null);
 
   // Redux
   const dispatch = useDispatch();
   const queueIndex = useSelector((state) => state.queueIndex.value);
   const queue = useSelector((state) => state.queue.value);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
+  const panValue = useSelector((state) => state.pannerRef.value);
 
   // State
   const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
+
+  // Ref
+  const audioCtx = useRef();
+  const audioTag = useRef();
+  const track = useRef();
 
   useEffect(() => {
     // Enables next and previous media keys (play and pause work by default)
@@ -38,7 +46,30 @@ const PlayerControls = (props) => {
         dispatch(previous());
       }
     });
+
   }, [queue, queueIndex]);
+
+  // Setup audio context
+  useEffect(() => {
+    if (!audioCtx.current) audioCtx.current = new AudioContext();
+  }, []);
+
+  // Setup web audio api effects
+  useEffect(() => {
+    if (audioCtx.current) {
+      if (!audioTag.current) audioTag.current = document.querySelector('audio');
+      if (!track.current) track.current = audioCtx.current.createMediaElementSource(audioTag.current);
+
+      const pannerOptions = { pan: panValue };
+      const panner = new StereoPannerNode(audioCtx.current, pannerOptions);
+
+      track.current.connect(panner).connect(audioCtx.current.destination);
+    }
+    return () => {
+      track.current.disconnect();
+    }
+  }, [audioCtx.current, panValue]);
+
 
   const handleSlowdown = () => {
     dispatch(decrement());
@@ -63,9 +94,13 @@ const PlayerControls = (props) => {
     <div>
       <AudioPlayer
         id="audioPlayer"
+        ref={audioRef}
+        crossOrigin="anonymous"
         autoPlay
         src={props.url}
-        onPlay={(e) => dispatch(setIsPaused(false))}
+        onPlay={(e) => {
+          dispatch(setIsPaused(false))
+        }}
         onPause={(e) => dispatch(setIsPaused(true))}
         onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}

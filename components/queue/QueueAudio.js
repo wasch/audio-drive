@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import style from '../styles/queue.module.css'
+import style from '../../styles/queue.module.css'
 
 const QueueAudio = (props) => {
 

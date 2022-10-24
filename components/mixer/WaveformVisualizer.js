@@ -12,7 +12,7 @@ const WaveformVisualizer = () => {
     const formWaveSurferOptions = (ref) => ({
         container: ref,
         waveColor: "#eee",
-        progressColor: "#0178FF",
+        progressColor: "#42b1fc",
         cursorColor: "OrangeRed",
         cursorWidth: 2,
         barWidth: 3,
@@ -97,7 +97,7 @@ const WaveformVisualizer = () => {
     }, [currentTime]);
 
     return (
-        <div className="bg-zinc-700 shadow-md rounded-md p-5">
+        <div className="bg-zinc-700 shadow-md rounded-md p-5 mb-2">
             <div className="flex justify-center">
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}

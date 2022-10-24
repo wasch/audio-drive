@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import style from '../styles/player.module.css'
+import style from '../../styles/player.module.css'
 
 import PlayerInfo from './PlayerInfo'
 import PlayerControls from './PlayerControls'

@@ -2,9 +2,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addPlaylist, setPlaylists } from '../redux/slices/playlistsSlice'
+import { addPlaylist, setPlaylists } from '../../redux/slices/playlistsSlice'
 
-import { db, fbAuth } from '../firebase'
+import { db, fbAuth } from '../../firebase'
 import { collection, addDoc, doc, updateDoc } from 'firebase/firestore'
 
 import Playlist from './Playlist'

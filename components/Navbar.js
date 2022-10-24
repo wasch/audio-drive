@@ -55,7 +55,7 @@ const Navbar = () => {
                             <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Queue</a></Link>
                         </li>
                         <li>
-                            <Link href="/editor"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Editor</a></Link>
+                            <Link href="/mixer"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Mixer</a></Link>
                         </li>
                         <li>
                             <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Upload</a></Link>
@@ -80,7 +80,7 @@ const Navbar = () => {
                         <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Queue</a></Link>
                     </li>
                     <li>
-                        <Link href="/editor"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Editor</a></Link>
+                        <Link href="/mixer"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Mixer</a></Link>
                     </li>
                     <li>
                         <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Upload</a></Link>
