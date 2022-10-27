@@ -73,7 +73,7 @@ const WaveformVisualizer = () => {
 
     // Generates the waveform when the current audio is updated
     useEffect(() => {
-        if (current && !waveSurfer) {
+        if (current) {
             create();
             return () => {
                 if (wavesurfer.current) {

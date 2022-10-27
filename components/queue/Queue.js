@@ -8,8 +8,6 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import QueueAudio from './QueueAudio'
 
-import style from '../../styles/queue.module.css'
-
 const Queue = () => {
 
     // Redux
