@@ -7,9 +7,6 @@ import Uploader from '../components/Uploader'
 export default function Upload() {
   return (
     <div className="m-5 grid justify-items-center">
-      <Head>
-        <title>Upload Files</title>
-      </Head>
       <div>
         <h3 className="text-3xl mt-20">Drag & Drop or Click to Upload</h3>
       </div>

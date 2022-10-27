@@ -9,9 +9,6 @@ import MixerContainer from '../components/mixer/MixerContainer'
 export default function Mixer() {
   return (
     <div>
-      <Head>
-        <title>Mixer</title>
-      </Head>
       <MixerContainer />
     </div>
   )

@@ -30,9 +30,6 @@ export default function Queue() {
 
   return (
     <>
-      <Head>
-        <title>Queue</title>
-      </Head>
       <DragDropContext
         //onDragStart={ }
         //onDragUpdate

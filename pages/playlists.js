@@ -7,9 +7,6 @@ import PlaylistsContainer from '../components/playlist/PlaylistsContainer'
 export default function Playlists() {
   return (
     <div>
-      <Head>
-        <title>Your Playlists</title>
-      </Head>
       <PlaylistsContainer />
     </div>
   )

@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <div className={style.container}>
       <Head>
-        <title>Audio Drive</title>
         <meta name="Audio Drive" content="music, entertainment" />
       </Head>
 
