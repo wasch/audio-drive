@@ -16,15 +16,11 @@ const Panner = () => {
         setPannerValue(0);
     }
 
-    // Add panner event listener
-    useEffect(() => {
-        const pannerControl = document.querySelector("#panner");
-        pannerControl.addEventListener("input", () => {
-            let panValue = pannerControl.value;
-            dispatch(setPannerRef(panValue));
-            setPannerValue(panValue);
-        }, false);
-    }, []);
+    const handlePanChange = (e) => {
+        let panValue = e.target.value;
+        dispatch(setPannerRef(panValue));
+        setPannerValue(panValue);
+    }
 
     useEffect(() => {
         if (panValue) setPannerValue(panValue);
@@ -32,7 +28,8 @@ const Panner = () => {
 
     return (
         <div className="bg-zinc-700 shadow-md rounded-md p-5">
-            <input type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
+            <p className="text-2xl mb-1">Panning</p>
+            <input onChange={handlePanChange} type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
             <p onClick={handleResetPan} className="hover:cursor-pointer">{pannerValue}</p>
         </div>
     )

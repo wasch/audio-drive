@@ -6,7 +6,7 @@ import { Popover, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { next, previous } from '../../redux/slices/queueIndexSlice'
-import { increment, decrement } from '../../redux/slices/playbackSpeedSlice'
+import { increment, decrement, setPlaybackSpeed } from '../../redux/slices/playbackSpeedSlice'
 import { toggleShouldMaintainPitch } from '../../redux/slices/maintainPitchSlice'
 import { setTime } from '../../redux/slices/currentTimeSlice'
 import { setIsPaused } from '../../redux/slices/pausedSlice'
@@ -79,6 +79,10 @@ const PlayerControls = (props) => {
     dispatch(increment());
   }
 
+  const handleResetSpeed = () => {
+    dispatch(setPlaybackSpeed(1));
+  }
+
   const handleToggleMaintainPitch = () => {
     dispatch(toggleShouldMaintainPitch());
     setMaintainPitchIsToggled(!maintainPitchIsToggled);
@@ -140,14 +144,14 @@ const PlayerControls = (props) => {
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78748/rotate-left">Rotate Left icon by Icons8</a> */}
                   </button>
-                  <h5 className="mx-2" title="Playback speed">{playbackSpeed.toFixed(2) + "x"}</h5>
+                  <p onClick={handleResetSpeed} className="mx-1 hover:cursor-pointer">{Number.parseFloat(playbackSpeed).toFixed(2) + "x"}</p>
                   <button className="speedUp" title="Speed up (5%)" onClick={handleSpeedup}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-right.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78746/rotate-right">Rotate Right icon by Icons8</a> */}
                   </button>
                   <div className="border border-l-2 border-zinc-700 h-full ml-4"></div>
                   <div className="flex flex-row">
-                    <input onClick={handleToggleMaintainPitch} type="checkbox" checked={maintainPitchIsToggled} id="maintainPitchToggle" name="maintainPitchToggle" className="ml-4 maintainPitchToggle" />
+                    <input onChange={handleToggleMaintainPitch} type="checkbox" checked={maintainPitchIsToggled} id="maintainPitchToggle" name="maintainPitchToggle" className="ml-4 maintainPitchToggle" />
                     <label htmlFor="maintainPitchToggle" title="Maintain pitch when changing speed">
                       <img src="https://img.icons8.com/windows/32/FFFFFF/tuning-fork.png" />
                       { /* Source: <a target="_blank" href="https://icons8.com/icon/bSsj0HDWJRzb/tuning-fork">Tuning Fork icon by Icons8</a> */}

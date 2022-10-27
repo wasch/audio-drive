@@ -27,7 +27,7 @@ const Player = () => {
       setUrl(currentAudio.audioSource);
 
       const audioTag = document.querySelector('audio');
-      audioTag.playbackRate = playbackSpeed; 
+      audioTag.playbackRate = Number.parseFloat(playbackSpeed).toFixed(2); 
       audioTag.mozPreservesPitch = maintainPitch;
     }
   });

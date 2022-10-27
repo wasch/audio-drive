@@ -9,18 +9,19 @@ export const playbackSpeedSlice = createSlice({
         increment: (state) => { // Increments playback speed by 5%
             if (state.value > 0) {
                 state.value += 0.05;
-                console.log(state.value);
             }
         },
         decrement: (state) => { // Decrements playback speed by 5%
             if (state.value > 0) {
                 state.value -= 0.05;
-                console.log(state.value);
             }
+        },
+        setPlaybackSpeed: (state, speed) => {
+            state.value = Number.parseFloat(Number.parseFloat(speed.payload).toFixed(2));
         }
     }
 })
 
-export const { increment, decrement } = playbackSpeedSlice.actions
+export const { increment, decrement, setPlaybackSpeed } = playbackSpeedSlice.actions
 
 export default playbackSpeedSlice.reducer
