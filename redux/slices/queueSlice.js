@@ -11,7 +11,6 @@ export const queueSlice = createSlice({
         },
         addAudioToStartOfList: (state, audio) => {
             const queueIndex = audio.payload.currentIndex;
-            //console.log("Queue index: " + queueIndex);
             const audioObj = {
                 name: audio.payload.name,
                 audioSource: audio.payload.audioSource,

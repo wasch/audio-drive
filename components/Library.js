@@ -126,7 +126,7 @@ const Library = () => {
     }
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center bg-[#2c2c31] p-5 rounded-md shadow-md">
             <button className={`absolute right-3 bottom-44 md:right-10 shadow-md transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
                 <i className="material-icons flex text-6xl">add_circle</i>
             </button>

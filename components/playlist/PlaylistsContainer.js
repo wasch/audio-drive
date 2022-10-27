@@ -3,6 +3,10 @@ import React, { Fragment, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addPlaylist, setPlaylists } from '../../redux/slices/playlistsSlice'
+import { setQueueIndex } from '../../redux/slices/queueIndexSlice'
+import { replaceQueue } from '../../redux/slices/queueSlice'
+
+import shuffler from '../../functions/shuffler';
 
 import { db, fbAuth } from '../../firebase'
 import { collection, addDoc, doc, updateDoc } from 'firebase/firestore'
@@ -17,6 +21,7 @@ const PlaylistsContainer = () => {
     // Redux
     const dispatch = useDispatch();
     const playlistList = useSelector((state) => state.playlists.value);
+
 
     // State
     const [search, setSearch] = useState("");
@@ -146,8 +151,20 @@ const PlaylistsContainer = () => {
         setActivePlaylist(null);
     }
 
+    const handlePlay = () => {
+        dispatch(replaceQueue(activePlaylist.audioList));
+        dispatch(setQueueIndex(0));
+    }
+
+    const handleShufflePlay = () => {
+        let tempPlaylist = activePlaylist.audioList.slice();
+        tempPlaylist = shuffler(tempPlaylist);
+        dispatch(replaceQueue(tempPlaylist));
+        dispatch(setQueueIndex(0));
+    }
+
     return (
-        <div className="flex flex-col grow">
+        <div className="flex flex-col grow bg-[#2c2c31] p-5 rounded-md shadow-md">
             <div className={`${isViewingPlaylist ? "hidden" : ""}`}>
                 <div className="flex flex-row justify-center mt-5">
                     <button className="mr-4 p-2 min-w-fit text-lg shadow-md rounded-md bg-slate-600 transition ease-in-out hover:brightness-110" onClick={handleCreateNewPlaylist}>Create new playlist</button>
@@ -202,6 +219,8 @@ const PlaylistsContainer = () => {
                         isFavorite={activePlaylist.isFavorite}
                         user={activePlaylist.user}
                         handleBack={handleBack}
+                        handlePlay={handlePlay}
+                        handleShufflePlay={handleShufflePlay}
                     />
                     : <div className="hidden"></div>
             }
