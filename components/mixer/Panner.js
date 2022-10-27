@@ -27,7 +27,7 @@ const Panner = () => {
     }, []);
 
     return (
-        <div className="bg-zinc-700 shadow-md rounded-md p-5">
+        <div className="bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mr-1">
             <p className="text-2xl mb-1">Panning</p>
             <input onChange={handlePanChange} type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
             <p onClick={handleResetPan} className="hover:cursor-pointer">{pannerValue}</p>

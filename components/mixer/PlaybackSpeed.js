@@ -40,7 +40,7 @@ const Panner = () => {
     }, [speedValue]);
 
     return (
-        <div className="bg-zinc-700 shadow-md rounded-md p-5 ml-2">
+        <div className="bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mx-1">
             <p className="text-2xl mb-1">Playback Speed</p>
             <input onChange={handlePlaybackSpeedChange} type="range" id="speedRange" min="0" max="2" value={speed} step="0.01" />
             <div className="flex flex-row flex-grow items-center">
