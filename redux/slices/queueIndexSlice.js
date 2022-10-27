@@ -13,10 +13,13 @@ export const queueIndexSlice = createSlice({
             if (state.value > 0) {
                 state.value -= 1;
             }
+        },
+        setQueueIndex: (state, index) => {
+            state.value = index.payload;
         }
     }
 })
 
-export const { next, previous } = queueIndexSlice.actions
+export const { next, previous, setQueueIndex } = queueIndexSlice.actions
 
 export default queueIndexSlice.reducer

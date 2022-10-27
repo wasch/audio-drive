@@ -1,4 +1,5 @@
 import { React, useState } from 'react'
+import Head from 'next/head'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { replaceQueue } from '../redux/slices/queueSlice'
@@ -29,6 +30,9 @@ export default function Queue() {
 
   return (
     <>
+      <Head>
+        <title>Queue</title>
+      </Head>
       <DragDropContext
         //onDragStart={ }
         //onDragUpdate
