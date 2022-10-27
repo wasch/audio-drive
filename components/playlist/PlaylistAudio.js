@@ -2,24 +2,21 @@ import React, { useState, useEffect, Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } from '../../redux/slices/queueSlice'
+import { addAudioToEndOfList, addAudioToStartOfList } from '../../redux/slices/queueSlice'
 import { next } from '../../redux/slices/queueIndexSlice'
-
-import { db } from '../../firebase'
-import { doc, deleteDoc, query, where, collection, getDocs, getDoc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import { Dialog } from '@headlessui/react'
 
 const Audio = (props) => {
 
     // Props
-    const { title, url, duration, user, size, deselect } = props;
+    const { id, title, url, duration, user, handleRemoveAudio } = props;
 
     // Redux
     const dispatch = useDispatch();
     const queueIndex = useSelector((state) => state.queueIndex.value);
     const queue = useSelector((state) => state.queue.value);
+    const playlists = useSelector((state) => state.playlists.value);
 
     // State
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,40 +27,6 @@ const Audio = (props) => {
     useEffect(() => {
         setCurrentIndex(queueIndex);
     }, [queueIndex]);
-
-    const removeFromLibrary = async () => {
-        // Remove doc
-        const q = query(collection(db, "audio"),
-            where("user", "==", user),
-            where("name", "==", title),
-            where("audioSource", "==", url),
-            where("audioDuration", "==", duration));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (audio) => {
-            await deleteDoc(doc(db, "audio", audio.id));
-        });
-
-        // Remove file
-        const storage = getStorage();
-        const fileRef = ref(storage, "audio/" + title + ".mp3");
-        deleteObject(fileRef).then(() => {
-            console.log("Successfully deleted: " + title);
-        }).catch((err) => {
-            console.log("Unable to delete: " + title);
-            console.log(err);
-        });
-
-        // Update user's capacity
-        const docRef = doc(db, "capacity", user);
-        const docSnap = await getDoc(docRef);
-        const currentCapacity = docSnap.data().capacity;
-        await updateDoc(docRef, {
-            capacity: currentCapacity - size,
-        });
-
-        // Clear queue
-        dispatch(replaceQueue([queue[0]]));
-    }
 
     return (
         <div className="bg-zinc-700 flex flex-row items-center my-3 px-2 shadow-md">
@@ -129,26 +92,14 @@ const Audio = (props) => {
                                 <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
                                     {({ active }) => (
                                         <button
-                                            onClick={removeFromLibrary}
+                                            onClick={() => handleRemoveAudio(id)}
                                             className={`${active && 'bg-blue-500'}`}
                                             href="#"
                                         >
-                                            Delete
+                                            Remove
                                         </button>
                                     )}
                                 </Menu.Item>
-                                {/**
-                            <Menu.Item className="px-4 py-2 hover:backdrop-brightness-110">
-                                {({ active }) => (
-                                    <a
-                                        className={`${active && 'bg-blue-500'}`}
-                                        href="#"
-                                    >
-                                        Documentation
-                                    </a>
-                                )}
-                            </Menu.Item>
-                             */}
                             </div>
                         </Menu.Items>
                     </Transition>

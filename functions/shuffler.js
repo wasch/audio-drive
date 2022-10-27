@@ -2,6 +2,7 @@
  * Shuffles the input array using the fisher-yates algorithm
  */
 export default function shuffler(shuffledArray) {
+    if (shuffledArray.length === 1) return shuffledArray;
     let tempShuffledArray = shuffledArray.slice();
     let hasChanged = false;
     while (!hasChanged) {

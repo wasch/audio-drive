@@ -74,7 +74,7 @@ const Navbar = () => {
             <div className="hidden bg-slate-600 mobile-menu">
                 <ul>
                     <li>
-                        <Link href="/playlists"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Playlists</a></Link>
+                        <Link href="/playlists"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Playlists</a></Link>
                     </li>
                     <li>
                         <Link href="/queue"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Queue</a></Link>
