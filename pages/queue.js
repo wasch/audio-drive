@@ -5,7 +5,7 @@ import { replaceQueue } from '../redux/slices/queueSlice'
 
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import QueueContainer from '../components/QueueContainer'
+import QueueContainer from '../components/queue/QueueContainer'
 import Layout from '../components/Layout'
 
 export default function Queue() {

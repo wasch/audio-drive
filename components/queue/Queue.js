@@ -2,13 +2,11 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { replaceQueue } from '../redux/slices/queueSlice'
+import { replaceQueue } from '../../redux/slices/queueSlice'
 
 import { Draggable } from 'react-beautiful-dnd';
 
 import QueueAudio from './QueueAudio'
-
-import style from '../styles/queue.module.css'
 
 const Queue = () => {
 

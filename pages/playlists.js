@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 
 import Layout from '../components/Layout'
-import PlaylistsContainer from '../components/PlaylistsContainer'
+import PlaylistsContainer from '../components/playlist/PlaylistsContainer'
 
 export default function Playlists() {
   return (

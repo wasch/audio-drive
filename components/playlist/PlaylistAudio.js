@@ -2,10 +2,10 @@ import React, { useState, useEffect, Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } from '../redux/slices/queueSlice'
-import { next } from '../redux/slices/queueIndexSlice'
+import { addAudioToEndOfList, addAudioToStartOfList, replaceQueue } from '../../redux/slices/queueSlice'
+import { next } from '../../redux/slices/queueIndexSlice'
 
-import { db } from '../firebase'
+import { db } from '../../firebase'
 import { doc, deleteDoc, query, where, collection, getDocs, getDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 

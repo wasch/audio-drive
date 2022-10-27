@@ -2,7 +2,7 @@ import React from 'react'
 import style from '../styles/layout.module.css'
 
 import Navbar from './Navbar'
-import Player from './Player'
+import Player from './player/Player'
 
 const Layout = ({ children }) => {
 
