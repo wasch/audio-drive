@@ -6,20 +6,20 @@ import { useSelector } from 'react-redux'
 import { fbAuth } from '../firebase'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../redux/slices/userSlice'
+import { useState } from 'react'
 
 const Navbar = () => {
 
+    // Redux
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
 
-    // Sets up the mobile menu button
+    // State
+    const [mobileMenu, setMobileMenu] = useState(false);
+
     useEffect(() => {
         const btn = document.querySelector("button.mobile-menu-button");
         const menu = document.querySelector(".mobile-menu");
-
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
 
         // Sets the current user
         fbAuth.onAuthStateChanged((user) => {
@@ -43,7 +43,7 @@ const Navbar = () => {
         <div className="bg-slate-600 shadow-lg">
             <nav className="flex items-center justify-center min-w-fit">
                 <Link href="/"><a className="text-3xl pl-5 w-full md:max-w-md">Audio Drive</a></Link>
-                <button type="button" className="md:hidden ml-auto p-2 text-sm rounded-lg hover:backdrop-brightness-110 mobile-menu-button" aria-controls="navbar-default" aria-expanded="false">
+                <button type="button" onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden ml-auto p-2 text-sm rounded-lg hover:backdrop-brightness-110 mobile-menu-button" aria-controls="navbar-default" aria-expanded="false">
                     <svg className="w-8 h-8" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path></svg>
                 </button>
                 <div className="hidden md:flex items-center" id="navbar-default">
@@ -71,8 +71,8 @@ const Navbar = () => {
                     </ul>
                 </div>
             </nav >
-            <div className="hidden bg-slate-600 mobile-menu">
-                <ul>
+            <div className={`bg-slate-600 mobile-menu ${!mobileMenu ? "hidden" : ""}`}>
+                <ul onClick={() => setMobileMenu(!mobileMenu)}>
                     <li>
                         <Link href="/playlists"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Playlists</a></Link>
                     </li>
