@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setPannerRef } from '../../redux/slices/pannerRefSlice';
 
@@ -27,10 +27,12 @@ const Panner = () => {
     }, []);
 
     return (
-        <div className="bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mr-1">
+        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mx-1">
             <p className="text-2xl mb-1">Panning</p>
-            <input onChange={handlePanChange} type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
-            <p onClick={handleResetPan} className="hover:cursor-pointer">{pannerValue}</p>
+            <input className="w-full my-2" onChange={handlePanChange} type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
+            <div className="flex flex-grow items-center justify-center mt-2">
+                <p onClick={handleResetPan} className="text-xl hover:cursor-pointer">{pannerValue}</p>
+            </div>
         </div>
     )
 }

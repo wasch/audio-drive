@@ -9,8 +9,8 @@ const MixerContainer = () => {
         <div>
             <WaveformVisualizer />
             <div className="flex flex-col md:flex-row">
-                <Panner />
                 <PlaybackSpeed />
+                <Panner />
             </div>
         </div>
     )
