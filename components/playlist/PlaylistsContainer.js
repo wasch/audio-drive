@@ -204,8 +204,8 @@ const PlaylistsContainer = () => {
                             <div className="w-full grid grid-cols-1 md:grid-cols-3 justify-center">
                                 {playlistList.map((item, index) => (
                                     item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If a playlist matches the search criteria or search is not being used, show it
-                                        <div key={index} className="relative bg-zinc-700 py-4 m-4 shadow-md flex flex-row overflow-hidden">
-                                            <div className="absolute top-0 right-0 border-t-orange-300 border-t-[20px] border-x-[20px] border-y-[20px] border-x-zinc-700 border-r-0 border-b-0"></div>
+                                        <div key={index} className="relative bg-zinc-700 py-4 m-4 shadow-md flex flex-row items-center justify-items-center overflow-hidden">
+                                            <div className="absolute top-0 right-0 border-t-amber-200/90 border-t-[20px] border-x-[20px] border-y-[20px] border-x-zinc-700 border-r-0 border-b-0"></div>
                                             <div className="pl-4 overflow-scroll hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
