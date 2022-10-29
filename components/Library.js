@@ -130,7 +130,7 @@ const Library = () => {
 
     return (
         <div className="flex flex-col items-center bg-[#2c2c31] p-5 rounded-md shadow-md">
-            <button className={`absolute right-3 bottom-44 md:right-10 shadow-md transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
+            <button className={`fixed z-50 right-5 bottom-44 md:right-10 md:bottom-52 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
                 <FontAwesomeIcon className="text-6xl" icon={faCirclePlus} />
             </button>
             <input type="text" onChange={handleSearchChange} placeholder="Search" className="self-center w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />

@@ -116,7 +116,7 @@ const PlayerControls = (props) => {
         for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i] / 2;
 
-          canvasCtx.fillStyle = `rgb(70, 85, 250)`;
+          canvasCtx.fillStyle = "rgb(70, 85, 250)";
           canvasCtx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
 
           x += barWidth + 1;
