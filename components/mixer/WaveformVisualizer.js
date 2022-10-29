@@ -99,7 +99,7 @@ const WaveformVisualizer = () => {
     return (
         <div className="bg-zinc-700 shadow-md rounded-md p-5 mb-2">
             <p className="text-2xl mb-2">Waveform</p>
-            <div className="flex justify-center">
+            <div className={`${current && !waveSurfer ? "pointer-events-none" : ""} flex justify-center`}>
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}
             </div>
