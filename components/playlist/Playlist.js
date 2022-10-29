@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { db } from '../../firebase';
 import { setPlaylists } from '../../redux/slices/playlistsSlice';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCirclePlay, faShuffle, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+
 import PlaylistAudio from './PlaylistAudio'
 
 const Playlist = (props) => {
@@ -60,14 +63,14 @@ const Playlist = (props) => {
                 </div>
                 <div className="flex flex-row mt-4 mr-auto">
                     <button className="flex mr-2 p-1 hover:cursor-pointer" title="Play" onClick={handlePlay}>
-                        <i className="material-icons text-4xl">play_circle_filled</i>
+                        <FontAwesomeIcon className="text-4xl" icon={faCirclePlay} />
                     </button>
                     <button className="flex p-1 hover:cursor-pointer" title="Shuffle play" onClick={handleShufflePlay}>
-                        <i className="material-icons text-4xl">shuffle</i>
+                        <FontAwesomeIcon className="text-4xl" icon={faShuffle} />
                     </button>
                 </div>
                 <button className="absolute top-0 right-0 rounded-sm bg-[#2c2c31] z-10 py-1 hover:cursor-pointer" title="Back" onClick={handleBack}>
-                    <i className="material-icons text-4xl">arrow_back</i>
+                    <FontAwesomeIcon className="text-4xl" icon={faArrowLeft} />
                 </button>
             </div>
             {playlistAudio.map((item, index) => (

@@ -16,6 +16,10 @@ import Playlist from './Playlist'
 import { Switch } from '@headlessui/react';
 import { useEffect } from 'react';
 
+
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const PlaylistsContainer = () => {
 
     // Redux
@@ -210,7 +214,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <i className="material-icons text-3xl">more_vert</i>
+                                                <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
@@ -226,7 +230,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <i className="material-icons text-3xl">more_vert</i>
+                                                <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
