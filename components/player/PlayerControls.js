@@ -24,6 +24,9 @@ const PlayerControls = (props) => {
 
   // State
   const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
+  const [audioAnalyser, setAudioAnalyser] = useState(null);
+  const [playStatus, setPlayStatus] = useState('PAUSED');
+  const [isDrawing, setIsDrawing] = useState(false);
 
   // Ref
   const audioCtx = useRef();
@@ -46,12 +49,11 @@ const PlayerControls = (props) => {
         dispatch(previous());
       }
     });
-
   }, [queue, queueIndex]);
 
   // Setup audio context
   useEffect(() => {
-    if (!audioCtx.current) audioCtx.current = new AudioContext();
+    if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
   }, []);
 
   // Setup web audio api effects
@@ -60,16 +62,71 @@ const PlayerControls = (props) => {
       if (!audioTag.current) audioTag.current = document.querySelector('audio');
       if (!track.current) track.current = audioCtx.current.createMediaElementSource(audioTag.current);
 
+      // TODO: Filters
+
+      // Panning
       const pannerOptions = { pan: panValue };
       const panner = new StereoPannerNode(audioCtx.current, pannerOptions);
 
-      track.current.connect(panner).connect(audioCtx.current.destination);
+      // Analyzer
+      let analyser;
+      if (!audioAnalyser) {
+        analyser = audioCtx.current.createAnalyser();
+        analyser.fftSize = 256;
+        setAudioAnalyser(analyser);
+      } else {
+        analyser = audioAnalyser;
+      }
+
+      track.current.connect(panner);
+      panner.connect(analyser);
+      analyser.connect(audioCtx.current.destination);
     }
     return () => {
       track.current.disconnect();
     }
   }, [audioCtx.current, panValue]);
 
+  useEffect(() => {
+    if (audioAnalyser && !isDrawing) {
+      draw();
+      setIsDrawing(true);   // Don't draw over itself
+    }
+  }, [playStatus]);
+
+  // Draws the audio visualizer using a canvas
+  function draw() {
+    const canvas = document.getElementById("audioCanvas");
+    if (canvas) {
+      try {
+        let canvasHeight = canvas.height;
+        let canvasWidth = canvas.width;
+        let canvasCtx = canvas.getContext("2d");
+        const bufferLength = audioAnalyser.frequencyBinCount;
+        let dataArray = new Uint8Array(bufferLength);
+        audioAnalyser.getByteFrequencyData(dataArray);
+
+        canvasCtx.fillStyle = "rgb(63, 63, 70)";
+        canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        const barWidth = (canvasWidth / bufferLength) * 1.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] / 2;
+
+          canvasCtx.fillStyle = 'rgb(0, 125, 255)';
+          canvasCtx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    window.requestAnimationFrame(draw);
+  }
 
   const handleSlowdown = () => {
     dispatch(decrement());
@@ -103,9 +160,13 @@ const PlayerControls = (props) => {
         autoPlay
         src={props.url}
         onPlay={(e) => {
-          dispatch(setIsPaused(false))
+          dispatch(setIsPaused(false));
+          setPlayStatus('PLAYING');
         }}
-        onPause={(e) => dispatch(setIsPaused(true))}
+        onPause={(e) => {
+          dispatch(setIsPaused(true));
+          setPlayStatus('PAUSED');
+        }}
         onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
         onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
         onClickPrevious={(e) => {
@@ -139,7 +200,7 @@ const PlayerControls = (props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Popover.Panel className="flex flex-row justify-center items-center z-10 absolute border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md rounded-sm z-10">
+                <Popover.Panel className="flex flex-row justify-center items-center absolute border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md z-10">
                   <button className="slowDown" title="Slow down (5%)" onClick={handleSlowdown}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78748/rotate-left">Rotate Left icon by Icons8</a> */}
