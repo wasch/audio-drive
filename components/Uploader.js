@@ -86,7 +86,8 @@ const Uploader = () => {
                         audioSource: audioUrl,
                         audioDuration: convertedDuration,
                         user: fbAuth.currentUser.uid,
-                        MBFileSize: e.currentTarget.size
+                        MBFileSize: e.currentTarget.size,
+                        isFavorite: false
                     }
 
                     // Add doc references for audio files in Firebase Cloud Firestore Database
@@ -154,7 +155,8 @@ const Uploader = () => {
                             audioSource: audioUrl,
                             audioDuration: convertedDuration,
                             user: fbAuth.currentUser.uid,
-                            MBFileSize: e.currentTarget.size
+                            MBFileSize: e.currentTarget.size,
+                            isFavorite: false
                         }
 
                         // Add doc references for audio files in Firebase Cloud Firestore Database and redux store
@@ -186,7 +188,7 @@ const Uploader = () => {
                 </form>
 
                 {audioList.length === 0 ? <></> :
-                    <div className="p-3 mt-8 shadow-md rounded-md bg-zinc-700">
+                    <div className="p-5 mt-8 shadow-md rounded-md bg-zinc-700">
                         <h3 className="text-2xl">Audio Added:</h3>
                         {audioList.map((item, index) => (
                             <div key={index}>

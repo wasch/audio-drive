@@ -214,7 +214,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
+                                                <FontAwesomeIcon className="text-2xl m-2 ml-5" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
@@ -230,7 +230,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
+                                                <FontAwesomeIcon className="text-2xl m-2 ml-3" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
@@ -268,12 +268,12 @@ const PlaylistsContainer = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-3 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenCreatePlaylistDialog(false)}>
+                <Dialog className="max-w-md z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-3 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenCreatePlaylistDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl">Create new playlist</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmitNewPlaylist}>
                             <label htmlFor="playlistName" className="hidden">Playlist name:</label>
-                            <input onChange={handlePlaylistChange} id="playlistName" name="name" type="text" placeholder="Name" className="w-full max-w-md p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />
+                            <input onChange={handlePlaylistChange} id="playlistName" name="name" type="text" placeholder="Name" className="w-full p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />
                             <input disabled={!canSubmitPlaylist} type="submit" value="Create" className="bg-slate-600 rounded-sm cursor-pointer disabled:cursor-not-allowed disabled:brightness-75 transition ease-in-out" />
                         </form>
                     </Dialog.Panel>
@@ -328,14 +328,14 @@ const PlaylistsContainer = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdatePlaylistInfoDialog(false)}>
+                <Dialog className="max-w-md z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdatePlaylistInfoDialog(false)}>
                     <Dialog.Panel>
-                        <Dialog.Title className="text-xl">Update playlist {playlistInfo.name}</Dialog.Title>
+                        <Dialog.Title className="overflow-scroll text-xl">Update playlist {playlistInfo.name}</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmit}>
                             <label htmlFor="playlistName" className="hidden">Playlist name:</label>
-                            <input onChange={handlePlaylistChange} id="playlistName" name="name" value={tempPlaylistInfo.name} type="text" className="w-full max-w-md p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />
+                            <input onChange={handlePlaylistChange} id="playlistName" name="name" value={tempPlaylistInfo.name} type="text" className="w-full p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />
                             <div className="flex flex-row flex-grow">
-                                <p>Favorite: </p>
+                                <p>Favorite:</p>
                                 <Switch
                                     checked={isFavoriteSwitch}
                                     onChange={setIsFavoriteSwitch}

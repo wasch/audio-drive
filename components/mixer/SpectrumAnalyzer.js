@@ -31,7 +31,6 @@ const SpectrumAnalyzer = () => {
 
     return (
         <div id="spectrumContainer" className="bg-zinc-700 shadow-md rounded-md p-5 mb-1">
-            <p className="text-2xl">Frequency Spectrum</p>
             <canvas width={size} id="audioCanvas"></canvas>
         </div>
     )

@@ -36,7 +36,8 @@ const Library = () => {
 
     // Fetch audio from redux and add it to library state
     useEffect(() => {
-        setLibraryAudio(audio);
+        setLibraryAudio(audio.slice().sort((a, b) => a.name.localeCompare(b.name)));
+        console.log(audio.slice().sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedAudioCount(0);
         setPrevSelectIndex(null);
     }, [user, queue, audio]);
@@ -49,8 +50,8 @@ const Library = () => {
         setPlaylistSearch(e.target.value);
     }
 
-    function handleSelectAudio(e, url, isSelected) {
-        const matchingAudio = audio.findIndex(element => element.audioSource === url);
+    function handleSelectAudio(e, id, isSelected) {
+        const matchingAudio = libraryAudio.findIndex(element => element.id === id);
 
         let selectCheck = !isSelected;
         let tempAudios = [...libraryAudio];
@@ -86,8 +87,8 @@ const Library = () => {
         setSelectedAudioCount(count);
     }
 
-    function handleDeselectAudio(url) {
-        const matchingAudio = audio.findIndex(element => element.audioSource === url);
+    function handleDeselectAudio(id) {
+        const matchingAudio = libraryAudio.findIndex(element => element.id === id);
 
         let selectCheck = false;
         setSelectedAudioCount(selectedAudioCount - 1);
@@ -131,30 +132,58 @@ const Library = () => {
     return (
         <div className="flex flex-col items-center bg-[#2c2c31] p-5 rounded-md shadow-md">
             <button className={`fixed z-50 right-5 bottom-44 md:right-10 md:bottom-52 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
-                <FontAwesomeIcon className="text-6xl" icon={faCirclePlus} />
+                <FontAwesomeIcon className="text-6xl bg-zinc-800 rounded-full" icon={faCirclePlus} />
             </button>
             <input type="text" onChange={handleSearchChange} placeholder="Search" className="self-center w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
             {libraryAudio ?
                 <div className="w-full">
-                    {
-                        libraryAudio.map((item, index) => (
-                            search === "" || item.name.toLowerCase().includes(search.toLowerCase()) ?      // If the audio matches the search criteria or search is not being used, show it
-                                <div key={index}>
-                                    <Audio
-                                        id={item.id}
-                                        title={item.name}
-                                        url={item.audioSource}
-                                        duration={item.audioDuration}
-                                        user={item.user}
-                                        size={item.MBFileSize}
-                                        isSelected={item.isSelected}
-                                        handleClick={handleSelectAudio}
-                                        deselect={handleDeselectAudio}
-                                    />
-                                </div>
-                                : <div key={index} className="hidden"></div>
-                        ))
-                    }
+                    <div className="p-5">
+                        {
+                            /* Favorites */
+                            libraryAudio.map((item, index) => (
+                                item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If the audio matches the search criteria or search is not being used, show it
+                                    <div key={index}>
+                                        <Audio
+                                            id={item.id}
+                                            title={item.name}
+                                            url={item.audioSource}
+                                            duration={item.audioDuration}
+                                            user={item.user}
+                                            size={item.MBFileSize}
+                                            isFavorite={item.isFavorite}
+                                            isSelected={item.isSelected}
+                                            handleClick={handleSelectAudio}
+                                            deselect={handleDeselectAudio}
+                                        />
+                                    </div>
+                                    : <div key={index} className="hidden"></div>
+                            ))
+                        }
+                    </div>
+
+                    <div>
+                        {
+                            /* Non favorites */
+                            libraryAudio.map((item, index) => (
+                                !item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If the audio matches the search criteria or search is not being used, show it
+                                    <div key={index}>
+                                        <Audio
+                                            id={item.id}
+                                            title={item.name}
+                                            url={item.audioSource}
+                                            duration={item.audioDuration}
+                                            user={item.user}
+                                            size={item.MBFileSize}
+                                            isFavorite={item.isFavorite}
+                                            isSelected={item.isSelected}
+                                            handleClick={handleSelectAudio}
+                                            deselect={handleDeselectAudio}
+                                        />
+                                    </div>
+                                    : <div key={index} className="hidden"></div>
+                            ))
+                        }
+                    </div>
                 </div>
                 : <h3>No audio in library</h3>
             }
