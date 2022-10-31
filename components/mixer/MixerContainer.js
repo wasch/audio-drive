@@ -13,7 +13,11 @@ const MixerContainer = () => {
 
     return (
         <div>
-            <p className="bg-zinc-700 my-2 p-5 rounded-md shadow-md text-2xl md:text-3xl">Now playing: {currentAudio.name}</p>
+            {
+                currentAudio ?
+                    <p className="bg-zinc-700 my-2 p-5 rounded-md shadow-md text-2xl md:text-3xl">Now playing: {currentAudio.name}</p>
+                    : <div className="hidden"></div>
+            }
             <WaveformVisualizer />
             <SpectrumAnalyzer />
             <div className="flex flex-col md:flex-row">
