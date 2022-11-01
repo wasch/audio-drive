@@ -219,7 +219,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <FontAwesomeIcon className="text-2xl m-2 ml-5" icon={faEllipsisV} />
+                                                <FontAwesomeIcon className="text-2xl m-2 pl-2 ml-5" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
@@ -235,7 +235,7 @@ const PlaylistsContainer = () => {
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
-                                                <FontAwesomeIcon className="text-2xl m-2 ml-3" icon={faEllipsisV} />
+                                                <FontAwesomeIcon className="text-2xl m-2 pl-2 ml-3" icon={faEllipsisV} />
                                             </button>
                                         </div>
                                         : <div key={index} className="hidden"></div>
