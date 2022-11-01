@@ -1,16 +1,19 @@
 import Audio from './Audio'
 
-import { faC, faCirclePlus } from '@fortawesome/free-solid-svg-icons'
+import { faCircleMinus, faCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { doc, updateDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../firebase'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { setPlaylists } from '../redux/slices/playlistsSlice'
+import { removeFromPlaylists, setPlaylists } from '../redux/slices/playlistsSlice'
 
 import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { replaceQueue } from '../redux/slices/queueSlice'
+import { removeAudio } from '../redux/slices/audioSlice'
+import { deleteObject, getStorage, ref } from 'firebase/storage'
 
 const Library = () => {
 
@@ -32,6 +35,7 @@ const Library = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenUpdatePlaylistDialogConf, setIsOpenUpdatePlaylistDialogConf] = useState(false);
     const [isOpenUpdatePlaylistDialogError, setIsOpenUpdatePlaylistDialogError] = useState(false);
+    const [isOpenMassDeleteAudioConfDialog, setIsOpenMassDeleteAudioConfDialog] = useState(false);
 
     // Fetch audio from redux and add it to library state
     useEffect(() => {
@@ -127,10 +131,71 @@ const Library = () => {
         }
     }
 
+    const handleMassDeleteAudio = async () => {
+        setIsOpenMassDeleteAudioConfDialog(false);
+
+        let tempAudio = [];
+        for (let i in libraryAudio) {
+            if (libraryAudio[i].isSelected) tempAudio.push(libraryAudio[i]);
+        }
+
+        for (let file of tempAudio) {
+            try {
+                // Remove doc
+                await deleteDoc(doc(db, "audio", file.id));
+
+                // Remove file
+                const storage = getStorage();
+                const fileRef = ref(storage, "audio/" + file.name + ".mp3");
+                deleteObject(fileRef).then(() => {
+                    console.log("Successfully deleted: " + file.name);
+                }).catch((err) => {
+                    console.log("Unable to delete: " + file.name);
+                    console.log(err);
+                });
+
+                // Remove from playlists
+                const q = query(collection(db, "playlists"), where("user", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach(async (document) => {
+                    let data = document.data();
+                    for (let i = 0; i < data.audioList.length; i++) {
+                        if (data.audioList[i].id === file.id) {
+                            data.audioList.splice(i, 1);
+                            await updateDoc(doc(db, "playlists", document.id), {
+                                audioList: data.audioList
+                            });
+                        }
+                    }
+                });
+
+                // Update user's capacity
+                const docRef = doc(db, "capacity", user.uid);
+                const docSnap = await getDoc(docRef);
+                const currentCapacity = docSnap.data().capacity;
+                await updateDoc(docRef, {
+                    capacity: currentCapacity - file.MBFileSize
+                });
+
+                // Remove from redux store
+                dispatch(removeAudio(file.id));
+                dispatch(removeFromPlaylists(file.id));
+
+                // Clear queue
+                dispatch(replaceQueue([queue[0]]));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+    }
+
     return (
         <div className="flex flex-col items-center bg-[#2c2c31] p-5 rounded-md shadow-md">
-            <button className={`fixed z-50 right-5 bottom-44 md:right-10 md:bottom-52 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
+            <button className={`fixed z-50 right-5 bottom-64 md:right-10 md:bottom-72 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpen(true)} title="Add selected to playlist">
                 <FontAwesomeIcon className="text-6xl bg-zinc-800 rounded-full" icon={faCirclePlus} />
+            </button>
+            <button className={`fixed z-50 right-5 bottom-44 md:right-10 md:bottom-52 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpenMassDeleteAudioConfDialog(true)} title="Remove selected from library">
+                <FontAwesomeIcon className="text-6xl bg-zinc-800 text-red-500 rounded-full" icon={faCircleMinus} />
             </button>
             <input type="text" onChange={handleSearchChange} placeholder="Search" className="self-center w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
             {libraryAudio ?
@@ -254,6 +319,28 @@ const Library = () => {
                 <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdatePlaylistDialogError(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Failed to update playlist</Dialog.Title>
+                    </Dialog.Panel>
+                </Dialog>
+            </Transition>
+
+            {/* Delete audio confirmation dialog */}
+            <Transition
+                show={isOpenMassDeleteAudioConfDialog}
+                enter="transition duration-100 ease-in-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+                as={Fragment}
+            >
+                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenMassDeleteAudioConfDialog(false)}>
+                    <Dialog.Panel>
+                        <Dialog.Title className="text-xl">Are you sure you want to remove the selected audio from your account?</Dialog.Title>
+                        <div className="flex flex-row flex-grow justify-between mt-8">
+                            <button onClick={() => setIsOpenMassDeleteAudioConfDialog(false)} className="px-2 py-1 border-2 ">Cancel</button>
+                            <button onClick={handleMassDeleteAudio} className="px-2 py-1 border-2 border-red-500 text-red-500">Delete</button>
+                        </div>
                     </Dialog.Panel>
                 </Dialog>
             </Transition>

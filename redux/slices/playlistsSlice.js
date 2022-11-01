@@ -11,10 +11,19 @@ export const playlistsSlice = createSlice({
         },
         setPlaylists: (state, playlists) => {
             state.value = playlists.payload;
+        },
+        removeFromPlaylists: (state, id) => {
+            for (let i = 0; i < state.value.length; i++) {
+                for (let j = 0; j < state.value[i].audioList.length; j++) {
+                    if (state.value[i].audioList[j].id === id.payload) {
+                        state.value[i].audioList.splice(j, 1);
+                    }
+                }
+            }
         }
     }
 })
 
-export const { addPlaylist, setPlaylists } = playlistsSlice.actions
+export const { addPlaylist, setPlaylists, removeFromPlaylists } = playlistsSlice.actions
 
 export default playlistsSlice.reducer

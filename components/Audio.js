@@ -14,6 +14,7 @@ import { Dialog } from '@headlessui/react'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { setIsLooping, setLoopStart } from '../redux/slices/loopSlice'
+import { removeFromPlaylists, setPlaylists } from '../redux/slices/playlistsSlice'
 
 const Audio = (props) => {
 
@@ -70,35 +71,53 @@ const Audio = (props) => {
     }
 
     const handleDeleteAudio = async () => {
-        
         setIsOpenDeleteAudioConfDialog(false);
+        try {
+            // Remove doc
+            await deleteDoc(doc(db, "audio", id));
 
-        // Remove doc
-        await deleteDoc(doc(db, "audio", id));
+            // Remove file
+            const storage = getStorage();
+            const fileRef = ref(storage, "audio/" + title + ".mp3");
+            deleteObject(fileRef).then(() => {
+                console.log("Successfully deleted: " + title);
+            }).catch((err) => {
+                console.log("Unable to delete: " + title);
+                console.log(err);
+            });
 
-        // Remove file
-        const storage = getStorage();
-        const fileRef = ref(storage, "audio/" + title + ".mp3");
-        deleteObject(fileRef).then(() => {
-            console.log("Successfully deleted: " + title);
-        }).catch((err) => {
-            console.log("Unable to delete: " + title);
-            console.log(err);
-        });
+            // Remove from playlists
+            const q = query(collection(db, "playlists"), where("user", "==", user));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (document) => {
+                let data = document.data();
+                for (let i = 0; i < data.audioList.length; i++) {
+                    if (data.audioList[i].id === id) {
+                        data.audioList.splice(i, 1);
+                        await updateDoc(doc(db, "playlists", document.id), {
+                            audioList: data.audioList
+                        });
+                    }
+                }
+            });
 
-        // Update user's capacity
-        const docRef = doc(db, "capacity", user);
-        const docSnap = await getDoc(docRef);
-        const currentCapacity = docSnap.data().capacity;
-        await updateDoc(docRef, {
-            capacity: currentCapacity - size,
-        });
+            // Update user's capacity
+            const docRef = doc(db, "capacity", user);
+            const docSnap = await getDoc(docRef);
+            const currentCapacity = docSnap.data().capacity;
+            await updateDoc(docRef, {
+                capacity: currentCapacity - size,
+            });
 
-        // Remove from redux store
-        dispatch(removeAudio(id))
+            // Remove from redux store
+            dispatch(removeAudio(id));
+            dispatch(removeFromPlaylists(id));
 
-        // Clear queue
-        dispatch(replaceQueue([queue[0]]));
+            // Clear queue
+            dispatch(replaceQueue([queue[0]]));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const handleUpdateAudioInfo = () => {
