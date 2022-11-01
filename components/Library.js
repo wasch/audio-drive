@@ -3,11 +3,10 @@ import Audio from './Audio'
 import { faC, faCirclePlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { setAudio } from '../redux/slices/audioSlice'
 import { setPlaylists } from '../redux/slices/playlistsSlice'
 
 import { useEffect, useState, Fragment } from 'react'
@@ -37,7 +36,6 @@ const Library = () => {
     // Fetch audio from redux and add it to library state
     useEffect(() => {
         setLibraryAudio(audio.slice().sort((a, b) => a.name.localeCompare(b.name)));
-        console.log(audio.slice().sort((a, b) => a.name.localeCompare(b.name)));
         setSelectedAudioCount(0);
         setPrevSelectIndex(null);
     }, [user, queue, audio]);
@@ -199,7 +197,7 @@ const Library = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 p-3  overflow-y-auto rounded shadow-md bg-zinc-900" onClose={() => setIsOpen(false)}>
+                <Dialog className="z-50 fixed bottom-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2 p-3  overflow-y-auto rounded shadow-md bg-zinc-900" onClose={() => setIsOpen(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl mb-3">Select playlist to add to</Dialog.Title>
                         <input type="text" onChange={handlePlaylistSearchChange} placeholder="Search" className="self-center w-full max-w-md p-3 mb-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
@@ -235,7 +233,7 @@ const Library = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpenUpdatePlaylistDialogConf(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpenUpdatePlaylistDialogConf(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Successfully updated playlist</Dialog.Title>
                     </Dialog.Panel>

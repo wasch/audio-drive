@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { setIsLooping, setLoopStart } from '../../redux/slices/loopSlice';
 
 const PlaylistsContainer = () => {
 
@@ -182,11 +183,15 @@ const PlaylistsContainer = () => {
     }
 
     const handlePlay = () => {
+        dispatch(setIsLooping(true));
+        dispatch(setLoopStart(0));
         dispatch(replaceQueue(activePlaylist.audioList));
         dispatch(setQueueIndex(0));
     }
 
     const handleShufflePlay = () => {
+        dispatch(setIsLooping(true));
+        dispatch(setLoopStart(0));
         let tempPlaylist = activePlaylist.audioList.slice();
         tempPlaylist = shuffler(tempPlaylist);
         dispatch(replaceQueue(tempPlaylist));
@@ -209,7 +214,7 @@ const PlaylistsContainer = () => {
                                 {playlistList.map((item, index) => (
                                     item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If a playlist matches the search criteria or search is not being used, show it
                                         <div key={index} className="relative bg-zinc-700 py-4 px-1 m-4 shadow-md flex flex-row overflow-hidden">
-                                            <div className="absolute top-0 right-0 border-t-amber-200/90 border-t-[20px] border-x-[20px] border-y-[20px] border-x-zinc-700 border-r-0 border-b-0"></div>
+                                            <div className="absolute top-0 right-0 border-t-yellow-300 border-t-[20px] border-x-[20px] border-y-[20px] border-x-zinc-700 border-r-0 border-b-0"></div>
                                             <div className="pl-4 overflow-scroll hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>

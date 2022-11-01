@@ -15,15 +15,15 @@ const QueueAudio = (props) => {
             <div className="bg-zinc-700 px-1 py-2 shadow-md">
                 <div className={style.audioCardWrapper}>
                     <div className="text-lg">
-                        {props.card.name}
+                        {props.item.name}
                     </div>
                     <div className="text-md text-zinc-400 ml-auto mr-3">
-                        {props.card.audioDuration}
+                        {props.item.audioDuration}
                     </div>
                     <div title="Remove from queue">
                         <button className="flex" onClick={() => {
-                            if (props.card !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
-                                props.setQueueFromButtonClick(props.card);
+                            if (props.item !== storeQueue[queueIndex]) {     // Don't remove currently playing audio
+                                props.setQueueFromButtonClick(props.item);
                             }
                         }}>
                             <i className="material-icons">remove</i>

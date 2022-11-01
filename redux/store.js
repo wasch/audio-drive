@@ -9,6 +9,7 @@ import playlistsReducer from './slices/playlistsSlice'
 import currentTimeReducer from './slices/currentTimeSlice'
 import pausedReducer from './slices/pausedSlice'
 import pannerRefReducer from './slices/pannerRefSlice'
+import loopReducer from './slices/loopSlice'
 
 export default configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export default configureStore({
     currentTime: currentTimeReducer,
     isPaused: pausedReducer,
     pannerRef: pannerRefReducer,
+    loopInfo: loopReducer,
   }
 });

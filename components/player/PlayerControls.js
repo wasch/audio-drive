@@ -5,7 +5,7 @@ import 'react-h5-audio-player/lib/styles.css'
 import { Popover, Transition } from '@headlessui/react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { next, previous } from '../../redux/slices/queueIndexSlice'
+import { next, previous, setQueueIndex } from '../../redux/slices/queueIndexSlice'
 import { increment, decrement, setPlaybackSpeed } from '../../redux/slices/playbackSpeedSlice'
 import { toggleShouldMaintainPitch } from '../../redux/slices/maintainPitchSlice'
 import { setTime } from '../../redux/slices/currentTimeSlice'
@@ -21,6 +21,7 @@ const PlayerControls = (props) => {
   const queue = useSelector((state) => state.queue.value);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
   const panValue = useSelector((state) => state.pannerRef.value);
+  const loopInfo = useSelector((state) => state.loopInfo.value);
 
   // State
   const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
@@ -36,16 +37,16 @@ const PlayerControls = (props) => {
   useEffect(() => {
     // Enables next and previous media keys (play and pause work by default)
     navigator.mediaSession.setActionHandler('nexttrack', () => {
-      console.log(queueIndex);
-      console.log(queue.length);
-      if (queueIndex + 1 < queue.length) dispatch(next());
+      if (loopInfo.isLooping && queueIndex === queue.length - 1) { // If looping and reached end of loop, return to start of loop 
+        dispatch(setQueueIndex(loopInfo.loopStart));
+      } else if (queueIndex + 1 < queue.length) dispatch(next());
     });
     navigator.mediaSession.setActionHandler('previoustrack', () => {  // Restarts audio if current time is over 3 seconds, goes to previous audio otherwise
       if (document.querySelector('audio').currentTime > 3) {
         document.querySelector('audio').pause();
         document.querySelector('audio').currentTime = 0;
         document.querySelector('audio').play();
-      } else {
+      } else if (queueIndex !== loopInfo.loopStart) { // Don't leave the loop if looping
         dispatch(previous());
       }
     });
@@ -167,12 +168,20 @@ const PlayerControls = (props) => {
           dispatch(setIsPaused(true));
           setPlayStatus('PAUSED');
         }}
-        onEnded={(e) => { if (queueIndex < queue.length - 1) dispatch(next()); }}   // Don't increment the queueIndex if there is no more audio in the queue
-        onClickNext={(e) => { if (queueIndex + 1 < queue.length) dispatch(next()); }}
+        onEnded={(e) => {
+          if (loopInfo.isLooping && queueIndex === queue.length - 1) { // If looping and reached end of loop, return to start of loop 
+            dispatch(setQueueIndex(loopInfo.loopStart));
+          } else if (queueIndex < queue.length - 1) dispatch(next()); // Don't increment the queueIndex if there is no more audio in the queue
+        }}
+        onClickNext={(e) => {
+          if (loopInfo.isLooping && queueIndex === queue.length - 1) { // If looping and reached end of loop, return to start of loop 
+            dispatch(setQueueIndex(loopInfo.loopStart));
+          } else if (queueIndex + 1 < queue.length) dispatch(next());
+        }}
         onClickPrevious={(e) => {
           if (document.querySelector('audio').currentTime > 3) {
             handleRestart();
-          } else {
+          } else if (queueIndex !== loopInfo.loopStart) { // Don't exit loop if looping
             dispatch(previous())
           }
         }}
@@ -200,7 +209,7 @@ const PlayerControls = (props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Popover.Panel className="flex flex-row justify-center items-center absolute border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md z-10">
+                <Popover.Panel className="flex flex-row justify-center items-center fixed border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md z-10">
                   <button className="slowDown" title="Slow down (5%)" onClick={handleSlowdown}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />
                     { /* Source: <a target="_blank" href="https://icons8.com/icon/78748/rotate-left">Rotate Left icon by Icons8</a> */}

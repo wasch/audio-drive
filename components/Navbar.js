@@ -40,10 +40,10 @@ const Navbar = () => {
     }
 
     return (
-        <div className="bg-slate-600 shadow-lg">
-            <nav className="flex items-center justify-center min-w-fit">
-                <div onClick={() => setMobileMenu(false)}>
-                    <Link href="/"><a className="text-3xl pl-5 md:pr-40 w-full md:max-w-md">Audio Drive</a></Link>
+        <div className="bg-slate-600 shadow-lg flex items-center justify-center">
+            <nav className="flex flex-grow items-center justify-center max-w-6xl">
+                <div className="flex justify-self-start ml-4 mr-auto" onClick={() => setMobileMenu(false)}>
+                    <Link href="/"><a className="text-3xl">Audio Drive</a></Link>
                 </div>
                 <button type="button" onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden ml-auto p-2 text-sm rounded-lg hover:backdrop-brightness-110 mobile-menu-button" aria-controls="navbar-default" aria-expanded="false">
                     <svg className="w-8 h-8" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path></svg>
@@ -65,7 +65,7 @@ const Navbar = () => {
                         <li>
                             <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
                         </li>
-                        <li>
+                        <li className="flex items-center">
                             {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
                             {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={signOutUser}>Sign out {user.email}</a></Link>}
                         </li>

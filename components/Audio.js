@@ -13,6 +13,7 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 import { Dialog } from '@headlessui/react'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { setIsLooping, setLoopStart } from '../redux/slices/loopSlice'
 
 const Audio = (props) => {
 
@@ -156,6 +157,8 @@ const Audio = (props) => {
                         isFavorite: isFavorite,
                         currentIndex: currentIndex
                     };
+                    dispatch(setIsLooping(false));
+                    dispatch(setLoopStart(null));
                     if (queue[0]) { // If audio already exists in the queue
                         audioObj.currentIndex += 1;
                         dispatch(addAudioToStartOfList(audioObj));
@@ -192,7 +195,7 @@ const Audio = (props) => {
                 }}>
                     <i className="material-icons">add</i>
                 </button>
-                <button onClick={() => handleUpdateAudioInfo()} className="self-center ml-auto z-20" title="Edit">
+                <button onClick={() => handleUpdateAudioInfo()} className="self-center ml-auto" title="Edit">
                     <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
                 </button>
             </div>
@@ -207,7 +210,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpen(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpen(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Added {title} to queue</Dialog.Title>
                     </Dialog.Panel>
@@ -225,7 +228,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="max-w-md z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdateAudioInfoDialog(false)}>
+                <Dialog className="max-w-md z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdateAudioInfoDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="overflow-scroll text-xl">Update {title}</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmit}>
@@ -270,7 +273,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenDeleteAudioConfDialog(false)}>
+                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenDeleteAudioConfDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl">Are you sure you want to remove {title} from your account?</Dialog.Title>
                         <div className="flex flex-row flex-grow justify-between mt-8">
@@ -292,7 +295,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpenUpdateAudioInfoDialogConf(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpenUpdateAudioInfoDialogConf(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Updated {title}</Dialog.Title>
                     </Dialog.Panel>
@@ -310,7 +313,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdateAudioInfoDialogError(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdateAudioInfoDialogError(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Failed to update {title}</Dialog.Title>
                     </Dialog.Panel>

@@ -99,7 +99,7 @@ const Playlist = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 absolute bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenRemoveAudioFromPlaylistErrorDialog(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenRemoveAudioFromPlaylistErrorDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Failed to update playlist</Dialog.Title>
                     </Dialog.Panel>
