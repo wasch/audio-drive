@@ -14,10 +14,10 @@ const QueueAudio = (props) => {
         <div className={style.queueContainer}>
             <div className="bg-zinc-700 px-1 py-2 shadow-md">
                 <div className={style.audioCardWrapper}>
-                    <div className="text-lg">
+                    <div className="text-lg overflow-auto">
                         {props.item.name}
                     </div>
-                    <div className="text-md text-zinc-400 ml-auto mr-3">
+                    <div className="text-md text-zinc-400 ml-auto mr-3 pl-2 md:pl-5">
                         {props.item.audioDuration}
                     </div>
                     <div title="Remove from queue">

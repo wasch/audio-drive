@@ -14,7 +14,7 @@ import { Dialog } from '@headlessui/react'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { setIsLooping, setLoopStart } from '../redux/slices/loopSlice'
-import { removeFromPlaylists, setPlaylists } from '../redux/slices/playlistsSlice'
+import { removeFromPlaylists, editNameInPlaylists } from '../redux/slices/playlistsSlice'
 
 const Audio = (props) => {
 
@@ -146,6 +146,28 @@ const Audio = (props) => {
             });
             tempAudios[matchingAudio] = tempAudio;
             dispatch(setAudio(tempAudios));
+
+            // Remove from playlists
+            const q = query(collection(db, "playlists"), where("user", "==", user));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (document) => {
+                let data = document.data();
+                for (let i = 0; i < data.audioList.length; i++) {
+                    if (data.audioList[i].id === tempAudioInfo.id) {
+                        data.audioList[i].name = tempAudioInfo.title;
+                        await updateDoc(doc(db, "playlists", document.id), {
+                            audioList: data.audioList
+                        });
+                    }
+                }
+            });
+
+            // Remove from redux store playlists
+            dispatch(editNameInPlaylists({
+                id: tempAudioInfo.id,
+                newName: tempAudioInfo.title
+            }));
+
             setIsOpenUpdateAudioInfoDialogConf(true);    // Triggers dialog
             setTimeout(() => setIsOpenUpdateAudioInfoDialogConf(false), 3000); // Dismisses dialog after 3 seconds
         } catch (e) {
@@ -292,7 +314,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenDeleteAudioConfDialog(false)}>
+                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 max-w-xl rounded shadow-md bg-zinc-900" onClose={() => setIsOpenDeleteAudioConfDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl">Are you sure you want to remove {title} from your account?</Dialog.Title>
                         <div className="flex flex-row flex-grow justify-between mt-8">
@@ -314,7 +336,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-slate-600" onClose={() => setIsOpenUpdateAudioInfoDialogConf(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded max-w-xl shadow-md bg-slate-600" onClose={() => setIsOpenUpdateAudioInfoDialogConf(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Updated {title}</Dialog.Title>
                     </Dialog.Panel>
@@ -332,7 +354,7 @@ const Audio = (props) => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdateAudioInfoDialogError(false)}>
+                <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 max-w-xl rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdateAudioInfoDialogError(false)}>
                     <Dialog.Panel>
                         <Dialog.Title>Failed to update {title}</Dialog.Title>
                     </Dialog.Panel>

@@ -50,78 +50,80 @@ const Queue = () => {
     }
 
     return (
-        <div className="flex flex-col justify-center bg-[#2c2c31] p-5 rounded-md shadow-md">
-            {
-                loopInfo.isLooping && storeQueue.length > 0 ? (
-                    storeQueue.slice(loopInfo.loopStart).map((item, index) => index !== 0 ? (
-                        <div key={index} className="">
-                            <QueueAudioSimple
-                                item={item}
-                                index={index}
-                            />
-                        </div>
+        <div className="flex flex-col md:flex-row justify-evenly">
+            <div className={`${loopInfo.isLooping && storeQueue.length > 0 ? "flex flex-col bg-[#2c2c31] p-5 mb-5 md:m-5 rounded-md shadow-md" : "hidden"}`}>
+                {
+                    loopInfo.isLooping && storeQueue.length > 0 ? (
+                        storeQueue.slice(loopInfo.loopStart).map((item, index) => index !== 0 ? (
+                            <div key={index} className="">
+                                <QueueAudioSimple
+                                    item={item}
+                                    index={index}
+                                />
+                            </div>
+                        ) : (
+                            <div key={index}>
+                                <div className="flex flex-row items-center">
+                                    <h4 className="text-3xl mt-4 mb-4">Looping:</h4>
+                                </div>
+                                <QueueAudioSimple
+                                    item={item}
+                                    index={index}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <div className="hidden"></div>
+                    )
+                }
+            </div>
+
+            <div className="flex flex-col bg-[#2c2c31] p-5 md:m-5 rounded-md shadow-md">
+                {storeQueue.length > 0 ? (
+                    storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
+                        <Draggable draggableId={index + item.name} key={index} index={index}>
+                            {(provided) => (
+                                <div
+                                    className="mb-3"
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    ref={provided.innerRef}
+                                >
+                                    <QueueAudio
+                                        item={item}
+                                        index={index}
+                                        setQueueFromButtonClick={setQueueFromButtonClick}
+                                    />
+                                </div>
+                            )}
+                        </Draggable>
                     ) : (
                         <div key={index}>
                             <div className="flex flex-row items-center">
-                                <h4 className="text-3xl mt-4 mb-4">Looping:</h4>
+                                <p className="text-3xl mt-4 mb-4">Now playing:</p>
+                                <div className="ml-auto flex">
+                                    <button className={`${loopInfo.isLooping ? "text-yellow-300" : ""}`} title="Loop" onClick={() => dispatch(handleToggleLooping)}>
+                                        <FontAwesomeIcon className="text-3xl" icon={faRepeat} />
+                                    </button>
+                                    <button className="ml-4" title="Shuffle" onClick={handleQueueShuffle}>
+                                        <FontAwesomeIcon className="text-3xl" icon={faShuffle} />
+                                    </button>
+                                </div>
                             </div>
-                            <QueueAudioSimple
-                                item={item}
-                                index={index}
-                            />
-                        </div>
-                    ))
-                ) : (
-                    <div className="hidden"></div>
-                )
-            }
-
-            {loopInfo.isLooping && storeQueue.length > 0 ? <div className="my-5"></div> : <div className="hidden"></div>}
-
-            {storeQueue.length > 0 ? (
-                storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
-                    <Draggable draggableId={index + item.name} key={index} index={index}>
-                        {(provided) => (
-                            <div
-                                className="mb-3"
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                            >
+                            <div className="p-5">
                                 <QueueAudio
                                     item={item}
                                     index={index}
                                     setQueueFromButtonClick={setQueueFromButtonClick}
                                 />
                             </div>
-                        )}
-                    </Draggable>
+                            <hr className="border-2 rounded-md my-6" />
+                        </div>
+                    ))
                 ) : (
-                    <div key={index}>
-                        <div className="flex flex-row items-center">
-                            <h4 className="text-3xl mt-4 mb-4">Now playing:</h4>
-                            <div className="ml-auto">
-                                <button className={`${loopInfo.isLooping ? "text-yellow-300" : ""}`} title="Loop" onClick={() => dispatch(handleToggleLooping)}>
-                                    <FontAwesomeIcon className="text-3xl" icon={faRepeat} />
-                                </button>
-                                <button className="ml-4" title="Shuffle" onClick={handleQueueShuffle}>
-                                    <FontAwesomeIcon className="text-3xl" icon={faShuffle} />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="p-5">
-                            <QueueAudio
-                                item={item}
-                                index={index}
-                                setQueueFromButtonClick={setQueueFromButtonClick}
-                            />
-                        </div>
-                        <hr className="border-2 rounded-md my-6" />
-                    </div>
-                ))
-            ) : (
-                <p className="text-lg self-center">There is currently no queue</p>
-            )}
+                    <p className="text-lg self-center">There is currently no queue</p>
+                )}
+            </div>
         </div>
     )
 }

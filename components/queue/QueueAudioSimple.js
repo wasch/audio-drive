@@ -14,7 +14,7 @@ const QueueAudioSimple = (props) => {
                 <div className="text-lg">
                     {props.item.name}
                 </div>
-                <div className="text-md text-zinc-400 ml-auto mr-3">
+                <div className="text-md text-zinc-400 ml-auto pl-2 md:mr-3 md:pl-5">
                     {props.item.audioDuration}
                 </div>
             </div>

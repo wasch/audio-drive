@@ -20,10 +20,19 @@ export const playlistsSlice = createSlice({
                     }
                 }
             }
+        },
+        editNameInPlaylists: (state, audioObj) => {
+            for (let i = 0; i < state.value.length; i++) {
+                for (let j = 0; j < state.value[i].audioList.length; j++) {
+                    if (state.value[i].audioList[j].id === audioObj.payload.id) {
+                        state.value[i].audioList[j].name = audioObj.payload.newName;
+                    }
+                }
+            }
         }
     }
 })
 
-export const { addPlaylist, setPlaylists, removeFromPlaylists } = playlistsSlice.actions
+export const { addPlaylist, setPlaylists, removeFromPlaylists, editNameInPlaylists } = playlistsSlice.actions
 
 export default playlistsSlice.reducer

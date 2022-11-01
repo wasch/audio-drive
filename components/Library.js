@@ -334,7 +334,7 @@ const Library = () => {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenMassDeleteAudioConfDialog(false)}>
+                <Dialog className="z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 max-w-xl rounded shadow-md bg-zinc-900" onClose={() => setIsOpenMassDeleteAudioConfDialog(false)}>
                     <Dialog.Panel>
                         <Dialog.Title className="text-xl">Are you sure you want to remove the selected audio from your account?</Dialog.Title>
                         <div className="flex flex-row flex-grow justify-between mt-8">
