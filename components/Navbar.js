@@ -40,7 +40,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="bg-slate-600 shadow-lg flex items-center justify-center">
+        <div className="bg-slate-600 shadow-lg md:flex items-center justify-center">
             <nav className="flex flex-grow items-center justify-center max-w-6xl">
                 <div className="flex justify-self-start ml-4 mr-auto" onClick={() => setMobileMenu(false)}>
                     <Link href="/"><a className="text-3xl">Audio Drive</a></Link>
