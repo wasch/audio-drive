@@ -52,7 +52,7 @@ const Queue = () => {
     return (
         <div className="flex flex-col justify-center bg-[#2c2c31] p-5 rounded-md shadow-md">
             {
-                loopInfo.isLooping ? (
+                loopInfo.isLooping && storeQueue.length > 0 ? (
                     storeQueue.slice(loopInfo.loopStart).map((item, index) => index !== 0 ? (
                         <div key={index} className="">
                             <QueueAudioSimple
@@ -76,7 +76,7 @@ const Queue = () => {
                 )
             }
 
-            {loopInfo.isLooping ? <div className="my-5"></div> : <div className="hidden"></div>}
+            {loopInfo.isLooping && storeQueue.length > 0 ? <div className="my-5"></div> : <div className="hidden"></div>}
 
             {storeQueue.length > 0 ? (
                 storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
@@ -109,11 +109,13 @@ const Queue = () => {
                                 </button>
                             </div>
                         </div>
-                        <QueueAudio
-                            item={item}
-                            index={index}
-                            setQueueFromButtonClick={setQueueFromButtonClick}
-                        />
+                        <div className="p-5">
+                            <QueueAudio
+                                item={item}
+                                index={index}
+                                setQueueFromButtonClick={setQueueFromButtonClick}
+                            />
+                        </div>
                         <hr className="border-2 rounded-md my-6" />
                     </div>
                 ))
