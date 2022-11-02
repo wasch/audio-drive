@@ -58,7 +58,7 @@ const Playlist = (props) => {
     return (
         <div>
             <div className="relative flex flex-col flex-grow mb-6">
-                <div className="w-full overflow-scroll">
+                <div className="w-full overflow-hidden">
                     <p className="text-4xl py-1">{name}</p>
                 </div>
                 <div className="flex flex-row mt-4 mr-auto">
@@ -69,7 +69,7 @@ const Playlist = (props) => {
                         <FontAwesomeIcon className="text-4xl" icon={faShuffle} />
                     </button>
                 </div>
-                <button className="absolute top-0 right-0 rounded-sm bg-[#2c2c31] z-10 py-1 hover:cursor-pointer" title="Back" onClick={handleBack}>
+                <button className="absolute top-0 right-0 rounded-sm bg-[#2c2c31] z-10 py-1 pl-2 hover:cursor-pointer" title="Back" onClick={handleBack}>
                     <FontAwesomeIcon className="text-4xl" icon={faArrowLeft} />
                 </button>
             </div>

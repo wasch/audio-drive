@@ -271,7 +271,7 @@ const Audio = (props) => {
             >
                 <Dialog className="max-w-md z-50 fixed left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdateAudioInfoDialog(false)}>
                     <Dialog.Panel>
-                        <Dialog.Title className="overflow-scroll text-xl">Update {title}</Dialog.Title>
+                        <Dialog.Title className="overflow-hidden text-xl">Update {title}</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmit}>
                             <label htmlFor="name" className="hidden">Name:</label>
                             <input onChange={handleAudioChange} id="name" name="title" value={tempAudioInfo.title} type="text" className="w-full p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />

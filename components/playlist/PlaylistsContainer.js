@@ -215,7 +215,7 @@ const PlaylistsContainer = () => {
                                     item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If a playlist matches the search criteria or search is not being used, show it
                                         <div key={index} className="relative bg-zinc-700 py-4 px-1 m-4 shadow-md flex flex-row overflow-hidden">
                                             <div className="absolute top-0 right-0 border-t-yellow-300 border-t-[20px] border-x-[20px] border-y-[20px] border-x-zinc-700 border-r-0 border-b-0"></div>
-                                            <div className="pl-4 overflow-scroll hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
+                                            <div className="pl-4 overflow-hidden hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
@@ -231,7 +231,7 @@ const PlaylistsContainer = () => {
                                 {playlistList.map((item, index) => (
                                     !item.isFavorite && (search === "" || item.name.toLowerCase().includes(search.toLowerCase())) ?      // If a playlist matches the search criteria or search is not being used, show it
                                         <div key={index} className="bg-zinc-700 py-3 px-1 m-4 shadow-md flex flex-row overflow-hidden">
-                                            <div className="pl-4 overflow-scroll hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
+                                            <div className="pl-4 overflow-hidden hover:cursor-pointer" onClick={() => handleSelectPlaylist(item)} >
                                                 <h2 className="text-4xl py-1">{item.name}</h2>
                                             </div>
                                             <button onClick={() => handleUpdatePlaylistInfo(item)} className="self-center ml-auto">
@@ -335,7 +335,7 @@ const PlaylistsContainer = () => {
             >
                 <Dialog className="max-w-md z-50 absolute left-1/2 bottom-1/2 transform -translate-x-1/2 translate-y-1/2 p-5 rounded shadow-md bg-zinc-900" onClose={() => setIsOpenUpdatePlaylistInfoDialog(false)}>
                     <Dialog.Panel>
-                        <Dialog.Title className="overflow-scroll text-xl">Update playlist {playlistInfo.name}</Dialog.Title>
+                        <Dialog.Title className="overflow-hidden text-xl">Update playlist {playlistInfo.name}</Dialog.Title>
                         <form autoComplete="off" className="flex flex-col" onSubmit={handleSubmit}>
                             <label htmlFor="playlistName" className="hidden">Playlist name:</label>
                             <input onChange={handlePlaylistChange} id="playlistName" name="name" value={tempPlaylistInfo.name} type="text" className="w-full p-3 my-6 shadow-md bg-zinc-800 outline-none rounded-sm border-b-2 border-zinc-700 transition ease-in-out focus:border-zinc-500" />
