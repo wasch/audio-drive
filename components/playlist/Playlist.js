@@ -28,7 +28,7 @@ const Playlist = (props) => {
     // Update audio when changed
     useEffect(() => {
         const matchingPlaylist = playlists.findIndex(element => element.id === id);
-        setPlaylistAudio(playlists[matchingPlaylist].audioList);
+        setPlaylistAudio(playlists[matchingPlaylist].audioList.slice().sort((a, b) => a.name.localeCompare(b.name)));
     }, [playlists]);
 
     const handleRemoveAudio = async (audioId) => {

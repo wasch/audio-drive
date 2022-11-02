@@ -19,7 +19,7 @@ import { removeFromPlaylists, editNameInPlaylists } from '../redux/slices/playli
 const Audio = (props) => {
 
     // Props
-    const { id, title, url, duration, user, size, isFavorite, isSelected, handleClick, deselect } = props;
+    const { id, title, originalName, fileType, url, duration, user, size, isFavorite, isSelected, handleClick, deselect } = props;
 
     // Redux
     const dispatch = useDispatch();
@@ -78,7 +78,7 @@ const Audio = (props) => {
 
             // Remove file
             const storage = getStorage();
-            const fileRef = ref(storage, "audio/" + title + ".mp3");
+            const fileRef = ref(storage, "audio/" + originalName + "." + fileType);
             deleteObject(fileRef).then(() => {
                 console.log("Successfully deleted: " + title);
             }).catch((err) => {
@@ -338,7 +338,7 @@ const Audio = (props) => {
             >
                 <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 rounded max-w-xl shadow-md bg-slate-600" onClose={() => setIsOpenUpdateAudioInfoDialogConf(false)}>
                     <Dialog.Panel>
-                        <Dialog.Title>Updated {title}</Dialog.Title>
+                        <Dialog.Title>Updated info</Dialog.Title>
                     </Dialog.Panel>
                 </Dialog>
             </Transition>
@@ -356,7 +356,7 @@ const Audio = (props) => {
             >
                 <Dialog className="z-50 fixed bottom-44 left-1/2 transform -translate-x-1/2 p-3 max-w-xl rounded shadow-md bg-red-700" onClose={() => setIsOpenUpdateAudioInfoDialogError(false)}>
                     <Dialog.Panel>
-                        <Dialog.Title>Failed to update {title}</Dialog.Title>
+                        <Dialog.Title>Failed to update info</Dialog.Title>
                     </Dialog.Panel>
                 </Dialog>
             </Transition>

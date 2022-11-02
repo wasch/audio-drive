@@ -185,14 +185,14 @@ const PlaylistsContainer = () => {
     const handlePlay = () => {
         dispatch(setIsLooping(true));
         dispatch(setLoopStart(0));
-        dispatch(replaceQueue(activePlaylist.audioList));
+        dispatch(replaceQueue(activePlaylist.audioList.slice().sort((a, b) => a.name.localeCompare(b.name))));
         dispatch(setQueueIndex(0));
     }
 
     const handleShufflePlay = () => {
         dispatch(setIsLooping(true));
         dispatch(setLoopStart(0));
-        let tempPlaylist = activePlaylist.audioList.slice();
+        let tempPlaylist = activePlaylist.audioList.slice().sort((a, b) => a.name.localeCompare(b.name));
         tempPlaylist = shuffler(tempPlaylist);
         dispatch(replaceQueue(tempPlaylist));
         dispatch(setQueueIndex(0));

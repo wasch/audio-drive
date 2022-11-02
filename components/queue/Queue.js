@@ -80,51 +80,53 @@ const Queue = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col bg-[#2c2c31] p-5 my-5 md:mx-2 rounded-md shadow-md">
-                {storeQueue.length > 0 ? (
-                    storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
-                        <Draggable draggableId={index + item.name} key={index} index={index}>
-                            {(provided) => (
-                                <div
-                                    className="mb-3"
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    ref={provided.innerRef}
-                                >
+            <div className="flex flex-col">
+                <div className="bg-[#2c2c31] p-5 my-5 md:mx-2 rounded-md shadow-md">
+                    {storeQueue.length > 0 ? (
+                        storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
+                            <Draggable draggableId={index + item.name} key={index} index={index}>
+                                {(provided) => (
+                                    <div
+                                        className="mb-3"
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        <QueueAudio
+                                            item={item}
+                                            index={index}
+                                            setQueueFromButtonClick={setQueueFromButtonClick}
+                                        />
+                                    </div>
+                                )}
+                            </Draggable>
+                        ) : (
+                            <div key={index}>
+                                <div className="flex flex-row items-center">
+                                    <p className="text-3xl mt-4 mb-4 pr-4">Now playing:</p>
+                                    <div className="ml-auto flex">
+                                        <button className={`${loopInfo.isLooping ? "text-yellow-300" : ""}`} title="Loop" onClick={() => dispatch(handleToggleLooping)}>
+                                            <FontAwesomeIcon className="text-3xl" icon={faRepeat} />
+                                        </button>
+                                        <button className="ml-4" title="Shuffle" onClick={handleQueueShuffle}>
+                                            <FontAwesomeIcon className="text-3xl" icon={faShuffle} />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="p-5">
                                     <QueueAudio
                                         item={item}
                                         index={index}
                                         setQueueFromButtonClick={setQueueFromButtonClick}
                                     />
                                 </div>
-                            )}
-                        </Draggable>
+                                <hr className="border-2 rounded-md my-6" />
+                            </div>
+                        ))
                     ) : (
-                        <div key={index}>
-                            <div className="flex flex-row items-center">
-                                <p className="text-3xl mt-4 mb-4 pr-4">Now playing:</p>
-                                <div className="ml-auto flex">
-                                    <button className={`${loopInfo.isLooping ? "text-yellow-300" : ""}`} title="Loop" onClick={() => dispatch(handleToggleLooping)}>
-                                        <FontAwesomeIcon className="text-3xl" icon={faRepeat} />
-                                    </button>
-                                    <button className="ml-4" title="Shuffle" onClick={handleQueueShuffle}>
-                                        <FontAwesomeIcon className="text-3xl" icon={faShuffle} />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="p-5">
-                                <QueueAudio
-                                    item={item}
-                                    index={index}
-                                    setQueueFromButtonClick={setQueueFromButtonClick}
-                                />
-                            </div>
-                            <hr className="border-2 rounded-md my-6" />
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-lg self-center">There is currently no queue</p>
-                )}
+                        <p className="text-lg self-center">There is currently no queue</p>
+                    )}
+                </div>
             </div>
         </div>
     )

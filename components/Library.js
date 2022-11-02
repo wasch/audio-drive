@@ -12,7 +12,7 @@ import { removeFromPlaylists, setPlaylists } from '../redux/slices/playlistsSlic
 import { useEffect, useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { replaceQueue } from '../redux/slices/queueSlice'
-import { removeAudio } from '../redux/slices/audioSlice'
+import { removeAudio, setAudio } from '../redux/slices/audioSlice'
 import { deleteObject, getStorage, ref } from 'firebase/storage'
 
 const Library = () => {
@@ -143,10 +143,10 @@ const Library = () => {
             try {
                 // Remove doc
                 await deleteDoc(doc(db, "audio", file.id));
-
+                
                 // Remove file
                 const storage = getStorage();
-                const fileRef = ref(storage, "audio/" + file.name + ".mp3");
+                const fileRef = ref(storage, "audio/" + file.originalName + "." + file.fileType);
                 deleteObject(fileRef).then(() => {
                     console.log("Successfully deleted: " + file.name);
                 }).catch((err) => {
@@ -209,6 +209,8 @@ const Library = () => {
                                         <Audio
                                             id={item.id}
                                             title={item.name}
+                                            originalName={item.originalName}
+                                            fileType={item.fileType}
                                             url={item.audioSource}
                                             duration={item.audioDuration}
                                             user={item.user}
@@ -233,6 +235,8 @@ const Library = () => {
                                         <Audio
                                             id={item.id}
                                             title={item.name}
+                                            originalName={item.originalName}
+                                            fileType={item.fileType}
                                             url={item.audioSource}
                                             duration={item.audioDuration}
                                             user={item.user}

@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
+const path = require('path');
+
 import { addAudio } from '../redux/slices/audioSlice'
 
 const Uploader = () => {
@@ -25,7 +27,6 @@ const Uploader = () => {
     useEffect(() => {
         if (audioList.length !== 0) {
             setDisable(false);
-            console.log(audioList);
         }
     }, [audioList])
 
@@ -60,48 +61,52 @@ const Uploader = () => {
     const audioChanged = async (e) => {
         const audioArray = Array.from(e.target.files);
         for (const file of audioArray) {
-            const capacityCheck = await checkForStorageExceeded(file);
-            if (!capacityCheck) {
-                // Add files to Firebase Storage
-                const storagemRef = getStorage();
-                const audioRef = ref(storagemRef, 'audio/' + file.name);
-                await uploadBytes(audioRef, file).then((snapshot) => {
-                    console.log('Uploaded audio');
-                });
-                let audioUrl = await getDownloadURL(audioRef);
+            if (file.name.split('.').pop() === 'mp3' || file.name.split('.').pop() === 'wav') {
+                const capacityCheck = await checkForStorageExceeded(file);
+                if (!capacityCheck) {
+                    // Add files to Firebase Storage
+                    const storagemRef = getStorage();
+                    const audioRef = ref(storagemRef, 'audio/' + file.name);
+                    await uploadBytes(audioRef, file).then((snapshot) => {
+                        console.log('Uploaded audio');
+                    });
+                    let audioUrl = await getDownloadURL(audioRef);
 
-                // Get audio duration
-                let audioTag = document.createElement('audio');
-                audioTag.src = audioUrl;
-                audioTag.name = file.name;
-                audioTag.size = file.size / 1000000;
-                audioTag.addEventListener('loadedmetadata', async (e) => {
+                    // Get audio duration
+                    let audioTag = document.createElement('audio');
+                    audioTag.src = audioUrl;
+                    audioTag.name = file.name;
+                    audioTag.size = file.size / 1000000;
+                    audioTag.addEventListener('loadedmetadata', async (e) => {
 
-                    let minutes = parseInt(audioTag.duration / 60, 10);
-                    let seconds = "0" + parseInt(audioTag.duration % 60);
-                    let convertedDuration = minutes + ":" + seconds.slice(-2)
+                        let minutes = parseInt(audioTag.duration / 60, 10);
+                        let seconds = "0" + parseInt(audioTag.duration % 60);
+                        let convertedDuration = minutes + ":" + seconds.slice(-2);
 
-                    const audioObj = {
-                        name: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf(".")),
-                        audioSource: audioUrl,
-                        audioDuration: convertedDuration,
-                        user: fbAuth.currentUser.uid,
-                        MBFileSize: e.currentTarget.size,
-                        isFavorite: false
-                    }
+                        const audioObj = {
+                            name: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf('.')),
+                            originalName: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf('.')),
+                            audioSource: audioUrl,
+                            audioDuration: convertedDuration,
+                            user: fbAuth.currentUser.uid,
+                            MBFileSize: e.currentTarget.size,
+                            fileType: e.currentTarget.name.split('.').pop(),
+                            isFavorite: false
+                        }
 
-                    // Add doc references for audio files in Firebase Cloud Firestore Database
-                    try {
-                        const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
-                        dispatch(addAudio(audioObj));
-                        setAudioList(current => [...current, audioObj]);
-                    } catch (e) {
-                        console.error("Error adding document: ", e);
-                    }
-                });
-            } else {
-                setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
-                setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
+                        // Add doc references for audio files in Firebase Cloud Firestore Database
+                        try {
+                            const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                            dispatch(addAudio(audioObj));
+                            setAudioList(current => [...current, audioObj]);
+                        } catch (e) {
+                            console.error("Error adding document: ", e);
+                        }
+                    });
+                } else {
+                    setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
+                    setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
+                }
             }
         };
     }
@@ -128,49 +133,52 @@ const Uploader = () => {
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const audioArray = Array.from(e.dataTransfer.files);
             for (const file of audioArray) {
+                if (file.name.split('.').pop() === 'mp3' || file.name.split('.').pop() === 'wav') {
+                    const capacityCheck = await checkForStorageExceeded(file);
+                    if (!capacityCheck) {
+                        // Upload audio to Firebase Storage
+                        const storagemRef = getStorage();
+                        const audioRef = ref(storagemRef, 'audio/' + file.name);
+                        await uploadBytes(audioRef, file).then((snapshot) => {
+                            console.log('Uploaded audio');
+                        });
+                        let audioUrl = await getDownloadURL(audioRef);
 
-                const capacityCheck = await checkForStorageExceeded(file);
-                if (!capacityCheck) {
-                    // Upload audio to Firebase Storage
-                    const storagemRef = getStorage();
-                    const audioRef = ref(storagemRef, 'audio/' + file.name);
-                    await uploadBytes(audioRef, file).then((snapshot) => {
-                        console.log('Uploaded audio');
-                    });
-                    let audioUrl = await getDownloadURL(audioRef);
+                        // Get audio duration
+                        let audioTag = document.createElement('audio');
+                        audioTag.src = audioUrl;
+                        audioTag.name = file.name;
+                        audioTag.size = file.size / 1000000;
+                        audioTag.addEventListener('loadedmetadata', async (e) => {
 
-                    // Get audio duration
-                    let audioTag = document.createElement('audio');
-                    audioTag.src = audioUrl;
-                    audioTag.name = file.name;
-                    audioTag.size = file.size / 1000000;
-                    audioTag.addEventListener('loadedmetadata', async (e) => {
+                            let minutes = parseInt(audioTag.duration / 60, 10);
+                            let seconds = "0" + parseInt(audioTag.duration % 60);
+                            let convertedDuration = minutes + ":" + seconds.slice(-2)
 
-                        let minutes = parseInt(audioTag.duration / 60, 10);
-                        let seconds = "0" + parseInt(audioTag.duration % 60);
-                        let convertedDuration = minutes + ":" + seconds.slice(-2)
+                            const audioObj = {
+                                name: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf('.')),
+                                originalName: e.currentTarget.name.substr(0, e.currentTarget.name.lastIndexOf('.')),
+                                audioSource: audioUrl,
+                                audioDuration: convertedDuration,
+                                user: fbAuth.currentUser.uid,
+                                MBFileSize: e.currentTarget.size,
+                                fileType: e.currentTarget.name.split('.').pop(),
+                                isFavorite: false
+                            }
 
-                        const audioObj = {
-                            name: e.currentTarget.name.substr(0, file.name.lastIndexOf(".")),
-                            audioSource: audioUrl,
-                            audioDuration: convertedDuration,
-                            user: fbAuth.currentUser.uid,
-                            MBFileSize: e.currentTarget.size,
-                            isFavorite: false
-                        }
-
-                        // Add doc references for audio files in Firebase Cloud Firestore Database and redux store
-                        try {
-                            const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
-                            dispatch(addAudio(audioObj));
-                            setAudioList(current => [...current, audioObj]);
-                        } catch (e) {
-                            console.error("Error adding document: ", e);
-                        }
-                    });
-                } else {
-                    setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
-                    setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
+                            // Add doc references for audio files in Firebase Cloud Firestore Database and redux store
+                            try {
+                                const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                                dispatch(addAudio(audioObj));
+                                setAudioList(current => [...current, audioObj]);
+                            } catch (e) {
+                                console.error("Error adding document: ", e);
+                            }
+                        });
+                    } else {
+                        setIsOpenFileSizeLimitExceededDialog(true);    // Triggers dialog
+                        setTimeout(() => setIsOpenFileSizeLimitExceededDialog(false), 3000); // Dismisses dialog after 3 seconds
+                    }
                 }
             };
         }
