@@ -102,7 +102,7 @@ const Queue = () => {
                     ) : (
                         <div key={index}>
                             <div className="flex flex-row items-center">
-                                <p className="text-3xl mt-4 mb-4">Now playing:</p>
+                                <p className="text-3xl mt-4 mb-4 pr-4">Now playing:</p>
                                 <div className="ml-auto flex">
                                     <button className={`${loopInfo.isLooping ? "text-yellow-300" : ""}`} title="Loop" onClick={() => dispatch(handleToggleLooping)}>
                                         <FontAwesomeIcon className="text-3xl" icon={faRepeat} />
