@@ -29,11 +29,11 @@ const MixerContainer = (props) => {
     }, []);
 
     return (
-        <div className={`px-2 md:p-5 md:bg-[#2c2c31] ${props.isExpanded ? "" : "flex flex-col w-full"}`}>
+        <div className={`px-2 md:p-5 md:bg-[#2c2c31] ${props.isExpanded ? "max-w-[992px]" : "flex flex-col w-full"}`}>
             {
                 currentAudio ?
                     <div className="flex flex-row items-center">
-                        <p className="bg-zinc-700 my-2 p-5 rounded-md shadow-md text-2xl md:text-3xl">{currentAudio.name}</p>
+                        <p className="bg-zinc-700 mb-2 md:my-2 p-5 rounded-md shadow-md text-2xl md:text-3xl">{currentAudio.name}</p>
                         <div className="my-1 ml-auto p-3 pl-5 rounded-md justify-center hidden md:inline-flex cursor-pointer hover:brightness-125">
                             <button className={`text-6xl ${props.isExpanded ? "text-red-500" : ""}`} title="Expanded View (experimental)" onClick={handleClickToggleExpandedLayout}>
                                 <FontAwesomeIcon icon={faSquareCaretLeft} />

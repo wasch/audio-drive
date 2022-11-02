@@ -117,7 +117,7 @@ const PlayerControls = (props) => {
         for (let i = 0; i < bufferLength; i++) {
           barHeight = dataArray[i] / 2;
 
-          canvasCtx.fillStyle = "rgb(70, 85, 250)";
+          canvasCtx.fillStyle = "rgb(100, 130, 250)";
           canvasCtx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
 
           x += barWidth + 1;
@@ -170,6 +170,9 @@ const PlayerControls = (props) => {
         }}
         onEnded={(e) => {
           if (loopInfo.isLooping && queueIndex === queue.length - 1) { // If looping and reached end of loop, return to start of loop 
+            document.querySelector('audio').pause();
+            document.querySelector('audio').currentTime = 0;
+            document.querySelector('audio').play();
             dispatch(setQueueIndex(loopInfo.loopStart));
           } else if (queueIndex < queue.length - 1) dispatch(next()); // Don't increment the queueIndex if there is no more audio in the queue
         }}
@@ -193,7 +196,6 @@ const PlayerControls = (props) => {
         listenInterval={10}
         customAdditionalControls={
           [
-            RHAP_UI.LOOP,
             <Popover as="div" key="popover" className="flex mt-0.5 -mr-6 md:mr-0">
               <div>
                 <Popover.Button title="Other controls">
@@ -229,7 +231,8 @@ const PlayerControls = (props) => {
                   </div>
                 </Popover.Panel>
               </Transition>
-            </Popover>
+            </Popover>,
+            <div className="ml-6" key="spacer"></div>
           ]
         }
         customVolumeControls={[
