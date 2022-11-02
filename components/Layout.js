@@ -11,6 +11,7 @@ const Layout = ({ children }) => {
   // Redux
   const queue = useSelector((state) => state.queue.value);
   const queueIndex = useSelector((state) => state.queueIndex.value);
+  const isExpandedLayout = useSelector((state) => state.layout.value);
 
   return (
     <div className="layoutContainer">
@@ -22,7 +23,7 @@ const Layout = ({ children }) => {
         <Navbar />
       </header>
 
-      <main className={style.main}>
+      <main className={`${isExpandedLayout ? "" : "max-w-5xl"} mx-auto p-4 mb-60`}>
         {children}
       </main>
 

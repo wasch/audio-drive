@@ -51,34 +51,36 @@ const Queue = () => {
 
     return (
         <div className="flex flex-col md:flex-row justify-evenly">
-            <div className={`${loopInfo.isLooping && storeQueue.length > 0 ? "flex flex-col bg-[#2c2c31] p-5 mb-5 md:m-5 rounded-md shadow-md" : "hidden"}`}>
-                {
-                    loopInfo.isLooping && storeQueue.length > 0 ? (
-                        storeQueue.slice(loopInfo.loopStart).map((item, index) => index !== 0 ? (
-                            <div key={index} className="">
-                                <QueueAudioSimple
-                                    item={item}
-                                    index={index}
-                                />
-                            </div>
-                        ) : (
-                            <div key={index}>
-                                <div className="flex flex-row items-center">
-                                    <h4 className="text-3xl mt-4 mb-4">Looping:</h4>
+            <div className={`${loopInfo.isLooping && storeQueue.length > 0 ? "flex flex-col mb-5 my-5 md:mx-2" : "hidden"}`}>
+                <div className="flex flex-col rounded-md shadow-md bg-[#2c2c31] p-5">
+                    {
+                        loopInfo.isLooping && storeQueue.length > 0 ? (
+                            storeQueue.slice(loopInfo.loopStart).map((item, index) => index !== 0 ? (
+                                <div key={index} className="">
+                                    <QueueAudioSimple
+                                        item={item}
+                                        index={index}
+                                    />
                                 </div>
-                                <QueueAudioSimple
-                                    item={item}
-                                    index={index}
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        <div className="hidden"></div>
-                    )
-                }
+                            ) : (
+                                <div key={index}>
+                                    <div className="flex flex-row items-center">
+                                        <h4 className="text-3xl mt-4 mb-4">Looping:</h4>
+                                    </div>
+                                    <QueueAudioSimple
+                                        item={item}
+                                        index={index}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="hidden"></div>
+                        )
+                    }
+                </div>
             </div>
 
-            <div className="flex flex-col bg-[#2c2c31] p-5 md:m-5 rounded-md shadow-md">
+            <div className="flex flex-col bg-[#2c2c31] p-5 my-5 md:mx-2 rounded-md shadow-md">
                 {storeQueue.length > 0 ? (
                     storeQueue.slice(queueIndex).map((item, index) => index !== 0 ? (
                         <Draggable draggableId={index + item.name} key={index} index={index}>
