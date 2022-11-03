@@ -8,8 +8,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
-const path = require('path');
-
 import { addAudio } from '../redux/slices/audioSlice'
 
 const Uploader = () => {

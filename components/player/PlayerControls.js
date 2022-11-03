@@ -26,6 +26,7 @@ const PlayerControls = (props) => {
   // State
   const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
   const [audioAnalyser, setAudioAnalyser] = useState(null);
+  const [audioGainNode, setAudioGainNode] = useState(null);
   const [playStatus, setPlayStatus] = useState('PAUSED');
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -73,15 +74,26 @@ const PlayerControls = (props) => {
       let analyser;
       if (!audioAnalyser) {
         analyser = audioCtx.current.createAnalyser();
-        analyser.fftSize = 256;
+        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.85;
         setAudioAnalyser(analyser);
       } else {
         analyser = audioAnalyser;
       }
 
+      // General Gain
+      let gainNode;
+      if (!audioGainNode) {
+        gainNode = audioCtx.current.createGain();
+        setAudioGainNode(gainNode);
+      } else {
+        gainNode = audioGainNode;
+      }
+      
       track.current.connect(panner);
       panner.connect(analyser);
-      analyser.connect(audioCtx.current.destination);
+      analyser.connect(gainNode);
+      gainNode.connect(audioCtx.current.destination);
     }
     return () => {
       track.current.disconnect();
@@ -96,6 +108,7 @@ const PlayerControls = (props) => {
   }, [playStatus]);
 
   // Draws the audio visualizer using a canvas
+  // (canvas is located in the Spectrum Analyzer component)
   function draw() {
     const canvas = document.getElementById("audioCanvas");
     if (canvas) {
@@ -110,7 +123,7 @@ const PlayerControls = (props) => {
         canvasCtx.fillStyle = "rgb(63, 63, 70)";
         canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        const barWidth = (canvasWidth / bufferLength) * 1.5;
+        const barWidth = (canvasWidth / bufferLength) * 4;
         let barHeight;
         let x = 0;
 
