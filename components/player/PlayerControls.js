@@ -10,10 +10,11 @@ import { increment, decrement, setPlaybackSpeed } from '../../redux/slices/playb
 import { toggleShouldMaintainPitch } from '../../redux/slices/maintainPitchSlice'
 import { setTime } from '../../redux/slices/currentTimeSlice'
 import { setIsPaused } from '../../redux/slices/pausedSlice'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { db } from '../../firebase'
+import { setVolume } from '../../redux/slices/volumeSlice'
 
 const PlayerControls = (props) => {
-
-  const audioRef = useRef(null);
 
   // Redux
   const dispatch = useDispatch();
@@ -22,6 +23,8 @@ const PlayerControls = (props) => {
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
   const panValue = useSelector((state) => state.pannerRef.value);
   const loopInfo = useSelector((state) => state.loopInfo.value);
+  const user = useSelector((state) => state.user.value);
+  const volume = useSelector((state) => state.volume.value);
 
   // State
   const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
@@ -32,7 +35,6 @@ const PlayerControls = (props) => {
 
   // Ref
   const audioCtx = useRef();
-  const audioTag = useRef();
   const track = useRef();
 
   useEffect(() => {
@@ -53,6 +55,24 @@ const PlayerControls = (props) => {
     });
   }, [queue, queueIndex]);
 
+  // Set volume
+  useEffect(() => {
+    // Add doc references for volume in Firebase Cloud Firestore Database
+    document.querySelector('audio').volume = volume;
+    if (user) {
+      async function setVolume() {
+        try {
+          await setDoc(doc(db, 'volume', user.uid), {
+            volume: volume
+          });
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      }
+      setVolume();
+    }
+  }, [volume]);
+
   // Setup audio context
   useEffect(() => {
     if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -61,8 +81,7 @@ const PlayerControls = (props) => {
   // Setup web audio api effects
   useEffect(() => {
     if (audioCtx.current) {
-      if (!audioTag.current) audioTag.current = document.querySelector('audio');
-      if (!track.current) track.current = audioCtx.current.createMediaElementSource(audioTag.current);
+      if (!track.current) track.current = audioCtx.current.createMediaElementSource(document.querySelector('audio'));
 
       // TODO: Filters
 
@@ -81,7 +100,7 @@ const PlayerControls = (props) => {
         analyser = audioAnalyser;
       }
 
-      // General Gain
+      // General gain
       let gainNode;
       if (!audioGainNode) {
         gainNode = audioCtx.current.createGain();
@@ -169,7 +188,6 @@ const PlayerControls = (props) => {
     <div>
       <AudioPlayer
         id="audioPlayer"
-        ref={audioRef}
         crossOrigin="anonymous"
         autoPlay
         src={props.url}
@@ -204,7 +222,8 @@ const PlayerControls = (props) => {
         onListen={(e) => {
           dispatch(setTime(document.querySelector('audio').currentTime));
         }}
-        volume={0.20}
+        volume={volume}
+        onVolumeChange={(e) => dispatch(setVolume(e.target.volume))}
         // other props here
         listenInterval={10}
         customAdditionalControls={

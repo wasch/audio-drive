@@ -10,7 +10,8 @@ import { setUser } from '../redux/slices/userSlice'
 import { setPlaylists } from '../redux/slices/playlistsSlice'
 
 import { db, fbAuth } from '../firebase'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore'
+import { setVolume } from '../redux/slices/volumeSlice'
 
 const AppWrapper = ({ children }) => {
 
@@ -57,6 +58,18 @@ const AppWrapper = ({ children }) => {
       dispatch(setAudio(audio));
     }
     fetchAudio();
+  }, [user]);
+
+  // Gets the user's volume
+  useEffect(() => {
+    if (user) {
+      async function getVolume() {
+        const volRef = doc(db, "volume", user.uid);
+        const volSnap = await getDoc(volRef);
+        if (volSnap.data()) dispatch(setVolume(volSnap.data().volume));
+      }
+      getVolume();
+    }
   }, [user]);
 
   return <>{children}</>;

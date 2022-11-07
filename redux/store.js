@@ -11,6 +11,7 @@ import pausedReducer from './slices/pausedSlice'
 import pannerRefReducer from './slices/pannerRefSlice'
 import loopReducer from './slices/loopSlice'
 import layoutReducer from './slices/layoutSlice'
+import volumeReducer from './slices/volumeSlice'
 
 export default configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export default configureStore({
     pannerRef: pannerRefReducer,
     loopInfo: loopReducer,
     layout: layoutReducer,
+    volume: volumeReducer,
   }
 });
