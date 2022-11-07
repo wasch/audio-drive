@@ -89,7 +89,7 @@ const PlayerControls = (props) => {
       } else {
         gainNode = audioGainNode;
       }
-      
+
       track.current.connect(panner);
       panner.connect(analyser);
       analyser.connect(gainNode);

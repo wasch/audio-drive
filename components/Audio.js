@@ -139,6 +139,7 @@ const Audio = (props) => {
 
         // Update audio in Firebase Cloud Firestore Database and redux state
         try {
+            console.log(tempAudioInfo);
             const audioRef = doc(db, "audio", tempAudioInfo.id);
             await updateDoc(audioRef, {
                 name: tempAudioInfo.title,

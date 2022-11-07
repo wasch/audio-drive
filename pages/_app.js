@@ -57,7 +57,7 @@ const AppWrapper = ({ children }) => {
       dispatch(setAudio(audio));
     }
     fetchAudio();
-  });
+  }, [user]);
 
   return <>{children}</>;
 }

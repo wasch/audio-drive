@@ -95,6 +95,7 @@ const Uploader = () => {
                         // Add doc references for audio files in Firebase Cloud Firestore Database
                         try {
                             const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                            audioObj.id = audioDatabaseRef.id;
                             dispatch(addAudio(audioObj));
                             setAudioList(current => [...current, audioObj]);
                         } catch (e) {
@@ -167,6 +168,7 @@ const Uploader = () => {
                             // Add doc references for audio files in Firebase Cloud Firestore Database and redux store
                             try {
                                 const audioDatabaseRef = await addDoc(collection(db, "audio"), audioObj);
+                                audioObj.id = audioDatabaseRef.id;
                                 dispatch(addAudio(audioObj));
                                 setAudioList(current => [...current, audioObj]);
                             } catch (e) {
