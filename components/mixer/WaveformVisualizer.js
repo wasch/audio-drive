@@ -56,9 +56,6 @@ const WaveformVisualizer = () => {
                             minLength: 1,
                         }
                     ],
-                    dragSelection: {
-                        slop: 5
-                    }
                 })).initPlugin('regions');
                 wavesurfer.current.regions.list.loop_region.on('out', function () {
                     document.querySelector('audio').pause();
