@@ -2,7 +2,8 @@ import Image from 'next/image';
 import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTime } from '../../redux/slices/currentTimeSlice';
 
 const WaveformVisualizer = () => {
 
@@ -24,6 +25,7 @@ const WaveformVisualizer = () => {
     });
 
     // Redux
+    const dispatch = useDispatch();
     const currentIndex = useSelector((state) => state.queueIndex.value);
     const current = useSelector((state) => state.queue.value[currentIndex]);
     const currentTime = useSelector((state) => state.currentTime.value);
@@ -31,6 +33,51 @@ const WaveformVisualizer = () => {
 
     // State
     const [waveSurfer, setWaveSurfer] = useState(false); // Indicates if the waveform has finished generating
+    const [isLooping, setIsLooping] = useState(false);
+
+    // Toggles the loop region
+    const handleClickToggleLoop = async () => {
+        if (wavesurfer.current) {
+            if (isLooping) {
+                setIsLooping(false);
+                wavesurfer.current.clearRegions();
+            } else {
+                setIsLooping(true);
+                const WaveSurferRegions = (await import("wavesurfer.js/dist/plugin/wavesurfer.regions")).default;
+                wavesurfer.current.addPlugin(WaveSurferRegions.create({
+                    regionsMinLength: 2,
+                    regions: [
+                        {
+                            id: "loop_region",
+                            start: 0,
+                            end: 30,
+                            loop: true,
+                            color: 'rgba(253, 224, 71, 0.5)',
+                            minLength: 1,
+                        }
+                    ],
+                    dragSelection: {
+                        slop: 5
+                    }
+                })).initPlugin('regions');
+                wavesurfer.current.regions.list.loop_region.on('out', function () {
+                    document.querySelector('audio').pause();
+                    document.querySelector('audio').currentTime = wavesurfer.current.regions.list.loop_region.start;
+                    document.querySelector('audio').play();
+                });
+                wavesurfer.current.regions.list.loop_region.on('remove', function () {
+                    setIsLooping(false);
+                });
+            }
+        }
+    }
+
+    // Seeks to start of loop
+    const handleClickGoToStartOfLoop = () => {
+        document.querySelector('audio').pause();
+        document.querySelector('audio').currentTime = wavesurfer.current.regions.list.loop_region.start;
+        document.querySelector('audio').play();
+    }
 
     // Creates the waveform and adds event listeners
     const create = async () => {
@@ -98,6 +145,10 @@ const WaveformVisualizer = () => {
 
     return (
         <div className="bg-zinc-700 shadow-md rounded-md p-5 mb-2">
+            <div className="flex flex-row mb-5">
+                {waveSurfer && current ? <button className={`${isLooping ? "bg-yellow-300 text-zinc-800" : "bg-zinc-600"} hover:brightness-110 hover:scale-105 transition ease-in-out p-3 rounded-md shadow-sm`} onClick={handleClickToggleLoop}>Toogle Looping</button> : <div className="hidden"></div>}
+                {waveSurfer && current && isLooping ? <button className="bg-zinc-600 hover:brightness-110 hover:scale-105 transition ease-in-out ml-3 p-3 rounded-md shadow-sm" onClick={handleClickGoToStartOfLoop}>Go to start of loop</button> : <div className="hidden"></div>}
+            </div>
             <div className={`${current && !waveSurfer ? "pointer-events-none" : ""} flex justify-center`}>
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}
                 {current && !waveSurfer ? <Image src="/images/loading.svg" height={100} width={100} /> : <div className="hidden"></div>}
