@@ -1,63 +1,74 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { setHighShelfFreq, setHighShelfGain } from '../../redux/slices/eqSlices/highShelfSlice';
+import style from '../../styles/filters.module.css'
 
 const Filters = () => {
 
-    // Redux
-    const dispatch = useDispatch();
-    const highShelfValue = useSelector((state) => state.highShelf.value);
-
-    // State
-    const [highShelfFreqState, setHighShelfFreqState] = useState(4700)
-    const [highShelfGainState, setHighShelfGainState] = useState(50)
-
-    // High Shelf Frequency
-    const handleResetHighShelfFreq = () => {
-        dispatch(setHighShelfFreq(4700));
-        setHighShelfFreqState(4700);
-    }
-
-    const handleHighShelfFreqChange = (e) => {
-        let freqValue = e.target.value;
-        dispatch(setHighShelfFreq(freqValue));
-        setHighShelfFreqState(freqValue);
-    }
-
-    // High Shelf Gain
-    const handleResetHighShelfGain = () => {
-        dispatch(setHighShelfGain(50));
-        setHighShelfGainState(50);
-    }
-
-    const handleHighShelfGainChange = (e) => {
-        let gainValue = e.target.value;
-        dispatch(setHighShelfGain(gainValue));
-        setHighShelfGainState(gainValue);
-    }
-
-    useEffect(() => {
-        if (highShelfValue.freq) setHighShelfFreqState(highShelfValue.freq);
-        if (highShelfValue.gain) setHighShelfGainState(highShelfValue.gain);
-    }, []);
-
     return (
-        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mr-1">
-            <p className="text-2xl mb-1">Filters (WIP)</p>
-            {/* 
-            
-            <input className="h-full my-2" onChange={handleHighShelfFreqChange} type="range" id="highShelfFreqSlider" min="0" max="22000" value={highShelfFreqState} step="100" />
-            <div className="flex flex-grow items-center justify-center mt-2">
-                <p onClick={handleResetHighShelfFreq} className="text-xl hover:cursor-pointer">{highShelfFreqState}</p>
-            </div>
+        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md px-5 pt-5 pb-10 md:p-5 w-full">
+            <p className="text-2xl mb-4">Filters</p>
+            <div className="flex flex-row flex-grow justify-evenly">
 
-            <input className="h-full my-2" onChange={handleHighShelfGainChange} type="range" id="highShelfGainSlider" min="-50" max="50" value={highShelfGainState} />
-            <div className="flex flex-grow items-center justify-center mt-2">
-                <p onClick={handleResetHighShelfGain} className="text-xl hover:cursor-pointer">{highShelfGainState}</p>
+                {/* High-pass filter */}
+                <div className="flex flex-col items-center">
+                    <button className="mx-2 mb-4 px-3 py-1 shadow-md rounded-md transition ease-in-out hover:scale-105 hover:brightness-125 bg-zinc-600 text-lg">High-pass</button>
+                    <div className="flex flex-row w-full -mb-5 justify-evenly">
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Low-pass filter */}
+                <div className="flex flex-col items-center">
+                    <button className="mx-2 mb-4 px-3 py-1 shadow-md rounded-md transition ease-in-out hover:scale-105 hover:brightness-125 bg-zinc-600 text-lg">Low-pass</button>
+                    <div className="flex flex-row w-full -mb-5 justify-evenly">
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* High-shelf filter */}
+                <div className="flex flex-col items-center">
+                    <button className="mx-2 mb-4 px-3 py-1 shadow-md rounded-md transition ease-in-out hover:scale-105 hover:brightness-125 bg-zinc-600 text-lg">High-shelf</button>
+                    <div className="flex flex-row w-full -mb-5 justify-evenly">
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Low-shelf filter */}
+                <div className="flex flex-col items-center">
+                    <button className="mx-2 mb-4 px-3 py-1 shadow-md rounded-md transition ease-in-out hover:scale-105 hover:brightness-125 bg-zinc-600 text-lg">Low-shelf</button>
+                    <div className="flex flex-row w-full -mb-5 justify-evenly">
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                        <div className="flex flex-col items-center justify-evenly">
+                            <input orient="vertical" className={style.vertSlider} type="range" />
+                            <p className="mt-2 text-xl hover:cursor-pointer">0</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            
-            */}
-            
         </div>
     )
 }

@@ -26,6 +26,7 @@ const PlaylistsContainer = () => {
     // Redux
     const dispatch = useDispatch();
     const playlistList = useSelector((state) => state.playlists.value);
+    const queue = useSelector((state) => state.queue.value);
 
     // State
     const [search, setSearch] = useState("");
@@ -187,6 +188,13 @@ const PlaylistsContainer = () => {
         dispatch(setLoopStart(0));
         dispatch(replaceQueue(activePlaylist.audioList.slice().sort((a, b) => a.name.localeCompare(b.name))));
         dispatch(setQueueIndex(0));
+
+        // Don't try and restart the audio if there is nothing in the queue
+        if (queue[0]) {   
+            document.querySelector('audio').pause();
+            document.querySelector('audio').currentTime = 0;
+            document.querySelector('audio').play();
+        }
     }
 
     const handleShufflePlay = () => {
@@ -196,6 +204,13 @@ const PlaylistsContainer = () => {
         tempPlaylist = shuffler(tempPlaylist);
         dispatch(replaceQueue(tempPlaylist));
         dispatch(setQueueIndex(0));
+
+        // Don't try and restart the audio if there is nothing in the queue
+        if (queue[0]) {
+            document.querySelector('audio').pause();
+            document.querySelector('audio').currentTime = 0;
+            document.querySelector('audio').play();
+        }
     }
 
     return (

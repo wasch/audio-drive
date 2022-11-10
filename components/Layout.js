@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
         <Navbar />
       </header>
 
-      <main className={`${isExpandedLayout ? "" : "max-w-5xl"} mx-auto p-4 mb-60`}>
+      <main className={`${isExpandedLayout ? "" : "max-w-5xl"} mx-auto px-4 pt-4 pb-60`}>
         {children}
       </main>
 

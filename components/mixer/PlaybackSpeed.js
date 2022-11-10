@@ -39,7 +39,7 @@ const Panner = () => {
     }, [speedValue]);
 
     return (
-        <div>
+        <div className="flex flex-col">
             <input className="w-full my-2" onChange={handlePlaybackSpeedChange} type="range" id="speedRange" min="0" max="2" value={speed} step="0.01" />
             <div className="flex flex-row flex-grow items-center">
                 <button className="slowDown" title="Slow down (5%)" onClick={handleSlowdown}>

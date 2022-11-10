@@ -143,8 +143,8 @@ const WaveformVisualizer = () => {
     return (
         <div className="bg-zinc-700 shadow-md rounded-md p-5 mb-2">
             <div className="flex flex-row mb-5">
-                {waveSurfer && current ? <button className={`${isLooping ? "bg-yellow-300 text-zinc-800" : "bg-zinc-600"} hover:brightness-110 hover:scale-105 transition ease-in-out p-3 rounded-md shadow-md`} onClick={handleClickToggleLoop}>Repeat section</button> : <div className="hidden"></div>}
-                {waveSurfer && current && isLooping ? <button className="bg-zinc-600 hover:brightness-110 hover:scale-105 transition ease-in-out ml-3 p-3 rounded-md shadow-md" onClick={handleClickGoToStartOfLoop}>Go to start</button> : <div className="hidden"></div>}
+                {waveSurfer && current ? <button className={`${isLooping ? "bg-yellow-300 text-zinc-800" : "bg-zinc-600"} hover:brightness-110 hover:scale-105 transition ease-in-out px-3 py-2 rounded-md shadow-md text-lg`} onClick={handleClickToggleLoop}>Repeat section</button> : <div className="hidden"></div>}
+                {waveSurfer && current && isLooping ? <button className="bg-zinc-600 hover:brightness-110 hover:scale-105 transition ease-in-out ml-3 px-3 py-2 rounded-md shadow-md text-lg" onClick={handleClickGoToStartOfLoop}>Go to start</button> : <div className="hidden"></div>}
             </div>
             <div className={`${current && !waveSurfer ? "pointer-events-none" : ""} flex justify-center`}>
                 {!current ? <div className="text-lg">No active audio</div> : <div className="hidden"></div>}

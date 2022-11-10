@@ -27,7 +27,7 @@ const Panner = () => {
     }, []);
 
     return (
-        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mx-1">
+        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md p-5">
             <p className="text-2xl mb-1">Panning</p>
             <input className="w-full my-2" onChange={handlePanChange} type="range" id="panner" min="-1" max="1" value={pannerValue} step="0.01" />
             <div className="flex flex-grow items-center justify-center mt-2">

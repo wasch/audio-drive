@@ -45,7 +45,7 @@ export default function Mixer() {
           <QueueContainer />
         </DragDropContext>
       </div>
-      <div className={`flex flex-col md:my-5 md:mx-2 ${isExpanded ? "" : "md:min-w-full"}`}>
+      <div className={`flex flex-col md:mx-2 ${isExpanded ? "" : "md:min-w-full"}`}>
         <MixerContainer
           isExpanded={isExpanded}
         />
