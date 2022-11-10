@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <div className="landscape:hidden md:landscape:inline">
+      <div className="landscape:hidden lg:landscape:inline">
         <div className={style.footerContainer}>
           <footer className={style.footer}>
             <Player />
