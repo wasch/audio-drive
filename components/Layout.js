@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
       <Head>
         <title>{queue[queueIndex] ? queue[queueIndex].name : "Audio Drive"}</title>
       </Head>
-      
+
       <header>
         <Navbar />
       </header>
@@ -27,10 +27,12 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <div className={style.footerContainer}>
-        <footer className={style.footer}>
-          <Player />
-        </footer>
+      <div className="landscape:hidden md:landscape:inline">
+        <div className={style.footerContainer}>
+          <footer className={style.footer}>
+            <Player />
+          </footer>
+        </div>
       </div>
     </div>
   )
