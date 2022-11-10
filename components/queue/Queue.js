@@ -50,7 +50,7 @@ const Queue = () => {
     }
 
     return (
-        <div className="flex flex-col md:flex-row justify-evenly">
+        <div className="flex flex-col md:flex-row justify-center">
             <div className={`${loopInfo.isLooping && storeQueue.length > 0 ? "flex flex-col mb-5 my-5 md:mx-2" : "hidden"}`}>
                 <div className="flex flex-col rounded-md shadow-md bg-[#2c2c31] p-5">
                     {

@@ -13,6 +13,7 @@ import { setIsPaused } from '../../redux/slices/pausedSlice'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { setVolume } from '../../redux/slices/volumeSlice'
+import PlaybackSpeed from '../mixer/PlaybackSpeed'
 
 const PlayerControls = (props) => {
 
@@ -21,13 +22,13 @@ const PlayerControls = (props) => {
   const queueIndex = useSelector((state) => state.queueIndex.value);
   const queue = useSelector((state) => state.queue.value);
   const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
+  const maintainPitchValue = useSelector((state) => state.maintainPitch.value);
   const panValue = useSelector((state) => state.pannerRef.value);
   const loopInfo = useSelector((state) => state.loopInfo.value);
   const user = useSelector((state) => state.user.value);
   const volume = useSelector((state) => state.volume.value);
 
   // State
-  const [maintainPitchIsToggled, setMaintainPitchIsToggled] = useState(false);
   const [audioAnalyser, setAudioAnalyser] = useState(null);
   const [audioGainNode, setAudioGainNode] = useState(null);
   const [playStatus, setPlayStatus] = useState('PAUSED');
@@ -175,7 +176,6 @@ const PlayerControls = (props) => {
 
   const handleToggleMaintainPitch = () => {
     dispatch(toggleShouldMaintainPitch());
-    setMaintainPitchIsToggled(!maintainPitchIsToggled);
   }
 
   const handleRestart = () => {
@@ -243,24 +243,8 @@ const PlayerControls = (props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Popover.Panel className="flex flex-row justify-center items-center fixed border-2 border-zinc-700 rounded-md px-2 my-1 w-52 h-10 -translate-y-3 translate-x-6 bg-zinc-900 shadow-md z-10">
-                  <button className="slowDown" title="Slow down (5%)" onClick={handleSlowdown}>
-                    <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />
-                    { /* Source: <a target="_blank" href="https://icons8.com/icon/78748/rotate-left">Rotate Left icon by Icons8</a> */}
-                  </button>
-                  <p onClick={handleResetSpeed} className="mx-1 hover:cursor-pointer">{Number.parseFloat(playbackSpeed).toFixed(2) + "x"}</p>
-                  <button className="speedUp" title="Speed up (5%)" onClick={handleSpeedup}>
-                    <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-right.png" />
-                    { /* Source: <a target="_blank" href="https://icons8.com/icon/78746/rotate-right">Rotate Right icon by Icons8</a> */}
-                  </button>
-                  <div className="border border-l-2 border-zinc-700 h-full ml-4"></div>
-                  <div className="flex flex-row">
-                    <input onChange={handleToggleMaintainPitch} type="checkbox" checked={maintainPitchIsToggled} id="maintainPitchToggle" name="maintainPitchToggle" className="ml-4 maintainPitchToggle" />
-                    <label htmlFor="maintainPitchToggle" title="Maintain pitch when changing speed">
-                      <img src="https://img.icons8.com/windows/32/FFFFFF/tuning-fork.png" />
-                      { /* Source: <a target="_blank" href="https://icons8.com/icon/bSsj0HDWJRzb/tuning-fork">Tuning Fork icon by Icons8</a> */}
-                    </label>
-                  </div>
+                <Popover.Panel className="fixed -translate-y-20 translate-x-6 p-3 border-2 border-zinc-700 bg-zinc-800 rounded-md shadow-md z-50">
+                  <PlaybackSpeed />
                 </Popover.Panel>
               </Transition>
             </Popover>,

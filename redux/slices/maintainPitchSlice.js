@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit/"
 export const maintainPitchSlice = createSlice({
     name: 'maintainPitch',
     initialState: {
-        value: false
+        value: true
     },
     reducers: {
         toggleShouldMaintainPitch: (state) => { 

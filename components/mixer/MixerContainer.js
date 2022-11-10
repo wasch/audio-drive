@@ -45,7 +45,10 @@ const MixerContainer = (props) => {
             <WaveformVisualizer />
             <SpectrumAnalyzer />
             <div className="flex flex-col md:flex-row">
-                <PlaybackSpeed />
+                <div className="my-1 md:mr-1 bg-zinc-700 shadow-md rounded-md p-5">
+                    <p className="text-2xl mb-1">Playback Speed</p>
+                    <PlaybackSpeed />
+                </div>
                 <Panner />
             </div>
         </div>
