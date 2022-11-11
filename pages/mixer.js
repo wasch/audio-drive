@@ -38,8 +38,6 @@ export default function Mixer() {
     <div className={`${isExpanded ? "" : "max-w-5xl m-auto"} flex flex-row justify-center`}>
       <div className={`flex flex-col items-center ${isExpanded ? "" : "hidden"}`}>
         <DragDropContext
-          //onDragStart={ }
-          //onDragUpdate
           onDragEnd={onDragEnd}
         >
           <QueueContainer />
