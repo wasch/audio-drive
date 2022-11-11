@@ -25,6 +25,7 @@ const PlayerControls = (props) => {
   const loopInfo = useSelector((state) => state.loopInfo.value);
   const user = useSelector((state) => state.user.value);
   const volume = useSelector((state) => state.volume.value);
+  const filters = useSelector((state) => state.filters.value);
 
   // State
   const [audioAnalyser, setAudioAnalyser] = useState(null);
@@ -82,7 +83,32 @@ const PlayerControls = (props) => {
     if (audioCtx.current && queue[0]) {
       if (!track.current) track.current = audioCtx.current.createMediaElementSource(document.querySelector('audio'));
 
-      // TODO: Filters
+      // Filters
+
+      // High-pass filter
+      const highpassFilter = audioCtx.current.createBiquadFilter();
+      highpassFilter.type = "highpass";
+      highpassFilter.frequency.value = filters.highpass.freq;
+      highpassFilter.Q.value = filters.highpass.q;
+
+      // Low-pass filter
+      const lowpassFilter = audioCtx.current.createBiquadFilter();
+      lowpassFilter.type = "lowpass";
+      lowpassFilter.frequency.value = filters.lowpass.freq;
+      lowpassFilter.Q.value = filters.lowpass.q;
+
+      // High-shelf filter
+      const highshelfFilter = audioCtx.current.createBiquadFilter();
+      highshelfFilter.type = "highshelf";
+      highshelfFilter.frequency.value = filters.highshelf.freq;
+      highshelfFilter.gain.value = filters.highshelf.gain;
+
+      // Low-shelf filter
+      const lowshelfFilter = audioCtx.current.createBiquadFilter();
+      lowshelfFilter.type = "lowshelf";
+      lowshelfFilter.frequency.value = filters.lowshelf.freq;
+      lowshelfFilter.gain.value = filters.lowshelf.gain;
+
 
       // Panning
       const pannerOptions = { pan: panValue };
@@ -107,8 +133,13 @@ const PlayerControls = (props) => {
       } else {
         gainNode = audioGainNode;
       }
+      gainNode.gain.value = 0.7;
 
-      track.current.connect(panner);
+      track.current.connect(highpassFilter);
+      highpassFilter.connect(lowpassFilter);
+      lowpassFilter.connect(highshelfFilter);
+      highshelfFilter.connect(lowshelfFilter);
+      lowshelfFilter.connect(panner);
       panner.connect(analyser);
       analyser.connect(gainNode);
       gainNode.connect(audioCtx.current.destination);
@@ -116,7 +147,7 @@ const PlayerControls = (props) => {
     return () => {
       if (track && track.current) track.current.disconnect();
     }
-  }, [audioCtx.current, panValue, queue]);
+  }, [audioCtx.current, panValue, filters, queue]);
 
   useEffect(() => {
     if (audioAnalyser && !isDrawing) {
