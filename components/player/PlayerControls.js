@@ -183,9 +183,6 @@ const PlayerControls = (props) => {
         }}
         onEnded={(e) => {
           if (loopInfo.isLooping && queueIndex === queue.length - 1) { // If looping and reached end of loop, return to start of loop 
-            document.querySelector('audio').pause();
-            document.querySelector('audio').currentTime = 0;
-            document.querySelector('audio').play();
             dispatch(setQueueIndex(loopInfo.loopStart));
           } else if (queueIndex < queue.length - 1) dispatch(next()); // Don't increment the queueIndex if there is no more audio in the queue
         }}
