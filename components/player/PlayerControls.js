@@ -21,8 +21,6 @@ const PlayerControls = (props) => {
   const dispatch = useDispatch();
   const queueIndex = useSelector((state) => state.queueIndex.value);
   const queue = useSelector((state) => state.queue.value);
-  const playbackSpeed = useSelector((state) => state.playbackSpeed.value);
-  const maintainPitchValue = useSelector((state) => state.maintainPitch.value);
   const panValue = useSelector((state) => state.pannerRef.value);
   const loopInfo = useSelector((state) => state.loopInfo.value);
   const user = useSelector((state) => state.user.value);
@@ -76,12 +74,12 @@ const PlayerControls = (props) => {
 
   // Setup audio context
   useEffect(() => {
-    if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-  }, []);
+    if (!audioCtx.current && queue[0]) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+  }, [queue]);
 
   // Setup web audio api effects
   useEffect(() => {
-    if (audioCtx.current) {
+    if (audioCtx.current && queue[0]) {
       if (!track.current) track.current = audioCtx.current.createMediaElementSource(document.querySelector('audio'));
 
       // TODO: Filters
@@ -116,9 +114,9 @@ const PlayerControls = (props) => {
       gainNode.connect(audioCtx.current.destination);
     }
     return () => {
-      track.current.disconnect();
+      if (track && track.current) track.current.disconnect();
     }
-  }, [audioCtx.current, panValue]);
+  }, [audioCtx.current, panValue, queue]);
 
   useEffect(() => {
     if (audioAnalyser && !isDrawing) {
@@ -160,22 +158,6 @@ const PlayerControls = (props) => {
       }
     }
     window.requestAnimationFrame(draw);
-  }
-
-  const handleSlowdown = () => {
-    dispatch(decrement());
-  }
-
-  const handleSpeedup = () => {
-    dispatch(increment());
-  }
-
-  const handleResetSpeed = () => {
-    dispatch(setPlaybackSpeed(1));
-  }
-
-  const handleToggleMaintainPitch = () => {
-    dispatch(toggleShouldMaintainPitch());
   }
 
   const handleRestart = () => {
