@@ -84,31 +84,10 @@ const PlayerControls = (props) => {
       if (!track.current) track.current = audioCtx.current.createMediaElementSource(document.querySelector('audio'));
 
       // Filters
-
-      // High-pass filter
-      const highpassFilter = audioCtx.current.createBiquadFilter();
-      highpassFilter.type = "highpass";
-      highpassFilter.frequency.value = filters.highpass.freq;
-      highpassFilter.Q.value = filters.highpass.q;
-
-      // Low-pass filter
-      const lowpassFilter = audioCtx.current.createBiquadFilter();
-      lowpassFilter.type = "lowpass";
-      lowpassFilter.frequency.value = filters.lowpass.freq;
-      lowpassFilter.Q.value = filters.lowpass.q;
-
-      // High-shelf filter
-      const highshelfFilter = audioCtx.current.createBiquadFilter();
-      highshelfFilter.type = "highshelf";
-      highshelfFilter.frequency.value = filters.highshelf.freq;
-      highshelfFilter.gain.value = filters.highshelf.gain;
-
-      // Low-shelf filter
-      const lowshelfFilter = audioCtx.current.createBiquadFilter();
-      lowshelfFilter.type = "lowshelf";
-      lowshelfFilter.frequency.value = filters.lowshelf.freq;
-      lowshelfFilter.gain.value = filters.lowshelf.gain;
-
+      const highpassFilter = createFilter("highpass", filters.highpass.freq, null, filters.highpass.q);
+      const lowpassFilter = createFilter("lowpass", filters.lowpass.freq, null, filters.lowpass.q);
+      const highshelfFilter = createFilter("highshelf", filters.highshelf.freq, filters.highshelf.gain, null);
+      const lowshelfFilter = createFilter("lowshelf", filters.lowshelf.freq, filters.lowshelf.gain, null);
 
       // Panning
       const pannerOptions = { pan: panValue };
@@ -133,7 +112,7 @@ const PlayerControls = (props) => {
       } else {
         gainNode = audioGainNode;
       }
-      gainNode.gain.value = 0.7;
+      gainNode.gain.setTargetAtTime(0.7, audioCtx.current.currentTime, 0.001);
 
       track.current.connect(highpassFilter);
       highpassFilter.connect(lowpassFilter);
@@ -148,6 +127,16 @@ const PlayerControls = (props) => {
       if (track && track.current) track.current.disconnect();
     }
   }, [audioCtx.current, panValue, filters, queue]);
+
+  // Creates a new filter based on the provided parameters
+  const createFilter = (filterType, freq, gain, q) => {
+    let newFilter = audioCtx.current.createBiquadFilter();
+    newFilter.type = filterType;
+    newFilter.frequency.value = freq;
+    if (gain) newFilter.gain.value = gain;
+    if (q) newFilter.Q.value = q;
+    return newFilter;
+  }
 
   useEffect(() => {
     if (audioAnalyser && !isDrawing) {
