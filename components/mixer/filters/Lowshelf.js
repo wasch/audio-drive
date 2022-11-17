@@ -28,15 +28,15 @@ const Lowshelf = () => {
     }
 
     return (
-        <div>
-            <button className="mx-2 mb-1 py-1 text-lg">Low-shelf</button>
-            <div className="flex flex-row w-full -mb-5 justify-evenly">
-                <div className="flex flex-col items-center">
+        <div className="text-center">
+            <button className="mx-2 mb-1 py-1 text-xl">Low-shelf</button>
+            <div className="flex flex-row -mb-5 justify-center w-36 relative">
+                <div className="flex flex-col items-center absolute mr-14">
                     <p className="text-lg mb-2">Hz</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="0" max="220" step="1" value={filters.lowshelf.freq} onChange={handleLowshelfFreqChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetLowshelfFreq}>{filters.lowshelf.freq}</p>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center absolute ml-14">
                     <p className="text-lg mb-2">Gain</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="-50" max="50" step="0.1" value={filters.lowshelf.gain} onChange={handleLowshelfGainChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetLowshelfGain}>{filters.lowshelf.gain}</p>

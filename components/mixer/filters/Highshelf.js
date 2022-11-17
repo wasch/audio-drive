@@ -28,15 +28,15 @@ const Highshelf = () => {
     }
 
     return (
-        <div>
-            <button className="mx-2 mb-1 py-1 text-lg">High-shelf</button>
-            <div className="flex flex-row w-full -mb-5 justify-evenly">
-                <div className="flex flex-col items-center">
+        <div className="text-center">
+            <button className="mx-2 mb-1 py-1 text-xl">High-shelf</button>
+            <div className="flex flex-row -mb-5 justify-center w-36 relative">
+                <div className="flex flex-col items-center absolute mr-14">
                     <p className="text-lg mb-2">Hz</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="800" max="5000" step="100" value={filters.highshelf.freq} onChange={handleHighshelfFreqChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetHighshelfFreq}>{filters.highshelf.freq}</p>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center absolute ml-14">
                     <p className="text-lg mb-2">Gain</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="-15" max="15" step="0.1" value={filters.highshelf.gain} onChange={handleHighshelfGainChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetHighshelfGain}>{filters.highshelf.gain}</p>

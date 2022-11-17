@@ -9,7 +9,7 @@ export const filtersSlice = createSlice({
                 q: 0
             },
             lowpass: {
-                freq: 10000,
+                freq: 20000,
                 q: 0
             },
             highshelf: {
@@ -39,9 +39,29 @@ export const filtersSlice = createSlice({
             if (input.payload.freq !== undefined) state.value.lowshelf.freq = input.payload.freq;
             if (input.payload.gain !== undefined) state.value.lowshelf.gain = input.payload.gain;
         },
+        resetAll: (state) => {
+            state.value = {
+                highpass: {
+                    freq: 0,
+                    q: 0
+                },
+                lowpass: {
+                    freq: 20000,
+                    q: 0
+                },
+                highshelf: {
+                    freq: 800,
+                    gain: 0
+                },
+                lowshelf: {
+                    freq: 0,
+                    gain: 0
+                },
+            }
+        },
     }
 })
 
-export const { setHighpass, setLowpass, setHighshelf, setLowshelf } = filtersSlice.actions
+export const { setHighpass, setLowpass, setHighshelf, setLowshelf, resetAll } = filtersSlice.actions
 
 export default filtersSlice.reducer

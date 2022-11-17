@@ -90,7 +90,7 @@ const PlayerControls = (props) => {
       const lowshelfFilter = createFilter("lowshelf", filters.lowshelf.freq, filters.lowshelf.gain, null);
 
       // Panning
-      const pannerOptions = { pan: panValue };
+      const pannerOptions = { pan: -panValue };
       const panner = new StereoPannerNode(audioCtx.current, pannerOptions);
 
       // Analyzer
@@ -132,9 +132,9 @@ const PlayerControls = (props) => {
   const createFilter = (filterType, freq, gain, q) => {
     let newFilter = audioCtx.current.createBiquadFilter();
     newFilter.type = filterType;
-    newFilter.frequency.value = freq;
-    if (gain) newFilter.gain.value = gain;
-    if (q) newFilter.Q.value = q;
+    newFilter.frequency.setTargetAtTime(freq, audioCtx.current.currentTime, 0.001);
+    if (gain) newFilter.gain.setTargetAtTime(gain, audioCtx.current.currentTime, 0.001);
+    if (q) newFilter.Q.setTargetAtTime(q, audioCtx.current.currentTime, 0.001);
     return newFilter;
   }
 
@@ -161,7 +161,7 @@ const PlayerControls = (props) => {
         canvasCtx.fillStyle = "rgb(63, 63, 70)";
         canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        const barWidth = (canvasWidth / bufferLength) * 4;
+        const barWidth = (canvasWidth / bufferLength) * 5;
         let barHeight;
         let x = 0;
 

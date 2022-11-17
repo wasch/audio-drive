@@ -15,7 +15,7 @@ const Lowpass = () => {
     }
 
     const handleResetLowpassFreq = () => {
-        dispatch(setLowpass({ freq: 10000 }));
+        dispatch(setLowpass({ freq: 20000 }));
     }
 
     // Lowpass Q
@@ -28,15 +28,15 @@ const Lowpass = () => {
     }
 
     return (
-        <div>
-            <button className="mx-2 mb-1 py-1 text-lg">Low-pass</button>
-            <div className="flex flex-row w-full -mb-5 justify-evenly">
-                <div className="flex flex-col items-center">
+        <div className="text-center">
+            <button className="mx-2 mb-1 py-1 text-xl">Low-pass</button>
+            <div className="flex flex-row -mb-5 justify-center w-36 relative">
+                <div className="flex flex-col items-center absolute mr-14">
                     <p className="text-lg mb-2">Hz</p>
-                    <input orient="vertical" className={style.vertSlider} type="range" min="20" max="10000" step="10" value={filters.lowpass.freq} onChange={handleLowpassFreqChange} />
+                    <input orient="vertical" className={style.vertSlider} type="range" min="20" max="20000" step="10" value={filters.lowpass.freq} onChange={handleLowpassFreqChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetLowpassFreq}>{filters.lowpass.freq}</p>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center absolute ml-14">
                     <p className="text-lg mb-2">Q</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="0" max="10" step="0.1" value={filters.lowpass.q} onChange={handleLowpassQChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetLowpassQ}>{filters.lowpass.q}</p>

@@ -120,7 +120,7 @@ const Queue = () => {
                                         setQueueFromButtonClick={setQueueFromButtonClick}
                                     />
                                 </div>
-                                <hr className="border-2 rounded-md my-6" />
+                                <hr className="border-2 rounded-md my-6 border-zinc-700" />
                             </div>
                         ))
                     ) : (

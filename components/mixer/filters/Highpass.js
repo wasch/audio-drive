@@ -28,15 +28,15 @@ const Highpass = () => {
     }
 
     return (
-        <div>
-            <button className="mx-2 mb-1 py-1 text-lg">High-pass</button>
-            <div className="flex flex-row w-full -mb-5 justify-evenly">
-                <div className="flex flex-col items-center">
+        <div className="text-center">
+            <button className="mx-2 mb-1 py-1 text-xl">High-pass</button>
+            <div className="flex flex-row -mb-5 justify-center w-36 relative">
+                <div className="flex flex-col items-center absolute mr-14">
                     <p className="text-lg mb-2">Hz</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="0" max="3000" step="100" value={filters.highpass.freq} onChange={handleHighpassFreqChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetHighpassFreq}>{filters.highpass.freq}</p>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center absolute ml-14">
                     <p className="text-lg mb-2">Q</p>
                     <input orient="vertical" className={style.vertSlider} type="range" min="0" max="10" step="0.1" value={filters.highpass.q} onChange={handleHighpassQChange} />
                     <p className="mt-2 text-xl hover:cursor-pointer" onClick={handleResetHighpassQ}>{filters.highpass.q}</p>
