@@ -2,8 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 
 import Layout from '../components/Layout'
-import WaveformVisualizer from '../components/mixer/WaveformVisualizer'
-import Panner from '../components/mixer/Panner'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { replaceQueue } from '../redux/slices/queueSlice'
@@ -12,7 +10,6 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import QueueContainer from '../components/queue/QueueContainer'
 import MixerContainer from '../components/mixer/MixerContainer'
-import { useState } from 'react'
 
 export default function Mixer() {
 

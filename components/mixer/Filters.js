@@ -2,10 +2,10 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { resetAll } from '../../redux/slices/filtersSlice'
 
-import Highpass from './filters/highpass'
-import Lowpass from './filters/lowpass'
-import Highshelf from './filters/highshelf'
-import Lowshelf from './filters/lowshelf'
+import Highpass from './filters/Highpass'
+import Lowpass from './filters/Lowpass'
+import Highshelf from './filters/Highshelf'
+import Lowshelf from './filters/Lowshelf'
 
 const Filters = () => {
 
