@@ -1,63 +1,38 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { setHighShelfFreq, setHighShelfGain } from '../../redux/slices/eqSlices/highShelfSlice';
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { resetAll } from '../../redux/slices/filtersSlice'
+
+import Highpass from './filters/Highpass'
+import Lowpass from './filters/Lowpass'
+import Highshelf from './filters/Highshelf'
+import Lowshelf from './filters/Lowshelf'
 
 const Filters = () => {
 
     // Redux
     const dispatch = useDispatch();
-    const highShelfValue = useSelector((state) => state.highShelf.value);
-
-    // State
-    const [highShelfFreqState, setHighShelfFreqState] = useState(4700)
-    const [highShelfGainState, setHighShelfGainState] = useState(50)
-
-    // High Shelf Frequency
-    const handleResetHighShelfFreq = () => {
-        dispatch(setHighShelfFreq(4700));
-        setHighShelfFreqState(4700);
-    }
-
-    const handleHighShelfFreqChange = (e) => {
-        let freqValue = e.target.value;
-        dispatch(setHighShelfFreq(freqValue));
-        setHighShelfFreqState(freqValue);
-    }
-
-    // High Shelf Gain
-    const handleResetHighShelfGain = () => {
-        dispatch(setHighShelfGain(50));
-        setHighShelfGainState(50);
-    }
-
-    const handleHighShelfGainChange = (e) => {
-        let gainValue = e.target.value;
-        dispatch(setHighShelfGain(gainValue));
-        setHighShelfGainState(gainValue);
-    }
-
-    useEffect(() => {
-        if (highShelfValue.freq) setHighShelfFreqState(highShelfValue.freq);
-        if (highShelfValue.gain) setHighShelfGainState(highShelfValue.gain);
-    }, []);
 
     return (
-        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md p-5 my-1 md:mr-1">
-            <p className="text-2xl mb-1">Filters (WIP)</p>
-            {/* 
-            
-            <input className="h-full my-2" onChange={handleHighShelfFreqChange} type="range" id="highShelfFreqSlider" min="0" max="22000" value={highShelfFreqState} step="100" />
-            <div className="flex flex-grow items-center justify-center mt-2">
-                <p onClick={handleResetHighShelfFreq} className="text-xl hover:cursor-pointer">{highShelfFreqState}</p>
+        <div className="flex flex-col bg-zinc-700 shadow-md rounded-md px-5 pt-5 pb-10 md:p-5 w-full">
+            <p onClick={() => dispatch(resetAll())} title="Reset filters" className="text-2xl mb-3 hover:cursor-pointer">Filters</p>
+            <div className="md:flex md:flex-row flex-grow justify-center">
+                <div className="flex flex-row">
+                    <div className="bg-[#2c2c31] border-2 border-zinc-600 rounded-md shadow-md py-2 h-56 m-2">
+                        <Highpass />
+                    </div>
+                    <div className="bg-[#2c2c31] border-2 border-zinc-600 rounded-md shadow-md py-2 h-56 m-2">
+                        <Lowpass />
+                    </div>
+                </div>
+                <div className="flex flex-row">
+                    <div className="bg-[#2c2c31] border-2 border-zinc-600 rounded-md shadow-md py-2 h-56 m-2">
+                        <Highshelf />
+                    </div>
+                    <div className="bg-[#2c2c31] border-2 border-zinc-600 rounded-md shadow-md py-2 h-56 m-2">
+                        <Lowshelf />
+                    </div>
+                </div>
             </div>
-
-            <input className="h-full my-2" onChange={handleHighShelfGainChange} type="range" id="highShelfGainSlider" min="-50" max="50" value={highShelfGainState} />
-            <div className="flex flex-grow items-center justify-center mt-2">
-                <p onClick={handleResetHighShelfGain} className="text-xl hover:cursor-pointer">{highShelfGainState}</p>
-            </div>
-            
-            */}
-            
         </div>
     )
 }

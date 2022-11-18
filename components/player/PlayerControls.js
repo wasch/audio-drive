@@ -25,6 +25,7 @@ const PlayerControls = (props) => {
   const loopInfo = useSelector((state) => state.loopInfo.value);
   const user = useSelector((state) => state.user.value);
   const volume = useSelector((state) => state.volume.value);
+  const filters = useSelector((state) => state.filters.value);
 
   // State
   const [audioAnalyser, setAudioAnalyser] = useState(null);
@@ -82,10 +83,14 @@ const PlayerControls = (props) => {
     if (audioCtx.current && queue[0]) {
       if (!track.current) track.current = audioCtx.current.createMediaElementSource(document.querySelector('audio'));
 
-      // TODO: Filters
+      // Filters
+      const highpassFilter = createFilter("highpass", filters.highpass.freq, null, filters.highpass.q);
+      const lowpassFilter = createFilter("lowpass", filters.lowpass.freq, null, filters.lowpass.q);
+      const highshelfFilter = createFilter("highshelf", filters.highshelf.freq, filters.highshelf.gain, null);
+      const lowshelfFilter = createFilter("lowshelf", filters.lowshelf.freq, filters.lowshelf.gain, null);
 
       // Panning
-      const pannerOptions = { pan: panValue };
+      const pannerOptions = { pan: -panValue };
       const panner = new StereoPannerNode(audioCtx.current, pannerOptions);
 
       // Analyzer
@@ -107,8 +112,13 @@ const PlayerControls = (props) => {
       } else {
         gainNode = audioGainNode;
       }
+      gainNode.gain.setTargetAtTime(0.7, audioCtx.current.currentTime, 0);
 
-      track.current.connect(panner);
+      track.current.connect(highpassFilter);
+      highpassFilter.connect(lowpassFilter);
+      lowpassFilter.connect(highshelfFilter);
+      highshelfFilter.connect(lowshelfFilter);
+      lowshelfFilter.connect(panner);
       panner.connect(analyser);
       analyser.connect(gainNode);
       gainNode.connect(audioCtx.current.destination);
@@ -116,7 +126,17 @@ const PlayerControls = (props) => {
     return () => {
       if (track && track.current) track.current.disconnect();
     }
-  }, [audioCtx.current, panValue, queue]);
+  }, [audioCtx.current, panValue, filters, queue]);
+
+  // Creates a new filter based on the provided parameters
+  const createFilter = (filterType, freq, gain, q) => {
+    let newFilter = audioCtx.current.createBiquadFilter();
+    newFilter.type = filterType;
+    newFilter.frequency.setTargetAtTime(freq, audioCtx.current.currentTime, 0);
+    if (gain) newFilter.gain.setTargetAtTime(gain, audioCtx.current.currentTime, 0);
+    if (q) newFilter.Q.setTargetAtTime(q, audioCtx.current.currentTime, 0);
+    return newFilter;
+  }
 
   useEffect(() => {
     if (audioAnalyser && !isDrawing) {
@@ -141,7 +161,7 @@ const PlayerControls = (props) => {
         canvasCtx.fillStyle = "rgb(63, 63, 70)";
         canvasCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        const barWidth = (canvasWidth / bufferLength) * 4;
+        const barWidth = (canvasWidth / bufferLength) * 5;
         let barHeight;
         let x = 0;
 

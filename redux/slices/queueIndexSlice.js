@@ -8,23 +8,29 @@ export const queueIndexSlice = createSlice({
     reducers: {
         next: (state) => {
             state.value += 1;
-            document.querySelector('audio').pause();
-            document.querySelector('audio').currentTime = 0;
-            document.querySelector('audio').play();
-        },
-        previous: (state) => {
-            if (state.value > 0) {
-                state.value -= 1;
+            if (document.querySelector('audio').currentTime && !document.querySelector('audio').ended) {  // Don't try to restart audio if nothing is playing
                 document.querySelector('audio').pause();
                 document.querySelector('audio').currentTime = 0;
                 document.querySelector('audio').play();
             }
         },
+        previous: (state) => {
+            if (state.value > 0) {
+                state.value -= 1;
+                if (document.querySelector('audio').currentTime && !document.querySelector('audio').ended) {  // Don't try to restart audio if nothing is playing
+                    document.querySelector('audio').pause();
+                    document.querySelector('audio').currentTime = 0;
+                    document.querySelector('audio').play();
+                }
+            }
+        },
         setQueueIndex: (state, index) => {
             state.value = index.payload;
-            document.querySelector('audio').pause();
-            document.querySelector('audio').currentTime = 0;
-            document.querySelector('audio').play();
+            if (document.querySelector('audio').currentTime && !document.querySelector('audio').ended) {  // Don't try to restart audio if nothing is playing
+                document.querySelector('audio').pause();
+                document.querySelector('audio').currentTime = 0;
+                document.querySelector('audio').play();
+            }
         }
     }
 })

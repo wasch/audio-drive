@@ -3,6 +3,7 @@ import Panner from './Panner'
 import PlaybackSpeed from './PlaybackSpeed'
 import WaveformVisualizer from './WaveformVisualizer'
 import SpectrumAnalyzer from './SpectrumAnalyzer'
+import Filters from './Filters'
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareCaretLeft } from '@fortawesome/free-solid-svg-icons'
@@ -45,11 +46,18 @@ const MixerContainer = (props) => {
             <WaveformVisualizer />
             <SpectrumAnalyzer />
             <div className="flex flex-col md:flex-row">
-                <div className="my-1 md:mr-1 bg-zinc-700 shadow-md rounded-md p-5">
-                    <p className="text-2xl mb-1">Playback Speed</p>
-                    <PlaybackSpeed />
+                <div className="flex flex-col md:w-1/4">
+                    <div className="my-1 md:mr-1 bg-zinc-700 shadow-md rounded-md p-5 h-1/2">
+                        <p className="text-2xl mb-1">Playback Speed</p>
+                        <PlaybackSpeed />
+                    </div>
+                    <div className="my-1 md:mr-1 h-1/2 bg-zinc-700 shadow-md rounded-md p-5">
+                        <Panner />
+                    </div>
                 </div>
-                <Panner />
+                <div className="my-1 flex md:ml-1 md:w-3/4">
+                    <Filters />
+                </div>
             </div>
         </div>
     )

@@ -1,0 +1,5 @@
+.vertSlider {
+    width: 5px;
+    height: 5.5em;
+    appearance: slider-vertical;
+}
