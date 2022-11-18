@@ -29,7 +29,7 @@ const Highpass = () => {
 
     return (
         <div className="text-center">
-            <button className="mx-2 mb-1 py-1 text-xl">High-pass</button>
+            <p className="mx-2 mb-1 py-1 text-xl">High-pass</p>
             <div className="flex flex-row -mb-5 justify-center w-36 relative">
                 <div className="flex flex-col items-center absolute mr-14">
                     <p className="text-lg mb-2">Hz</p>

@@ -40,7 +40,7 @@ const Panner = () => {
 
     return (
         <div className="flex flex-col">
-            <input className="w-full my-2" onChange={handlePlaybackSpeedChange} type="range" id="speedRange" min="0" max="2" value={speed} step="0.01" />
+            <input className="w-full my-3" onChange={handlePlaybackSpeedChange} type="range" id="speedRange" min="0" max="2" value={speed} step="0.01" />
             <div className="flex flex-row flex-grow items-center">
                 <button className="transition ease-in-out hover:scale-110 hover:brightness-125" title="Slow down (5%)" onClick={handleSlowdown}>
                     <img src="https://img.icons8.com/ios-glyphs/30/FFFFFF/rotate-left.png" />

@@ -47,11 +47,11 @@ const MixerContainer = (props) => {
             <SpectrumAnalyzer />
             <div className="flex flex-col md:flex-row">
                 <div className="flex flex-col md:w-1/4">
-                    <div className="my-1 md:mr-1 bg-zinc-700 shadow-md rounded-md p-5">
+                    <div className="my-1 md:mr-1 bg-zinc-700 shadow-md rounded-md p-5 h-1/2">
                         <p className="text-2xl mb-1">Playback Speed</p>
                         <PlaybackSpeed />
                     </div>
-                    <div className="my-1 md:mr-1">
+                    <div className="my-1 md:mr-1 h-1/2 bg-zinc-700 shadow-md rounded-md p-5">
                         <Panner />
                     </div>
                 </div>

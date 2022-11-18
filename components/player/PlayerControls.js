@@ -112,7 +112,7 @@ const PlayerControls = (props) => {
       } else {
         gainNode = audioGainNode;
       }
-      gainNode.gain.setTargetAtTime(0.7, audioCtx.current.currentTime, 0.001);
+      gainNode.gain.setTargetAtTime(0.7, audioCtx.current.currentTime, 0);
 
       track.current.connect(highpassFilter);
       highpassFilter.connect(lowpassFilter);
@@ -132,9 +132,9 @@ const PlayerControls = (props) => {
   const createFilter = (filterType, freq, gain, q) => {
     let newFilter = audioCtx.current.createBiquadFilter();
     newFilter.type = filterType;
-    newFilter.frequency.setTargetAtTime(freq, audioCtx.current.currentTime, 0.001);
-    if (gain) newFilter.gain.setTargetAtTime(gain, audioCtx.current.currentTime, 0.001);
-    if (q) newFilter.Q.setTargetAtTime(q, audioCtx.current.currentTime, 0.001);
+    newFilter.frequency.setTargetAtTime(freq, audioCtx.current.currentTime, 0);
+    if (gain) newFilter.gain.setTargetAtTime(gain, audioCtx.current.currentTime, 0);
+    if (q) newFilter.Q.setTargetAtTime(q, audioCtx.current.currentTime, 0);
     return newFilter;
   }
 
