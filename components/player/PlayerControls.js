@@ -90,7 +90,7 @@ const PlayerControls = (props) => {
       const lowshelfFilter = createFilter("lowshelf", filters.lowshelf.freq, filters.lowshelf.gain, null);
 
       // Panning
-      const pannerOptions = { pan: -panValue };
+      const pannerOptions = { pan: panValue };
       const panner = new StereoPannerNode(audioCtx.current, pannerOptions);
 
       // Analyzer
