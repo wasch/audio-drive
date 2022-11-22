@@ -36,7 +36,7 @@ const MixerContainer = (props) => {
                     <div className="flex flex-row items-center">
                         <p className="bg-zinc-700 mb-2 md:my-2 p-5 rounded-md shadow-md text-2xl md:text-3xl flex-grow">{currentAudio.name}</p>
                         <div className="my-1 ml-auto p-3 pl-5 rounded-md justify-center hidden md:inline-flex cursor-pointer hover:brightness-125">
-                            <button className={`text-6xl ${props.isExpanded ? "text-red-500" : ""}`} title="Expanded View" onClick={handleClickToggleExpandedLayout}>
+                            <button className={`text-6xl ${props.isExpanded ? "text-red-500 scale-110" : "transform -rotate-90 hover:scale-110"} transition ease-in-out`} title="Expanded View" onClick={handleClickToggleExpandedLayout}>
                                 <FontAwesomeIcon icon={faSquareCaretLeft} />
                             </button>
                         </div>
