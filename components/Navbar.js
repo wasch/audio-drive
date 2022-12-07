@@ -35,10 +35,6 @@ const Navbar = () => {
         });
     }, []);
 
-    const signOutUser = () => {
-        fbAuth.signOut();
-    }
-
     return (
         <div className="bg-slate-600 shadow-lg md:flex items-center justify-center">
             <nav className="flex flex-grow items-center justify-center max-w-6xl">
@@ -67,9 +63,8 @@ const Navbar = () => {
                         </li>
                         <li className="flex items-center">
                             {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
-                            {user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6" onClick={signOutUser}>Sign out {user.email}</a></Link>}
+                            {user && <Link href="/profile"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Your Profile</a></Link>}
                         </li>
-
                     </ul>
                 </div>
             </nav >
@@ -92,7 +87,7 @@ const Navbar = () => {
                     </li>
                     <li>
                         {!user && <Link href="/auth"><a className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5">Sign in</a></Link>}
-                        {user && <Link href="/auth"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5" onClick={signOutUser}>Sign out {user.email}</a></Link>}
+                        {user && <Link href="/profile"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5">Your Profile</a></Link>}
                     </li>
                 </ul>
             </div>

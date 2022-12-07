@@ -237,7 +237,7 @@ const Audio = (props) => {
                 }}>
                     <i className="material-icons">add</i>
                 </button>
-                <button onClick={() => handleUpdateAudioInfo()} className="self-center ml-auto" title="Edit">
+                <button onClick={() => handleUpdateAudioInfo()} className="flex self-center ml-auto" title="Edit">
                     <FontAwesomeIcon className="text-2xl m-2" icon={faEllipsisV} />
                 </button>
             </div>
