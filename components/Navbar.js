@@ -58,9 +58,11 @@ const Navbar = () => {
                         <li>
                             <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Upload</a></Link>
                         </li>
+                        {/**
                         <li>
                             <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">About</a></Link>
                         </li>
+                         */}
                         <li className="flex items-center">
                             {!user && <Link href="/auth"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Sign in</a></Link>}
                             {user && <Link href="/profile"><a className="block hover:backdrop-brightness-110 text-lg py-4 px-6">Your Profile</a></Link>}
@@ -82,9 +84,11 @@ const Navbar = () => {
                     <li>
                         <Link href="/upload"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">Upload</a></Link>
                     </li>
+                    {/**
                     <li>
                         <Link href="#"><a className="block hover:backdrop-brightness-110 text-lg py-3 px-5">About</a></Link>
                     </li>
+                    */}
                     <li>
                         {!user && <Link href="/auth"><a className="block w-full mr-auto hover:backdrop-brightness-110 text-lg py-3 px-5">Sign in</a></Link>}
                         {user && <Link href="/profile"><a className="block w-full justify-end hover:backdrop-brightness-110 text-lg py-3 px-5">Your Profile</a></Link>}

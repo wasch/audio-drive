@@ -6,6 +6,7 @@ import { db, fbAuth } from '../firebase'
 
 const ProfileInfo = () => {
 
+  // Redux
   const user = useSelector((state) => state.user.value);
 
   // State
