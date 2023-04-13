@@ -15,6 +15,8 @@ import { replaceQueue } from '../redux/slices/queueSlice'
 import { removeAudio, setAudio } from '../redux/slices/audioSlice'
 import { deleteObject, getStorage, ref } from 'firebase/storage'
 
+import GenerateAudio from './GenerateAudio'
+
 const Library = () => {
 
     // Redux
@@ -143,7 +145,7 @@ const Library = () => {
             try {
                 // Remove doc
                 await deleteDoc(doc(db, "audio", file.id));
-                
+
                 // Remove file
                 const storage = getStorage();
                 const fileRef = ref(storage, "audio/" + file.originalName + "." + file.fileType);
@@ -197,7 +199,14 @@ const Library = () => {
             <button className={`fixed z-50 right-5 bottom-44 md:right-10 md:bottom-52 transition ease-in-out ${selectedAudioCount === 0 ? "opacity-0" : ""}`} onClick={() => setIsOpenMassDeleteAudioConfDialog(true)} title="Remove selected from library">
                 <FontAwesomeIcon className="text-6xl bg-zinc-800 text-red-500 rounded-full" icon={faCircleMinus} />
             </button>
-            <input type="text" onChange={handleSearchChange} placeholder="Search" className="self-center w-full max-w-md p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
+
+            <div className="-mb-5 w-full flex flex-row justify-center items-center">
+                <input type="text" onChange={handleSearchChange} placeholder="Search" className="self-center w-1/2 mr-2 p-3 shadow-md bg-zinc-800 outline-none rounded-sm border-2 border-zinc-700 transition ease-in-out focus:border-zinc-600" />
+                <div className="ml-2">
+                    <GenerateAudio />
+                </div>
+            </div>
+
             {libraryAudio ?
                 <div className="w-full">
                     <div className="p-5">
